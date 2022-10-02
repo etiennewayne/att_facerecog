@@ -23,13 +23,13 @@ use App\Models\DentistSchedule;
 |
 */
 
-Route::get('/', function () {
+Route::get('/cpanel', function () {
     // if(Auth::check()){
     //     $user = Auth::user();
     //     return view('welcome')
     //         ->with('user', $user->only(['lname', 'fname', 'mname', 'suffix', 'role', 'remark', 'office_id']));
     // }
-    return view('welcome');
+    return view('cpanel-login');
 });
 
 
@@ -65,7 +65,7 @@ Route::get('/load-user', function(){
 
 
 
-Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
+Route::post('/cpanel/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
 
 Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
 
