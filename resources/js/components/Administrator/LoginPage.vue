@@ -17,7 +17,7 @@
                         </b-field>
                     </form>
                 </div>
-                <div v-if="errors.username">{{ errors.username[0] }}</div>
+                <div class="error" v-if="errors.username">{{ errors.username[0] }}</div>
                 <hr>
                 <div class="login-panel-footer">
                     <div class="buttons">
@@ -116,6 +116,11 @@ export default {
     .login-panel-heading{
         font-weight: bold;
         padding: 15px 0;
+    }
+
+    .error{
+        color: red;
+        font-weight: bold;
     }
 
 

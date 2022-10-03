@@ -33,23 +33,7 @@ Route::get('/cpanel', function () {
 });
 
 
-Route::get('/get-dental-services', [App\Http\Controllers\Administrator\ServicesController::class, 'getDentalServices']);
 
-
-Route::get('/get-open-dentists', function () {
-    $dentists = User::where('role', 'DENTIST')
-        ->orderBy('lname', 'asc')->get();
-    return $dentists;
-});
-
-Route::get('/get-dentist-schedules/{id}', function ($id) {
-    $schedules = DentistSchedule::with(['user'])
-        ->whereHas('user', function($q) use ($id){
-            $q->where('user_id', $id);
-        })
-        ->get();
-    return $schedules;
-});
 
 
 Auth::routes([
@@ -83,16 +67,6 @@ Route::get('/get-user/{id}', [App\Http\Controllers\OpenUserController::class, 'g
 
 
 
-//QUICK BOOK NOW
-Route::post('/book-now', [App\Http\Controllers\BookNowController::class, 'store']);
-
-
-
-
-Route::get('/dental-chart', [App\Http\Controllers\DentalChartController::class, 'index']);
-
-
-
 
 //ADDRESS
 Route::get('/load-provinces', [App\Http\Controllers\AddressController::class, 'loadProvinces']);
@@ -100,8 +74,10 @@ Route::get('/load-cities', [App\Http\Controllers\AddressController::class, 'load
 Route::get('/load-barangays', [App\Http\Controllers\AddressController::class, 'loadBarangays']);
 
 
-/*     ADMINSITRATOR          */
-Route::resource('/admin-home', App\Http\Controllers\Administrator\AdminHomeController::class);
+/*     ADMINSITRATOR    
+      */
+Route::resource('/cpanel/home', App\Http\Controllers\Administrator\AdminHomeController::class);
+
 
 Route::resource('/users', App\Http\Controllers\Administrator\UserController::class);
 Route::get('/get-users', [App\Http\Controllers\Administrator\UserController::class, 'getUsers']);
@@ -146,7 +122,8 @@ Route::get('/get-report-track', [App\Http\Controllers\Administrator\ReportContro
 //Route::get('/get-dentist', [App\Http\Controllers\Administrator\DentistController::class, 'getDentists']);
 
 
-Route::get('/get-browse-dentist', [App\Http\Controllers\Administrator\DentistController::class, 'getBrowseDentist']);
+//MAIN PAGE
+Route::get('/', [App\Http\Controllers\MainPageController::class, 'index']);
 
 
 
