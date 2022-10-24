@@ -63,11 +63,9 @@ class UserSeeder extends Seeder
                 'role' => 'USER',
                 'password' => Hash::make('a')
             ],
-    
 
 
-
-                //DENTIST
+                //USER
             [
                 'username' => 'algadipe',
                 'lname' => 'ALGADIPE',
@@ -80,7 +78,7 @@ class UserSeeder extends Seeder
                 'street' => 'P-6',
                 'email' => 'algadipz@dev.com',
                 'contact_no' => '09167789522',
-                'role' => 'DENTIST',
+                'role' => 'USER',
                 'password' => Hash::make('a')
             ],
             [
@@ -95,7 +93,7 @@ class UserSeeder extends Seeder
                 'street' => 'P-6',
                 'email' => 'nimchie@dev.com',
                 'contact_no' => '09167789544',
-                'role' => 'DENTIST',
+                'role' => 'USER',
                 'password' => Hash::make('a')
             ],
             [
@@ -110,7 +108,7 @@ class UserSeeder extends Seeder
                 'street' => 'P-6',
                 'email' => 'angel@dev.com',
                 'contact_no' => '09167789546',
-                'role' => 'DENTIST',
+                'role' => 'USER',
                 'password' => Hash::make('a')
             ],
 

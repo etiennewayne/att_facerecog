@@ -50,7 +50,7 @@ export default {
             axios.post('/login', this.fields).then(res=>{
                 console.log(res.data)
                 if(res.data.role === 'ADMINISTRATOR' || res.data.role === 'STAFF'){
-                    window.location = '/admin-home';
+                    window.location = '/cpanel/home';
                 }
                 if(res.data.role === 'USER'){
                     window.location = '/';
