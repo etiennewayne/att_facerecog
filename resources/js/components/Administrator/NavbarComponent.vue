@@ -26,17 +26,12 @@
 
                         <b-menu-list label="Menu">
 
-                            <b-menu-item icon="home" label="Home" tag="a" href="/admin-home"></b-menu-item>
+                            <b-menu-item icon="home" label="Home" tag="a" href="/cpanel/home"></b-menu-item>
 
-                            <b-menu-item label="User" icon="account" tag="a" href="/users"></b-menu-item>
+                            <b-menu-item label="User" icon="account" tag="a" href="/cpanel/users"></b-menu-item>
 
-                            <b-menu-item label="Services" icon="calendar-blank" tag="a" href="/services"></b-menu-item>
-
-                            <b-menu-item label="Items" icon="sitemap" tag="a" href="/items"></b-menu-item>
-
-                            <b-menu-item label="Appointment" icon="calendar-blank" tag="a" href="/appointments"></b-menu-item>
-
-
+                            <b-menu-item label="Employee" icon="account" tag="a" href="/cpanel/employee"></b-menu-item>
+                        
                             <b-menu-item icon="poll">
                                 <template #label="props">
                                     Report

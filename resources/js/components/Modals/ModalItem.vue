@@ -91,7 +91,9 @@
 </template>
 
 <script>
+import ModalBrowseDentist from './ModalBrowseDentist.vue';
 export default {
+  components: { ModalBrowseDentist },
     props: {
         propItem: {
             type: String,

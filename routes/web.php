@@ -46,7 +46,8 @@ Route::get('/load-user', function(){
     }
 });
 
-
+Route::get('/face-recog', [App\Http\Controllers\FaceRecogDashboardController::class, 'index']);
+Route::get('/face-recog-dashboard', [App\Http\Controllers\FaceRecogDashboardController::class, 'index_face_dashboard']);
 
 
 Route::post('/cpanel/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
@@ -79,9 +80,10 @@ Route::get('/load-barangays', [App\Http\Controllers\AddressController::class, 'l
 Route::resource('/cpanel/home', App\Http\Controllers\Administrator\AdminHomeController::class);
 
 
-Route::resource('/users', App\Http\Controllers\Administrator\UserController::class);
-Route::get('/get-users', [App\Http\Controllers\Administrator\UserController::class, 'getUsers']);
-Route::get('/get-user-offices', [App\Http\Controllers\Administrator\UserController::class, 'getOffices']);
+Route::resource('/cpanel/users', App\Http\Controllers\Administrator\UserController::class);
+Route::get('/cpanel/get-users', [App\Http\Controllers\Administrator\UserController::class, 'getUsers']);
+
+
 Route::post('/user-reset-password/{id}', [App\Http\Controllers\Administrator\UserController::class, 'resetPassword']);
 
 

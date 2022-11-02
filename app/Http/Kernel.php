@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'dentist' => \App\Http\Middleware\DentistMiddleware::class,
         'user' => \App\Http\Middleware\UserMiddleware::class,
+        'allowcors' => \App\Http\Middleware\AllowCors::class,
 
     ];
 }

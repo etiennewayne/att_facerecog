@@ -104,9 +104,7 @@ export default {
         background-image: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url('/img/background-img.png');
         background-repeat: no-repeat;
         background-size: cover;
-   }
-
-
+    }
 
     .login-panel{
         padding: 25px;
