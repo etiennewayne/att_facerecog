@@ -28,11 +28,18 @@
 
                             <b-menu-item icon="home" label="Home" tag="a" href="/cpanel/home"></b-menu-item>
 
+<<<<<<< HEAD
                             <b-menu-item label="User" icon="account" tag="a" href="/cpanel/users"></b-menu-item>
 
                             <b-menu-item label="Employee" icon="account" tag="a" href="/cpanel/employee"></b-menu-item>
                         
                             <b-menu-item icon="poll">
+=======
+                            <b-menu-item label="User" icon="account" tag="a" href="/users"></b-menu-item>
+
+
+                            <!-- <b-menu-item icon="poll">
+>>>>>>> eecfa92c24d2236b88bd2aa8add3c9a1b82f7a3d
                                 <template #label="props">
                                     Report
                                     <b-icon class="is-pulled-right" :icon="props.expanded ? 'menu-down' : 'menu-up'"></b-icon>
@@ -40,8 +47,7 @@
                                 <b-menu-item icon="text-box-outline" label="Inventory" tag="a" href="/report/inventory"></b-menu-item>
                                 <b-menu-item icon="text-box-outline" label="Appointment" tag="a" href="/report/appointment"></b-menu-item>
 
-<!--                                <b-menu-item icon="cash-multiple" label="Payments" disabled></b-menu-item>-->
-                            </b-menu-item>
+                            </b-menu-item> -->
 
                         </b-menu-list>
 

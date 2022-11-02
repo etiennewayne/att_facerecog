@@ -1,6 +1,5 @@
 <template>
     <div class="whole-page">
-        
         <div class="login-panel">
             <form @submit.prevent="submit">
                 <div class="login-panel-heading">
@@ -11,7 +10,7 @@
                         <b-field label="Username">
                             <b-input type="text" v-model="fields.username" placeholder="Username"></b-input>
                         </b-field>
-    
+
                         <b-field label="Password">
                             <b-input type="password" v-model="fields.password" placeholder="Password"></b-input>
                         </b-field>

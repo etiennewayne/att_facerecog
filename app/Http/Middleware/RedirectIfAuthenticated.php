@@ -27,12 +27,12 @@ class RedirectIfAuthenticated
                 if($user->role === 'ADMINISTRATOR'){
                     return redirect('/cpanel/home');
                 }
-               
+
                 //return redirect(RouteServiceProvider::HOME);
             }
         }
         return $next($request);
 
-        
+
     }
 }
