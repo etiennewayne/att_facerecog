@@ -8496,9 +8496,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -35293,8 +35290,138 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function () {}
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("div", { staticClass: "mynav" }, [
+        _c("div", { staticClass: "mynav-brand" }, [
+          _vm._v(_vm._s(_vm.userRole)),
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "burger-button",
+            on: {
+              click: function ($event) {
+                _vm.open = true
+              },
+            },
+          },
+          [
+            _c("div", { staticClass: "burger-div" }),
+            _vm._v(" "),
+            _c("div", { staticClass: "burger-div" }),
+            _vm._v(" "),
+            _c("div", { staticClass: "burger-div" }),
+          ]
+        ),
+      ]),
+      _vm._v(" "),
+      _c(
+        "b-sidebar",
+        {
+          attrs: {
+            mobile: _vm.mobile,
+            type: "is-light",
+            fullheight: _vm.fullheight,
+            fullwidth: _vm.fullwidth,
+            overlay: _vm.overlay,
+            "expand-on-hover": _vm.expandOnHover,
+            reduce: _vm.reduce,
+            right: _vm.right,
+          },
+          model: {
+            value: _vm.open,
+            callback: function ($$v) {
+              _vm.open = $$v
+            },
+            expression: "open",
+          },
+        },
+        [
+          _c(
+            "div",
+            { staticClass: "p-4" },
+            [
+              _c("h3", { staticClass: "title is-4" }),
+              _vm._v(" "),
+              _c(
+                "b-menu",
+                { staticClass: "is-custom-mobile" },
+                [
+                  _c(
+                    "b-menu-list",
+                    { attrs: { label: "Menu" } },
+                    [
+                      _c("b-menu-item", {
+                        attrs: {
+                          icon: "home",
+                          label: "Home",
+                          tag: "a",
+                          href: "/cpanel/home",
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("b-menu-item", {
+                        attrs: {
+                          label: "User",
+                          icon: "account",
+                          tag: "a",
+                          href: "/cpanel/users",
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("b-menu-item", {
+                        attrs: {
+                          label: "Employee",
+                          icon: "account",
+                          tag: "a",
+                          href: "/cpanel/employee",
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("b-menu-item", {
+                        attrs: {
+                          label: "User",
+                          icon: "account",
+                          tag: "a",
+                          href: "/users",
+                        },
+                      }),
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-menu-list",
+                    { attrs: { label: "Actions" } },
+                    [
+                      _c("b-menu-item", {
+                        attrs: { label: "Logout" },
+                        on: { click: _vm.logout },
+                      }),
+                    ],
+                    1
+                  ),
+                ],
+                1
+              ),
+            ],
+            1
+          ),
+        ]
+      ),
+    ],
+    1
+  )
+}
 var staticRenderFns = []
+render._withStripped = true
 
 
 

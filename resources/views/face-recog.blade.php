@@ -75,26 +75,38 @@
 
         updateTimeStats(Date.now() - ts)
 
+        console.log(result)
+
+
         if (result) {
             const canvas = $('#overlay').get(0)
             const dims = faceapi.matchDimensions(canvas, videoEl, true)
-            //faceapi.draw.drawDetections(canvas, )
-            const resizeDetections = faceapi.resizeResults(result, dims);
-            //faceapi.draw.drawDetections(canvas, resizeDetections)
-            //console.log(canvas)
-            // const drawBox = new faceapi.draw.DrawBox(canvas, { label: "Test"})
-            // drawBox.draw(canvas);
-            //console.log(faceapi.resizeResults(result, dims))
-            console.log(resizeDetections);
-
-            const results = resizeDetections.map(d => faceMatcher.findBestMatch(d.descriptor));
-            
-            // results.forEach((result, i) => {
-            //     const box = resizeDetections[i].detection.box;
-            //     const drawBox = new faceapi.draw.DrawBox(box, { label: result.toString() });
-            //     drawBox.draw(canvas);
-            // })
+            faceapi.draw.drawDetections(canvas, faceapi.resizeResults(result, dims))
         }
+
+        // if (result) {
+        //     const canvas = $('#overlay').get(0)
+        //     faceapi.matchDimensions(canvas, videoEl, true)
+
+        //     //faceapi.draw.drawDetections(canvas, )
+        //     const resizeDetections = faceapi.resizeResults(result, videoEl);
+        //     //faceapi.draw.drawDetections(canvas, resizeDetections)
+        //     //console.log(canvas)
+        //     // const drawBox = new faceapi.draw.DrawBox(canvas, { label: "Test"})
+        //     // drawBox.draw(canvas);
+        //     //console.log(faceapi.resizeResults(result, dims))
+        //     console.log(resizeDetections);
+
+        //     //const results = resizeDetections.map(d => faceMatcher.findBestMatch(d.descriptor));
+        //     //naa error
+
+
+        //     // results.forEach((result, i) => {
+        //     //     const box = resizeDetections[i].detection.box;
+        //     //     const drawBox = new faceapi.draw.DrawBox(box, { label: result.toString() });
+        //     //     drawBox.draw(canvas);
+        //     // })
+        // }
 
         setTimeout(() => onPlay(), 3000)
 
