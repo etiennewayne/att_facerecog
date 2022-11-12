@@ -51,7 +51,7 @@ async function start(){
 
         results.forEach((result, i) => {
             const box = resizeDetections[i].detection.box;
-            const drawBox = new faceapi.draw.DrawBox(box, { label: result.toString() });
+            const drawBox = new faceapi.draw.DrawBox(box, { label: 'test' });
             drawBox.draw(canvas);
         })
     })

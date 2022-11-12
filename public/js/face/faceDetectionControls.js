@@ -37,9 +37,9 @@ function onInputSizeChanged(e) {
 function changeInputSize(size) {
   inputSize = parseInt(size)
 
-  const inputSizeSelect = $('#inputSize')
-  inputSizeSelect.val(inputSize)
-  inputSizeSelect.material_select()
+  // const inputSizeSelect = $('#inputSize')
+  // inputSizeSelect.val(inputSize)
+  // inputSizeSelect.material_select()
 }
 
 function onIncreaseScoreThreshold() {
@@ -82,9 +82,9 @@ async function changeFaceDetector(detector) {
     .forEach(id => $(id).hide())
 
   selectedFaceDetector = detector
-  const faceDetectorSelect = $('#selectFaceDetector')
-  faceDetectorSelect.val(detector)
-  faceDetectorSelect.material_select()
+  // const faceDetectorSelect = $('#selectFaceDetector')
+  // faceDetectorSelect.val(detector)
+  // faceDetectorSelect.material_select()
 
   $('#loader').show()
   if (!isFaceDetectionModelLoaded()) {
@@ -101,22 +101,19 @@ async function onSelectedFaceDetectorChanged(e) {
   await changeFaceDetector(e.target.value)
   updateResults()
 }
-
 function initFaceDetectionControls() {
 
-  faceapi.nets.faceRecognitionNet.loadFromUri('/js/face/weights')
-  faceapi.nets.faceLandmark68Net.loadFromUri('/js/face/weights')
+    faceapi.nets.faceRecognitionNet.loadFromUri('/js/face/weights')
+    faceapi.nets.faceLandmark68Net.loadFromUri('/js/face/weights')
 
+    // const faceDetectorSelect = $('#selectFaceDetector')
+    // faceDetectorSelect.val(selectedFaceDetector)
+    // faceDetectorSelect.on('change', onSelectedFaceDetectorChanged)
+    // faceDetectorSelect.material_select()
 
-  // const faceDetectorSelect = $('#selectFaceDetector')
-  // faceDetectorSelect.val(selectedFaceDetector)
-  // faceDetectorSelect.on('change', onSelectedFaceDetectorChanged)
-  // faceDetectorSelect.material_select()
-
-  // const inputSizeSelect = $('#inputSize')
-  // inputSizeSelect.val(inputSize)
-  // inputSizeSelect.on('change', onInputSizeChanged)
-  // inputSizeSelect.material_select()
-
+    // const inputSizeSelect = $('#inputSize')
+    // inputSizeSelect.val(inputSize)
+    // inputSizeSelect.on('change', onInputSizeChanged)
+    // inputSizeSelect.material_select()
 
 }
