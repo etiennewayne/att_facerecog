@@ -24,10 +24,16 @@
    
     .canvas-container{
         border: 1px solid red;
+        overflow: hidden;
+        margin-bottom: 10px;
     }
 
     @media only screen and (max-width: 480px) {
         .form-container{
             border: 1px solid rgb(22, 31, 112);
+        }
+
+        .form-body{
+            padding: 15px;
         }
     }

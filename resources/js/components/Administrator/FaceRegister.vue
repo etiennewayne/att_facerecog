@@ -17,11 +17,12 @@
                     <div class="canvas-container">
                         <canvas id="canvas1" width="320" height="240"></canvas>
                     </div>
-                    
-                    <canvas id="canvas2" width="320" height="240"></canvas>
-                    <canvas id="canvas3" width="320" height="240"></canvas>
-
-
+                    <div class="canvas-container">
+                        <canvas id="canvas2" width="320" height="240"></canvas>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="canvas3" width="320" height="240"></canvas>
+                    </div>
                     <img id="img" />
                 </div>
             </div>

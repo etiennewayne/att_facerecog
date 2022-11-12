@@ -72,6 +72,7 @@
         //loop
         const videoEl = $('#inputVideo').get(0)
         let canvas = $('#overlay').get(0);
+        
         if (videoEl.paused || videoEl.ended || !isFaceDetectionModelLoaded())
             return setTimeout(() => onPlay())
 
