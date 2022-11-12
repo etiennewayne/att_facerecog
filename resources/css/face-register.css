@@ -1,0 +1,33 @@
+
+    .form-container{
+        margin: 50px;
+        max-width: 720px;
+        border: 1px solid red;
+    }
+    .form-header{
+        padding: 15px;
+    }
+    .form-title{
+        font-weight: bold;
+        font-size: 1.4em;
+        text-align: center;
+    }
+    .webcam-container{
+        display: block;
+    }
+
+    .webcam{
+        margin: auto;
+        border: 1px solid blue;
+        display: block;
+    }
+   
+    .canvas-container{
+        border: 1px solid red;
+    }
+
+    @media only screen and (max-width: 480px) {
+        .form-container{
+            border: 1px solid rgb(22, 31, 112);
+        }
+    }
