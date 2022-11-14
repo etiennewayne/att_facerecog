@@ -101,19 +101,3 @@ async function onSelectedFaceDetectorChanged(e) {
   await changeFaceDetector(e.target.value)
   updateResults()
 }
-function initFaceDetectionControls() {
-
-    faceapi.nets.faceRecognitionNet.loadFromUri('/js/face/weights')
-    faceapi.nets.faceLandmark68Net.loadFromUri('/js/face/weights')
-
-    // const faceDetectorSelect = $('#selectFaceDetector')
-    // faceDetectorSelect.val(selectedFaceDetector)
-    // faceDetectorSelect.on('change', onSelectedFaceDetectorChanged)
-    // faceDetectorSelect.material_select()
-
-    // const inputSizeSelect = $('#inputSize')
-    // inputSizeSelect.val(inputSize)
-    // inputSizeSelect.on('change', onInputSizeChanged)
-    // inputSizeSelect.material_select()
-
-}

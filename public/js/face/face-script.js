@@ -65,14 +65,6 @@ function loadLabeledImages() {
             const descriptions = [];
 
             for(let i = 1; i <= 3; i++){
-
-                //to call image in local storage
-               //const canvas = require('canvas');
-                //faceapi.env.monkeyPatch({ Canvas, Image })
-                //const img = await canvas.loadImage(`/labeled_images/${label}/${i}.jpg`);
-                //const faceBase64 = 'data:image/jpg;base64,' + fs.readFileSync(`/labeled_images/${label}/${i}.jpg`, {encoding: 'base64'})
-                //console.log(faceBase64);
-                //no of images in folder //need upload to server with http
                 const img = await faceapi.fetchImage(`/labeled_images/${label}/${i}.jpg`)
                 const detections = await faceapi.detectSingleFace(img)
                     .withFaceLandmarks().withFaceDescriptor();

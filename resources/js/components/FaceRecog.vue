@@ -1,0 +1,185 @@
+<template>
+    <div>
+        <div class="w-center-content">
+            <div class="w-title">Face Recognition Attendance System</div>
+            <div class="video-container">
+                <video @loadedmetadata="onPlay(this)" 
+                    id="inputVideo" autoplay muted playsinline
+                    width="320" height="240">
+                </video>
+                <canvas id="overlay" />
+            </div>
+
+            <div class="time-container">
+                <div id="clock"></div>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+<script>
+
+    let forwardTimes = []
+    let faceMatcher;
+
+
+export default {
+    data() {
+        return{
+
+        }
+    },
+
+    methods: {
+
+        async onPlay() {
+            //loop
+            const videoEl = $('#inputVideo').get(0)
+            let canvas = $('#overlay').get(0);
+            
+            if (videoEl.paused || videoEl.ended || !isFaceDetectionModelLoaded())
+                return setTimeout(() => this.onPlay())
+
+            //options = new faceapi.TinyFaceDetectorOptions({ inputSize, scoreThreshold }) //return tinyFaceDetector
+            const options = getFaceDetectorOptions()
+
+            const result = await faceapi.detectSingleFace(videoEl, options)
+                .withFaceLandmarks()
+                .withFaceDescriptor();
+            const displaySize = { width: videoEl.width, height: videoEl.height };
+            
+
+            if (result && faceMatcher) {
+                    
+                faceapi.matchDimensions(canvas, displaySize, true);
+                const resizeDetection = faceapi.resizeResults(result, displaySize);
+
+
+                // console.log('Resize Detection Box => ', resizeDetection);
+                // console.log('result => ', result);
+                // console.log('faceMatcher => ', faceMatcher);
+
+                const faceResult = faceMatcher.findBestMatch(result.descriptor);
+
+                console.log('faceResult => ', faceResult);
+                
+                const faceDraw = new faceapi.draw.DrawBox(resizeDetection.detection.box, { label: faceResult.toString() });
+                faceDraw.draw(canvas);
+                //console.log('faceDraw ', faceDraw);
+            }else{
+                canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+            }
+
+            
+            setTimeout(() => this.onPlay(), 3000)
+        },
+
+        async run() {
+            // load face detection model
+            //await changeFaceDetector(TINY_FACE_DETECTOR)
+            //ikaw ang hinungdan mabuang ko!!!!!
+
+            await changeFaceDetector(TINY_FACE_DETECTOR)
+            changeInputSize(128)
+        
+            // try to access users webcam and stream the images
+            // to the video element
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: {}
+            })
+
+            const videoEl = $('#inputVideo').get(0)
+            videoEl.srcObject = stream
+
+            const labeledFaceDescriptors = await this.loadLabeledImages();
+            faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
+            //console.log('label descriptor: ', labeledFaceDescriptors);
+        },
+
+        loadLabeledImages() {
+            const labels = [
+                {
+                    folder: 'leda',
+                    name: 'Leda Grace Kigwa'
+                }, 
+                {
+                    folder: 'et',
+                    name: 'Etienne Wayne'
+                },
+                {
+                    folder: 'monmon',
+                    name: 'Ramonito'
+                }
+            ];
+
+            return Promise.all(
+                labels.map(async label => {
+                    const descriptions = [];
+
+                    for (let i = 1; i <= 3; i++) {
+
+                        const img = await faceapi.fetchImage(`/labeled_images/${label.folder}/${i}.jpg`); //convert image to base64
+                    
+                        const detections = await faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions())
+                            .withFaceLandmarks().withFaceDescriptor();
+                        console.log('img analyze detections ' + label.folder + ' => ', detections);
+                        descriptions.push(detections.descriptor)
+                        console.log('descriptions: ' + descriptions)
+                    } //loop
+
+                    return new faceapi.LabeledFaceDescriptors(label.name, descriptions)
+                })
+            );
+        },
+
+        updateResults(){},
+
+        currentTime: function() {
+            let date = new Date(); 
+            let hh = date.getHours();
+            let mm = date.getMinutes();
+            let ss = date.getSeconds();
+            let session = "AM";
+
+            if(hh === 0){
+                hh = 12;
+            }
+            if(hh > 12){
+                hh = hh - 12;
+                session = "PM";
+            }
+
+            hh = (hh < 10) ? "0" + hh : hh;
+            mm = (mm < 10) ? "0" + mm : mm;
+            ss = (ss < 10) ? "0" + ss : ss;
+                
+            let time = hh + ":" + mm + ":" + ss + " " + session;
+
+            document.getElementById("clock").innerText = time;
+
+            let t = setTimeout( ()=> this.currentTime() , 1000);
+        },
+
+        initFaceDetectionControls(){
+            faceapi.nets.faceRecognitionNet.loadFromUri('/js/face/weights');
+            faceapi.nets.faceLandmark68Net.loadFromUri('/js/face/weights');
+        }
+    },
+
+
+    mounted(){
+
+        this.$nextTick(function () {
+            // Code that will run only after the
+            // entire view has been rendered
+            this.initFaceDetectionControls();
+            this.run();
+            this.currentTime();
+        })
+
+      
+
+    }
+}
+</script>

@@ -24,7 +24,7 @@
   position: relative;
 }
 
-.center-content {
+.w-center-content {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -43,39 +43,10 @@
     border: 1px solid red;
 }
 
-.title{
+.w-title{
   font-weight: bold;
   font-size: 1.4em;
 }
-/* 
-.side-by-side {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.side-by-side >* {
-  margin: 0 5px;
-} */
-
-/* .bold {
-  font-weight: bold;
-}
-
-.margin-sm {
-  margin: 5px;
-}
-
-.margin {
-  margin: 20px;
-}
-
-.button-sm {
-  padding: 0 10px !important;
-}
-
-.pad-sides-sm {
-  padding: 0 8px !important;
-} */
 
 #github-link {
   display: flex !important;

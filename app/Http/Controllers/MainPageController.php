@@ -9,6 +9,6 @@ class MainPageController extends Controller
     //
 
     public function index(){
-        return view('main-page');
+        return view('face-recog');
     }
 }
