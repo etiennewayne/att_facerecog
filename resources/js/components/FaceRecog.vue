@@ -14,6 +14,13 @@
                 <div id="clock"></div>
             </div>
         </div>
+
+
+        <div class="section">
+            <div class="buttons">
+                <b-button @click="loadLabeledImages">Load Label (debug only)</b-button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -128,6 +135,10 @@ export default {
                         console.log('descriptions: ' + descriptions)
                     } //loop
 
+                    axios.post('/store-descriptor', {
+                            name : label.name,
+                            descriptor : descriptions
+                        })
                     return new faceapi.LabeledFaceDescriptors(label.name, descriptions)
                 })
             );

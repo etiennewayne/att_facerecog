@@ -25545,6 +25545,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 var forwardTimes = [];
 var faceMatcher;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -25702,9 +25709,14 @@ var faceMatcher;
                   break;
 
                 case 15:
+                  //loop
+                  axios.post('/store-descriptor', {
+                    name: label.name,
+                    descriptor: descriptions
+                  });
                   return _context3.abrupt("return", new faceapi.LabeledFaceDescriptors(label.name, descriptions));
 
-                case 16:
+                case 17:
                 case "end":
                   return _context3.stop();
               }
@@ -51589,6 +51601,19 @@ var render = function () {
       ]),
       _vm._v(" "),
       _vm._m(0),
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "section" }, [
+      _c(
+        "div",
+        { staticClass: "buttons" },
+        [
+          _c("b-button", { on: { click: _vm.loadLabeledImages } }, [
+            _vm._v("Load Label (debug only)"),
+          ]),
+        ],
+        1
+      ),
     ]),
   ])
 }
