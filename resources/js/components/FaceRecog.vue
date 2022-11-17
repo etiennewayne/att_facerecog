@@ -34,7 +34,8 @@
 export default {
     data() {
         return{
-
+            labels: [],
+            labeledFaceDescriptors: null,
         }
     },
 
@@ -55,10 +56,11 @@ export default {
                 .withFaceLandmarks()
                 .withFaceDescriptor();
             const displaySize = { width: videoEl.width, height: videoEl.height };
-            
 
+            console.log('faceMatcher', faceMatcher);
+            
             if (result && faceMatcher) {
-                    
+                
                 faceapi.matchDimensions(canvas, displaySize, true);
                 const resizeDetection = faceapi.resizeResults(result, displaySize);
 
@@ -99,24 +101,70 @@ export default {
             const videoEl = $('#inputVideo').get(0)
             videoEl.srcObject = stream
 
-            const labeledFaceDescriptors = await this.loadLabeledImages();
-            faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
-            //console.log('label descriptor: ', labeledFaceDescriptors);
+            this.labeledFaceDescriptors = await this.loadLabeledImages();
+            console.log('label descriptors: ', this.labeledFaceDescriptors);
+            //start faceMatching, threshold 0.6
+            faceMatcher = new faceapi.FaceMatcher(this.labeledFaceDescriptors, 0.6);
+            console.log('faceMatcher descriptors: ', faceMatcher);
         },
 
-        loadLabeledImages() {
+        async loadLabeledImages() {
+           
+            await axios.get('/load-descriptors').then(res=>{
+                //console.log('load images from db: ', res.data);
+                this.labels = res.data;
+            })
+
+            return Promise.all(
+                this.labels.map(async label => {
+                    const descriptions = [];
+                    const name = `(${label.employee_id}) ${label.fname}`;
+
+                    //console.log(label.descriptors[0].descriptor);
+                    
+                    for(let i = 0; i < 3; i++) {
+
+                        descriptions.push(new Float32Array(label.descriptors[i].descriptor))
+                    }
+                    console.log('descriptions: ', descriptions);
+                    return new faceapi.LabeledFaceDescriptors(name, descriptions)
+                })
+            );
+        },
+
+
+        loadLabeledImagesLocalImages() {
             const labels = [
                 {
+                    name: 'Leda Grace',
                     folder: 'leda',
-                    name: 'Leda Grace Kigwa'
+                    lname: 'Abella',
+                    fname: 'Leda Grace',
+                    mname: 'C',
+                    suffix: '',
+                    sex: 'FEMALE',
+                    contact_no: '09164'
                 }, 
                 {
+                    name: 'Etienne',
                     folder: 'et',
-                    name: 'Etienne Wayne'
+                    lname: 'Amparado',
+                    fname: 'Etienne Wayne',
+                    mname: 'N',
+                    suffix: '',
+                    sex: 'MALE',
+                    contact_no: '09164'
+                    
                 },
                 {
+                    name: 'Ramonito',
                     folder: 'monmon',
-                    name: 'Ramonito'
+                    lname: 'Lumapac',
+                    fname: 'Ramonito',
+                    mname: 'U',
+                    suffix: '',
+                    sex: 'MALE',
+                    contact_no: '09164'
                 }
             ];
 
@@ -136,8 +184,13 @@ export default {
                     } //loop
 
                     axios.post('/store-descriptor', {
-                            name : label.name,
-                            descriptor : descriptions
+                            lname : label.lname,
+                            fname : label.fname,
+                            mname : label.mname,
+                            suffix : label.suffix,
+                            sex : label.sex,
+                            contact_no : label.contact_no,
+                            descriptors : descriptions
                         })
                     return new faceapi.LabeledFaceDescriptors(label.name, descriptions)
                 })
@@ -184,6 +237,8 @@ export default {
         this.$nextTick(function () {
             // Code that will run only after the
             // entire view has been rendered
+            this.loadLabeledImages();
+
             this.initFaceDetectionControls();
             this.run();
             this.currentTime();

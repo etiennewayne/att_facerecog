@@ -1,35 +1,15 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.app')
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-    {{-- <script src="{{ asset('js/webcam/webcam.js') }}" defer></script> --}}
+@section('extra')
+    <script defer src="{{ asset('/js/face/face-api.min.js') }}"></script>
+    <script src="{{ asset('/js/face/faceDetectionControls.js') }}"></script>
+    {{-- <link rel="stylesheet" href="{{ asset('/css/face/styles.css') }}">  --}}
+    <script type="text/javascript" src="/js/face/jquery-2.1.1.min.js"></script>
+@endsection
 
 
-    <!-- Fonts -->
-    {{--    <link rel="dns-prefetch" href="//fonts.gstatic.com">--}}
-    {{--    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">--}}
+@section('content')
+    <face-register></face-register>
+@endsection
+    
 
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-</head>
-<body>
-    <div id="app">
-
-        <div>
-            {{-- face registration --}}
-            <face-register></face-register>
-
-        </div>
-
-    </div>
-</body>
-</html>

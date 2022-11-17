@@ -14,9 +14,9 @@ import Buefy from 'buefy'
 // import 'buefy/dist/buefy.css'
 
 //QR Scanner
-import VueQrcodeReader from "vue-qrcode-reader";
+//import VueQrcodeReader from "vue-qrcode-reader";
 //for QR CODE Generation
-import VueQrcode from '@chenfengyuan/vue-qrcode';
+//import VueQrcode from '@chenfengyuan/vue-qrcode';
 
 
 

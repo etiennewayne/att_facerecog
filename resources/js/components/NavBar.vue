@@ -18,8 +18,8 @@
             <!-- <b-navbar-item href="/about">
                 ABOUT
             </b-navbar-item> -->
-            <b-navbar-item href="/my-appointment" v-if="currentLogin">
-                MY APPOINTMENT
+            <b-navbar-item href="/face-register">
+               Face Register
             </b-navbar-item>
             <b-navbar-item tag="div">
                 <div v-if="!currentLogin" class="buttons">
@@ -39,7 +39,7 @@
 
 <script>
 export default {
-    props: ['propUser'],
+   
 
     data(){
         return{
@@ -49,10 +49,12 @@ export default {
 
     methods:{
         initData: function(){
-            if(this.propUser){
-                this.user = JSON.parse(this.propUser);
-            }
+            axios.get('/load-user').then(res=>{
+                this.user = res.data;
+            })
         },
+
+     
 
         logout(){
             axios.post('/logout').then(()=>{

@@ -56,7 +56,9 @@ Route::get('/face-register', [App\Http\Controllers\Administrator\FaceRegisterCon
 Route::post('/face-register', [App\Http\Controllers\Administrator\FaceRegisterController::class, 'store']);
 
 
-Route::post('/store-descriptor', [App\Http\Controllers\DescriptorController::class, 'store']);
+Route::post('/store-descriptor', [App\Http\Controllers\EmployeeController::class, 'store']);
+Route::get('/load-descriptors', [App\Http\Controllers\EmployeeController::class, 'loadDescriptors']);
+
 
 
 

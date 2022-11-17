@@ -11,17 +11,20 @@ class Descriptor extends Model
 
 
     protected $table = 'descriptors';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'descriptor_id';
 
-    protected $fillable = ['name', 'descriptor'];
+    protected $fillable = ['employee_id', 'descriptor'];
 
 
-    protected function descriptor(): Attribute
+    protected $casts = [
+        'descriptor' => 'json',
+    ];
+
+
+    public function setOptionsAttribute($descriptor)
     {
-        return Attribute::make(
-            get: fn ($value) => json_decode($value, true),
-            set: fn ($value) => json_encode($value),
-        );
+        $this->attributes['descriptor'] = json_encode($descriptor);
     }
+
 
 }
