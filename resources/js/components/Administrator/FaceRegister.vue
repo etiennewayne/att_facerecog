@@ -95,12 +95,19 @@ export default {
             //fields
             name: '',
            
-            lname: 'Amparado',
-            fname: 'Etienne Wayne',
+            // lname: 'Amparado',
+            // fname: 'Etienne Wayne',
+            // mname: '',
+            // suffix: '',
+            // sex: 'MALE',
+            // contact_no: '916465',
+
+            lname: '',
+            fname: '',
             mname: '',
             suffix: '',
-            sex: 'MALE',
-            contact_no: '916465',
+            sex: '',
+            contact_no: '',
 
             debug: 'test',
 
