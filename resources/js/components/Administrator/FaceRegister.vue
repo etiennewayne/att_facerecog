@@ -95,19 +95,19 @@ export default {
             //fields
             name: '',
            
-            // lname: 'Amparado',
-            // fname: 'Etienne Wayne',
-            // mname: '',
-            // suffix: '',
-            // sex: 'MALE',
-            // contact_no: '916465',
-
-            lname: '',
-            fname: '',
+            lname: 'Dela Curz',
+            fname: 'Juan',
             mname: '',
             suffix: '',
-            sex: '',
-            contact_no: '',
+            sex: 'MALE',
+            contact_no: '916465',
+
+            // lname: '',
+            // fname: '',
+            // mname: '',
+            // suffix: '',
+            // sex: '',
+            // contact_no: '',
 
             debug: 'test',
 
@@ -177,34 +177,34 @@ export default {
                                     .withFaceLandmarks().withFaceDescriptor();
             descriptions.push(detections1.descriptor)
             
-            this.debug = descriptions;
-            // const detections2 = await faceapi.detectSingleFace(canvas2, new faceapi.TinyFaceDetectorOptions())
-            //                         .withFaceLandmarks().withFaceDescriptor();
-            // descriptions.push(detections2.descriptor)
+            //this.debug = descriptions;
+            const detections2 = await faceapi.detectSingleFace(canvas2, new faceapi.TinyFaceDetectorOptions())
+                                    .withFaceLandmarks().withFaceDescriptor();
+            descriptions.push(detections2.descriptor)
             
-            // const detections3 = await faceapi.detectSingleFace(canvas2, new faceapi.TinyFaceDetectorOptions())
-            //                         .withFaceLandmarks().withFaceDescriptor();
-            // descriptions.push(detections3.descriptor)
+            const detections3 = await faceapi.detectSingleFace(canvas3, new faceapi.TinyFaceDetectorOptions())
+                                    .withFaceLandmarks().withFaceDescriptor();
+            descriptions.push(detections3.descriptor)
             
             
-            // axios.post('/store-descriptor', {
-            //     lname : this.lname,
-            //     fname : this.fname,
-            //     mname : this.mname,
-            //     suffix : this.suffix,
-            //     sex : this.sex,
-            //     contact_no : this.contact_no,
-            //     //descriptors : descriptions
-            // }).then(res=>{
-            //     this.btnClass['is-loading'] = false;
-            //     this.debug = res.data;
-            //     this.$buefy.dialog.alert({
-            //         title: 'Saved!',
-            //         message: 'Image successfully saved.',
-            //         confirmText: 'OK',
-            //         type: 'is-success'
-            //     })
-            // })
+            axios.post('/store-descriptor', {
+                lname : this.lname,
+                fname : this.fname,
+                mname : this.mname,
+                suffix : this.suffix,
+                sex : this.sex,
+                contact_no : this.contact_no,
+                descriptors : descriptions
+            }).then(res=>{
+                this.btnClass['is-loading'] = false;
+                this.debug = res.data;
+                this.$buefy.dialog.alert({
+                    title: 'Saved!',
+                    message: 'Image successfully saved.',
+                    confirmText: 'OK',
+                    type: 'is-success'
+                })
+            })
         },
 
         initFaceDetectionControls(){

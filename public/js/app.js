@@ -2891,18 +2891,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       loading: true,
       //fields
       name: '',
-      // lname: 'Amparado',
-      // fname: 'Etienne Wayne',
-      // mname: '',
-      // suffix: '',
-      // sex: 'MALE',
-      // contact_no: '916465',
-      lname: '',
-      fname: '',
+      lname: 'Dela Curz',
+      fname: 'Juan',
       mname: '',
       suffix: '',
-      sex: '',
-      contact_no: '',
+      sex: 'MALE',
+      contact_no: '916465',
+      // lname: '',
+      // fname: '',
+      // mname: '',
+      // suffix: '',
+      // sex: '',
+      // contact_no: '',
       debug: 'test',
       btnClass: {
         'button': true,
@@ -2981,7 +2981,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var canvas1, canvas2, canvas3, descriptions, detections1;
+        var canvas1, canvas2, canvas3, descriptions, detections1, detections2, detections3;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -2995,33 +2995,41 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 6:
                 detections1 = _context2.sent;
-                descriptions.push(detections1.descriptor);
-                _this2.debug = descriptions; // const detections2 = await faceapi.detectSingleFace(canvas2, new faceapi.TinyFaceDetectorOptions())
-                //                         .withFaceLandmarks().withFaceDescriptor();
-                // descriptions.push(detections2.descriptor)
-                // const detections3 = await faceapi.detectSingleFace(canvas2, new faceapi.TinyFaceDetectorOptions())
-                //                         .withFaceLandmarks().withFaceDescriptor();
-                // descriptions.push(detections3.descriptor)
-                // axios.post('/store-descriptor', {
-                //     lname : this.lname,
-                //     fname : this.fname,
-                //     mname : this.mname,
-                //     suffix : this.suffix,
-                //     sex : this.sex,
-                //     contact_no : this.contact_no,
-                //     //descriptors : descriptions
-                // }).then(res=>{
-                //     this.btnClass['is-loading'] = false;
-                //     this.debug = res.data;
-                //     this.$buefy.dialog.alert({
-                //         title: 'Saved!',
-                //         message: 'Image successfully saved.',
-                //         confirmText: 'OK',
-                //         type: 'is-success'
-                //     })
-                // })
+                descriptions.push(detections1.descriptor); //this.debug = descriptions;
 
-              case 9:
+                _context2.next = 10;
+                return faceapi.detectSingleFace(canvas2, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
+
+              case 10:
+                detections2 = _context2.sent;
+                descriptions.push(detections2.descriptor);
+                _context2.next = 14;
+                return faceapi.detectSingleFace(canvas3, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
+
+              case 14:
+                detections3 = _context2.sent;
+                descriptions.push(detections3.descriptor);
+                axios.post('/store-descriptor', {
+                  lname: _this2.lname,
+                  fname: _this2.fname,
+                  mname: _this2.mname,
+                  suffix: _this2.suffix,
+                  sex: _this2.sex,
+                  contact_no: _this2.contact_no,
+                  descriptors: descriptions
+                }).then(function (res) {
+                  _this2.btnClass['is-loading'] = false;
+                  _this2.debug = res.data;
+
+                  _this2.$buefy.dialog.alert({
+                    title: 'Saved!',
+                    message: 'Image successfully saved.',
+                    confirmText: 'OK',
+                    type: 'is-success'
+                  });
+                });
+
+              case 17:
               case "end":
                 return _context2.stop();
             }

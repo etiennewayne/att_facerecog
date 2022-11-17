@@ -25,7 +25,7 @@ class EmployeeController extends Controller
     }
     public function store(Request $req){
         
-        return $req;
+        //return $req;
 
         try{
 
