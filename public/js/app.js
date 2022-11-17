@@ -2883,6 +2883,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2897,6 +2898,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       suffix: '',
       sex: 'MALE',
       contact_no: '916465',
+      canvasWidth: 320,
+      canvasHeight: 240,
       // lname: '',
       // fname: '',
       // mname: '',
@@ -2932,7 +2935,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 stream = _context.sent;
                 video.srcObject = stream;
 
-              case 5:
+                if (screen.width < 400) {
+                  _this.canvasWidth = 240;
+                  _this.canvasHeight = 320;
+                } else {}
+
+                _this.canvasWidth = 320;
+                _this.canvasHeight = 240;
+
+              case 8:
               case "end":
                 return _context.stop();
             }
@@ -2949,17 +2960,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       switch (this.shutterCount) {
         case 0:
-          canvas1.getContext('2d').drawImage(video, 0, 0, 320, 240);
+          canvas1.getContext('2d').drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
           image_data_url = canvas1.toDataURL('image/jpeg');
           break;
 
         case 1:
-          canvas2.getContext('2d').drawImage(video, 0, 0, 320, 240);
+          canvas2.getContext('2d').drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
           image_data_url = canvas2.toDataURL('image/jpeg');
           break;
 
         case 2:
-          canvas3.getContext('2d').drawImage(video, 0, 0, 320, 240);
+          canvas3.getContext('2d').drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
           image_data_url = canvas3.toDataURL('image/jpeg');
           break;
       }
@@ -2974,8 +2985,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       console.log(image_data_url);
     },
     submit: function submit() {
-      this.btnClass['is-loading'] = true;
-      this.store();
+      this.btnClass['is-loading'] = true; //this.store();
     },
     store: function store() {
       var _this2 = this;
@@ -3064,7 +3074,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee3);
       }))();
+    },
+    showSize: function showSize() {
+      var videoImg = document.getElementById('video');
+      var canvas1 = document.getElementById('canvas1'); // alert('Video Width: ' + canvas1.width);
+
+      alert('screen width: ' + screen.width);
+    },
+    myEventHandler: function myEventHandler(e) {// your code for handling resize...
     }
+  },
+  created: function created() {
+    window.addEventListener("resize", this.myEventHandler);
+  },
+  destroyed: function destroyed() {
+    window.removeEventListener("resize", this.myEventHandler);
   },
   mounted: function mounted() {
     this.startCamera();
@@ -28493,6 +28517,15 @@ var render = function () {
                         },
                         [_vm._v("Snap")]
                       ),
+                      _vm._v(" "),
+                      _c(
+                        "b-button",
+                        {
+                          staticClass: "is-warning",
+                          on: { click: _vm.showSize },
+                        },
+                        [_vm._v("Show Size")]
+                      ),
                     ],
                     1
                   ),
@@ -28500,19 +28533,31 @@ var render = function () {
                   _c("div", { staticClass: "capture-container" }, [
                     _c("div", { staticClass: "canvas-container" }, [
                       _c("canvas", {
-                        attrs: { id: "canvas1", width: "320", height: "240" },
+                        attrs: {
+                          id: "canvas1",
+                          width: _vm.canvasWidth,
+                          height: _vm.canvasHeight,
+                        },
                       }),
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "canvas-container" }, [
                       _c("canvas", {
-                        attrs: { id: "canvas2", width: "320", height: "240" },
+                        attrs: {
+                          id: "canvas2",
+                          width: _vm.canvasWidth,
+                          height: _vm.canvasHeight,
+                        },
                       }),
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "canvas-container" }, [
                       _c("canvas", {
-                        attrs: { id: "canvas3", width: "320", height: "240" },
+                        attrs: {
+                          id: "canvas3",
+                          width: _vm.canvasWidth,
+                          height: _vm.canvasHeight,
+                        },
                       }),
                     ]),
                     _vm._v(" "),

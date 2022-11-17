@@ -47,17 +47,18 @@
                                 </div>
                                 <div class="buttons is-centered mt-2">
                                     <b-button class="button is-primary" @click="snap">Snap</b-button>
+                                    <b-button class="is-warning" @click="showSize">Show Size</b-button>
                                 </div>
         
                                 <div class="capture-container">
                                     <div class="canvas-container">
-                                        <canvas id="canvas1" width="320" height="240"></canvas>
+                                        <canvas id="canvas1" :width="canvasWidth" :height="canvasHeight"></canvas>
                                     </div>
                                     <div class="canvas-container">
-                                        <canvas id="canvas2" width="320" height="240"></canvas>
+                                        <canvas id="canvas2" :width="canvasWidth" :height="canvasHeight"></canvas>
                                     </div>
                                     <div class="canvas-container">
-                                        <canvas id="canvas3" width="320" height="240"></canvas>
+                                        <canvas id="canvas3" :width="canvasWidth" :height="canvasHeight"></canvas>
                                     </div>
                                     <img id="img" />
                                 </div>
@@ -102,6 +103,9 @@ export default {
             sex: 'MALE',
             contact_no: '916465',
 
+            canvasWidth: 320,
+            canvasHeight: 240,
+
             // lname: '',
             // fname: '',
             // mname: '',
@@ -124,6 +128,14 @@ export default {
             this.btnClass['is-loading'] = true;
             let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
 	        video.srcObject = stream;
+
+            if(screen.width < 400){
+                this.canvasWidth = 240;
+                this.canvasHeight = 320;
+            }else{
+
+            }this.canvasWidth = 320;
+                this.canvasHeight = 240;
         },
 
         snap(){
@@ -137,15 +149,15 @@ export default {
 
             switch(this.shutterCount){
                 case 0:
-                    canvas1.getContext('2d').drawImage(video, 0, 0, 320, 240);
+                    canvas1.getContext('2d').drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
                     image_data_url = canvas1.toDataURL('image/jpeg');
                     break;
                 case 1:
-                    canvas2.getContext('2d').drawImage(video, 0, 0, 320, 240);
+                    canvas2.getContext('2d').drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
                     image_data_url = canvas2.toDataURL('image/jpeg');
                     break;
                 case 2:
-                    canvas3.getContext('2d').drawImage(video, 0, 0, 320, 240);
+                    canvas3.getContext('2d').drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
                     image_data_url = canvas3.toDataURL('image/jpeg');
                     break;
             }
@@ -162,7 +174,8 @@ export default {
 
         submit: function(){
             this.btnClass['is-loading'] = true;
-            this.store();
+             
+            //this.store();
         },
 
         async store(){
@@ -218,9 +231,26 @@ export default {
 
             this.btnClass['is-loading'] = false;
             console.log(this.btnClass)
+        },
+
+        showSize(){
+            let videoImg = document.getElementById('video');
+            let canvas1 = document.getElementById('canvas1');
+           // alert('Video Width: ' + canvas1.width);
+           alert('screen width: ' + screen.width);
+        },
+
+        myEventHandler(e) {
+            // your code for handling resize...
         }
     },
 
+    created() {
+        window.addEventListener("resize", this.myEventHandler);
+    },
+    destroyed() {
+        window.removeEventListener("resize", this.myEventHandler);
+    },
     mounted(){
         this.startCamera();
         this.initFaceDetectionControls();
