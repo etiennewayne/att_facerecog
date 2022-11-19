@@ -5,7 +5,7 @@
                 <div class="column is-10">
                     <div class="box">
 
-                        <div class="is-flex mb-2" style="font-size: 20px; font-weight: bold;">LIST OF USER</div>
+                        <div class="is-flex mb-2" style="font-size: 20px; font-weight: bold;">LIST OF ACCOUNTS</div>
 
                         <div class="level">
                             <div class="level-left">
@@ -169,7 +169,7 @@
                                     </b-field>
                                 </div>
 
-                                <div class="column">
+                                <!-- <div class="column">
                                     <b-field label="Email" label-position="on-border"
                                              :type="this.errors.email ? 'is-danger':''"
                                              :message="this.errors.email ? this.errors.email[0] : ''">
@@ -177,7 +177,7 @@
                                                  placeholder="Email" required>
                                         </b-input>
                                     </b-field>
-                                </div>
+                                </div> -->
                             </div>
 
                             <div class="columns">
@@ -234,19 +234,6 @@
                                             <option value="ADMIN">ADMINISTRATOR</option>
                                             <option value="USER">USER</option>
 
-                                        </b-select>
-                                    </b-field>
-                                </div>
-
-                            </div>
-
-                            <div class="columns">
-                                <div class="column" v-if="fields.role === 'OFFICE'">
-                                    <b-field label="Office" label-position="on-border" expanded
-                                             :type="this.errors.office ? 'is-danger':''"
-                                             :message="this.errors.office ? this.errors.office[0] : ''">
-                                        <b-select v-model="fields.office" expanded>
-                                            <option v-for="(item, index) in offices" :key="index" :value="item.office_id">{{ item.office_name }}</option>
                                         </b-select>
                                     </b-field>
                                 </div>
@@ -433,7 +420,7 @@ export default{
             ].join('&')
 
             this.loading = true
-            axios.get(`/cpanel/get-users?${params}`)
+            axios.get(`/get-accounts?${params}`)
                 .then(({ data }) => {
                     this.data = [];
                     let currentTotal = data.total
@@ -501,7 +488,7 @@ export default{
         submit: function(){
             if(this.global_id > 0){
                 //update
-                axios.put('/users/'+this.global_id, this.fields).then(res=>{
+                axios.put('/accounts/'+this.global_id, this.fields).then(res=>{
                     if(res.data.status === 'updated'){
                         this.$buefy.dialog.alert({
                             title: 'UPDATED!',
@@ -522,7 +509,7 @@ export default{
                 })
             }else{
                 //INSERT HERE
-                axios.post('/users', this.fields).then(res=>{
+                axios.post('/accounts', this.fields).then(res=>{
                     if(res.data.status === 'saved'){
                         this.$buefy.dialog.alert({
                             title: 'SAVED!',
@@ -561,7 +548,7 @@ export default{
         },
         //execute delete after confirming
         deleteSubmit(delete_id) {
-            axios.delete('/users/' + delete_id).then(res => {
+            axios.delete('/accounts/' + delete_id).then(res => {
                 this.loadAsyncData();
             }).catch(err => {
                 if (err.response.status === 422) {
@@ -589,7 +576,7 @@ export default{
 
 
             //nested axios for getting the address 1 by 1 or request by request
-            axios.get('/users/'+data_id).then(res=>{
+            axios.get('/accounts/'+data_id).then(res=>{
                 this.fields = res.data;
                 this.fields.office = res.data.office_id;
                 let tempData = res.data;

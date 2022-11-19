@@ -47,7 +47,7 @@ class UserController extends Controller
             'lname' => ['required', 'string', 'max:100'],
             'fname' => ['required', 'string', 'max:100'],
             'sex' => ['required', 'string', 'max:20'],
-            'email' => ['required', 'unique:users'],
+            // 'email' => ['required', 'unique:users'],
             'password' => ['required', 'string', 'confirmed'],
             'role' => ['required', 'string'],
             'province' => ['required', 'string'],
@@ -56,14 +56,14 @@ class UserController extends Controller
         ]);
 
         User::create([
-            'qr_ref' => $qr_code,
+            // 'qr_ref' => $qr_code,
             'username' => $req->username,
             'password' => Hash::make($req->password),
             'lname' => strtoupper($req->lname),
             'fname' => strtoupper($req->fname),
             'mname' => strtoupper($req->mname),
             'sex' => $req->sex,
-            'email' => $req->email,
+            // 'email' => $req->email,
             'contact_no' => $req->contact_no,
             'role' => $req->role,
             'province' => $req->province,
@@ -83,7 +83,7 @@ class UserController extends Controller
             'lname' => ['required', 'string', 'max:100'],
             'fname' => ['required', 'string', 'max:100'],
             'sex' => ['required', 'string', 'max:20'],
-            'email' => ['required', 'unique:users,email,'.$id.',user_id'],
+            // 'email' => ['required', 'unique:users,email,'.$id.',user_id'],
             'role' => ['required', 'string'],
             'province' => ['required', 'string'],
             'city' => ['required', 'string'],
@@ -96,7 +96,7 @@ class UserController extends Controller
         $data->fname = strtoupper($req->fname);
         $data->mname = strtoupper($req->mname);
         $data->sex = $req->sex;
-        $data->email = $req->email;
+       // $data->email = $req->email;
         $data->role = $req->role;
         $data->province = $req->province;
         $data->city = $req->city;

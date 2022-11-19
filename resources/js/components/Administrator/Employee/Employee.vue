@@ -5,7 +5,7 @@
                 <div class="column is-10">
                     <div class="box">
 
-                        <div class="is-flex mb-2" style="font-size: 20px; font-weight: bold;">LIST OF USER</div>
+                        <div class="is-flex mb-2" style="font-size: 20px; font-weight: bold;">LIST OF EMPLOYEE</div>
 
                         <div class="level">
                             <div class="level-left">
@@ -57,12 +57,8 @@
                             :default-sort-direction="defaultSortDirection"
                             @sort="onSort">
 
-                            <b-table-column field="user_id" label="ID" sortable v-slot="props">
-                                {{ props.row.user_id }}
-                            </b-table-column>
-
-                            <b-table-column field="username" label="Username" sortable v-slot="props">
-                                {{ props.row.username }}
+                            <b-table-column field="employee_id" label="ID" sortable v-slot="props">
+                                {{ props.row.employee_id }}
                             </b-table-column>
 
                             <b-table-column field="lname" label="Name" sortable v-slot="props">
@@ -73,24 +69,16 @@
                                 {{ props.row.sex }}
                             </b-table-column>
 
-                            <b-table-column field="email" label="Email" v-slot="props">
-                                {{ props.row.email }}
-                            </b-table-column>
-
-                            <b-table-column field="role" label="Role" v-slot="props">
-                                {{ props.row.role }}
-                            </b-table-column>
-
                             <b-table-column label="Action" v-slot="props">
                                 <div class="is-flex">
                                     <b-tooltip label="Edit" type="is-warning">
-                                        <b-button class="button is-small mr-1" tag="a" icon-right="pencil" @click="getData(props.row.user_id)"></b-button>
+                                        <b-button class="button is-small mr-1" tag="a" icon-right="pencil" @click="getData(props.row.employee_id)"></b-button>
                                     </b-tooltip>
                                     <b-tooltip label="Delete" type="is-danger">
-                                        <b-button class="button is-small mr-1" icon-right="delete" @click="confirmDelete(props.row.user_id)"></b-button>
+                                        <b-button class="button is-small mr-1" icon-right="delete" @click="confirmDelete(props.row.employee_id)"></b-button>
                                     </b-tooltip>
                                     <b-tooltip label="Reset Password" type="is-info">
-                                        <b-button class="button is-small mr-1" icon-right="lock" @click="openModalResetPassword(props.row.user_id)"></b-button>
+                                        <b-button class="button is-small mr-1" icon-right="lock" @click="openModalResetPassword(props.row.employee_id)"></b-button>
                                     </b-tooltip>
                                 </div>
                             </b-table-column>
@@ -116,7 +104,7 @@
             <form @submit.prevent="submit">
                 <div class="modal-card">
                     <header class="modal-card-head">
-                        <p class="modal-card-title">User Information</p>
+                        <p class="modal-card-title">Employee Information</p>
                         <button
                             type="button"
                             class="delete"
@@ -125,18 +113,7 @@
 
                     <section class="modal-card-body">
                         <div class="">
-                            <div class="columns">
-                                <div class="column">
-                                    <b-field label="Username" label-position="on-border"
-                                             :type="this.errors.username ? 'is-danger':''"
-                                             :message="this.errors.username ? this.errors.username[0] : ''">
-                                        <b-input v-model="fields.username"
-                                                 placeholder="Username" required>
-                                        </b-input>
-                                    </b-field>
-                                </div>
-                            </div>
-
+                        
                             <div class="columns">
                                 <div class="column">
                                     <b-field label="Last Name" label-position="on-border"
@@ -168,50 +145,16 @@
                                         </b-input>
                                     </b-field>
                                 </div>
-
                                 <div class="column">
-                                    <b-field label="Email" label-position="on-border"
-                                             :type="this.errors.email ? 'is-danger':''"
-                                             :message="this.errors.email ? this.errors.email[0] : ''">
-                                        <b-input type="email" v-model="fields.email"
-                                                 placeholder="Email" required>
+                                    <b-field label="Suffix" label-position="on-border"
+                                             :type="this.errors.suffix ? 'is-danger':''"
+                                             :message="this.errors.suffix ? this.errors.suffix[0] : ''">
+                                        <b-input v-model="fields.suffix"
+                                                 placeholder="Suffix">
                                         </b-input>
                                     </b-field>
                                 </div>
                             </div>
-
-                            <div class="columns">
-                                <div class="column">
-                                    <b-field label="Contact No" label-position="on-border"
-                                             :type="this.errors.contact_no ? 'is-danger':''"
-                                             :message="this.errors.contact_no ? this.errors.contact_no[0] : ''">
-                                        <b-input type="number" v-model="fields.contact_no"
-                                                 placeholder="Contact No" required>
-                                        </b-input>
-                                    </b-field>
-                                </div>
-                            </div>
-                            <div class="columns" v-if="global_id < 1">
-                                <div class="column">
-                                    <b-field label="Password" label-position="on-border"
-                                             :type="this.errors.password ? 'is-danger':''"
-                                             :message="this.errors.password ? this.errors.password[0] : ''">
-                                        <b-input type="password" password-reveal v-model="fields.password"
-                                                 placeholder="Password" required>
-                                        </b-input>
-                                    </b-field>
-                                </div>
-                                <div class="column">
-                                    <b-field label="Confirm Password" label-position="on-border"
-                                             :type="this.errors.password_confirmation ? 'is-danger':''"
-                                             :message="this.errors.password_confirmation ? this.errors.password_confirmation[0] : ''">
-                                        <b-input type="password" password-reveal v-model="fields.password_confirmation"
-                                                 placeholder="Confirm Password" required>
-                                        </b-input>
-                                    </b-field>
-                                </div>
-                            </div>
-
 
                             <div class="columns">
                                 <div class="column">
@@ -226,75 +169,20 @@
                                     </b-field>
                                 </div>
 
-                                <div class="column">
-                                    <b-field label="Role" label-position="on-border" expanded
-                                             :type="this.errors.role ? 'is-danger':''"
-                                             :message="this.errors.role ? this.errors.role[0] : ''">
-                                        <b-select v-model="fields.role" expanded>
-                                            <option value="ADMIN">ADMINISTRATOR</option>
-                                            <option value="DENTIST">DENTIST</option>
-                                            <option value="STAFF">STAFF</option>
-                                            <option value="USER">USER</option>
-
-                                        </b-select>
-                                    </b-field>
-                                </div>
-
-                            </div>
-
-                            <div class="columns">
-                                <div class="column" v-if="fields.role === 'OFFICE'">
-                                    <b-field label="Office" label-position="on-border" expanded
-                                             :type="this.errors.office ? 'is-danger':''"
-                                             :message="this.errors.office ? this.errors.office[0] : ''">
-                                        <b-select v-model="fields.office" expanded>
-                                            <option v-for="(item, index) in offices" :key="index" :value="item.office_id">{{ item.office_name }}</option>
-                                        </b-select>
-                                    </b-field>
-                                </div>
-
                             </div>
 
                             <div class="columns">
                                 <div class="column">
-                                    <b-field label="Province" label-position="on-border" expanded
-                                             :type="this.errors.province ? 'is-danger':''"
-                                             :message="this.errors.province ? this.errors.province[0] : ''">
-                                        <b-select v-model="fields.province" @input="loadCity" expanded>
-                                            <option v-for="(item, index) in provinces" :key="index" :value="item.provCode">{{ item.provDesc }}</option>
-                                        </b-select>
-                                    </b-field>
-                                </div>
-
-                                <div class="column">
-                                    <b-field label="City" label-position="on-border" expanded
-                                             :type="this.errors.city ? 'is-danger':''"
-                                             :message="this.errors.city ? this.errors.city[0] : ''">
-                                        <b-select v-model="fields.city" @input="loadBarangay" expanded>
-                                            <option v-for="(item, index) in cities" :key="index" :value="item.citymunCode">{{ item.citymunDesc }}</option>
-                                        </b-select>
-                                    </b-field>
-                                </div>
-                            </div>
-
-                            <div class="columns">
-                                <div class="column">
-                                    <b-field label="Barangay" label-position="on-border" expanded
-                                             :type="this.errors.barangay ? 'is-danger':''"
-                                             :message="this.errors.barangay ? this.errors.barangay[0] : ''">
-                                        <b-select v-model="fields.barangay" expanded>
-                                            <option v-for="(item, index) in barangays" :key="index" :value="item.brgyCode">{{ item.brgyDesc }}</option>
-                                        </b-select>
-                                    </b-field>
-                                </div>
-                                <div class="column">
-                                    <b-field label="Street" label-position="on-border">
-                                        <b-input v-model="fields.street"
-                                                 placeholder="Street">
+                                    <b-field label="Contact No" label-position="on-border"
+                                             :type="this.errors.contact_no ? 'is-danger':''"
+                                             :message="this.errors.contact_no ? this.errors.contact_no[0] : ''">
+                                        <b-input type="number" v-model="fields.contact_no"
+                                                 placeholder="Contact No" required>
                                         </b-input>
                                     </b-field>
                                 </div>
                             </div>
+                          
                         </div>
                     </section>
                     <footer class="modal-card-foot">
@@ -381,7 +269,7 @@ export default{
             data: [],
             total: 0,
             loading: false,
-            sortField: 'user_id',
+            sortField: 'employee_id',
             sortOrder: 'desc',
             page: 1,
             perPage: 5,
@@ -398,11 +286,10 @@ export default{
             modalResetPassword: false,
 
             fields: {
-                username: '',
-                lname: '', fname: '', mname: '',
-                password: '', password_confirmation : '',
-                sex : '', role: '',  email : '', contact_no : '',
-                province: '', city: '', barangay: '', street: ''
+                lname: '', fname: '', mname: '', suffix: '',
+                sex: '',
+                contact_no: '',
+                
             },
             errors: {},
             offices: [],
@@ -435,7 +322,7 @@ export default{
             ].join('&')
 
             this.loading = true
-            axios.get(`/cpanel/get-employees?${params}`)
+            axios.get(`/get-employees?${params}`)
                 .then(({ data }) => {
                     this.data = [];
                     let currentTotal = data.total
@@ -503,7 +390,7 @@ export default{
         submit: function(){
             if(this.global_id > 0){
                 //update
-                axios.put('/users/'+this.global_id, this.fields).then(res=>{
+                axios.put('/employees/'+this.global_id, this.fields).then(res=>{
                     if(res.data.status === 'updated'){
                         this.$buefy.dialog.alert({
                             title: 'UPDATED!',
@@ -524,7 +411,7 @@ export default{
                 })
             }else{
                 //INSERT HERE
-                axios.post('/users', this.fields).then(res=>{
+                axios.post('/employees', this.fields).then(res=>{
                     if(res.data.status === 'saved'){
                         this.$buefy.dialog.alert({
                             title: 'SAVED!',
@@ -563,7 +450,7 @@ export default{
         },
         //execute delete after confirming
         deleteSubmit(delete_id) {
-            axios.delete('/users/' + delete_id).then(res => {
+            axios.delete('/employees/' + delete_id).then(res => {
                 this.loadAsyncData();
             }).catch(err => {
                 if (err.response.status === 422) {
@@ -574,11 +461,9 @@ export default{
 
         clearFields(){
             this.fields = {
-                    username: '',
-                    lname: '', fname: '', mname: '',
-                    password: '', password_confirmation : '',
-                    sex : '', role: '',  email : '', contact_no : '',
-                    province: '', city: '', barangay: '', street: ''
+                lname: '', fname: '', mname: '',
+                suffix: '',
+                sex : '', contact_no : ''
             };
         },
 
@@ -591,66 +476,21 @@ export default{
 
 
             //nested axios for getting the address 1 by 1 or request by request
-            axios.get('/users/'+data_id).then(res=>{
+            axios.get('/employees/'+data_id).then(res=>{
                 this.fields = res.data;
-                this.fields.office = res.data.office_id;
-                let tempData = res.data;
-                //load city first
-                axios.get('/load-cities?prov=' + this.fields.province).then(res=>{
-                    //load barangay
-                    this.cities = res.data;
-                    axios.get('/load-barangays?prov=' + this.fields.province + '&city_code='+this.fields.city).then(res=>{
-                        this.barangays = res.data;
-                        this.fields = tempData;
-                    });
-                });
-            });
-        },
-
-        loadOffices(){
-            axios.get('/get-user-offices').then(res=>{
-                this.offices = res.data
             });
         },
 
 
-        //CHANGE PASSWORD
-        openModalResetPassword(dataId){
-            this.modalResetPassword = true;
-            this.fields = {};
-            this.errors = {};
-            this.global_id = dataId;
-        },
-        resetPassword(){
-            axios.post('/user-reset-password/' + this.global_id, this.fields).then(res=>{
 
-                if(res.data.status === 'changed'){
-                    this.$buefy.dialog.alert({
-                        title: 'PASSWORD CHANGED',
-                        type: 'is-success',
-                        message: 'Password changed successfully.',
-                        confirmText: 'OK',
-                        onConfirm: () => {
-                            this.modalResetPassword = false;
-                            this.fields = {};
-                            this.errors = {};
-                            this.loadAsyncData()
-                        }
-                    });
-                }
-
-            }).catch(err=>{
-                this.errors = err.response.data.errors;
-            })
-        },
+     
 
 
     },
 
     mounted() {
         //this.loadOffices();
-        this.loadAsyncData();
-        this.loadProvince();
+        this.loadAsyncData(); 
     }
 }
 </script>

@@ -25,7 +25,7 @@ class RedirectIfAuthenticated
             if (Auth::guard($guard)->check()) {
                 $user = Auth::user();
                 if($user->role === 'ADMINISTRATOR'){
-                    return redirect('/cpanel/home');
+                    return redirect('/home');
                 }
 
                 //return redirect(RouteServiceProvider::HOME);

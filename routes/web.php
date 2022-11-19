@@ -91,15 +91,20 @@ Route::get('/load-barangays', [App\Http\Controllers\AddressController::class, 'l
 
 /*     ADMINSITRATOR
       */
-Route::resource('/cpanel/home', App\Http\Controllers\Administrator\AdminHomeController::class);
+Route::resource('/home', App\Http\Controllers\Administrator\AdminHomeController::class);
 
 
-Route::resource('/cpanel/users', App\Http\Controllers\Administrator\UserController::class);
-Route::get('/cpanel/get-users', [App\Http\Controllers\Administrator\UserController::class, 'getUsers']);
+
+//user === account
+Route::resource('/accounts', App\Http\Controllers\Administrator\UserController::class);
+Route::get('/get-accounts', [App\Http\Controllers\Administrator\UserController::class, 'getUsers']);
+
+Route::post('/account-reset-password/{id}', [App\Http\Controllers\Administrator\UserController::class, 'resetPassword']);
 
 
-Route::post('/user-reset-password/{id}', [App\Http\Controllers\Administrator\UserController::class, 'resetPassword']);
 
+Route::resource('/employees', App\Http\Controllers\Administrator\AdminEmployeeController::class);
+Route::get('/get-employees', [App\Http\Controllers\Administrator\AdminEmployeeController::class, 'getEmployees']);
 
 /*     ADMINSITRATOR          */
 

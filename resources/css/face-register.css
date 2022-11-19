@@ -2,7 +2,7 @@
     .form-container{
         margin: 50px;
         max-width: 720px;
-        border: 1px solid red;
+        /* border: 1px solid red; */
     }
     .form-header{
         padding: 15px;
@@ -18,22 +18,24 @@
 
     .webcam{
         margin: auto;
-        border: 1px solid blue;
+        border: 1px solid rgb(32, 32, 32);
         display: block;
     }
    
     .canvas-container{
-        border: 1px solid red;
+       
         overflow: hidden;
-        margin-bottom: 10px;
+        margin-bottom: 5px auto;
     }
+
+    
 
     @media only screen and (max-width: 480px) {
         .form-container{
             /* border: 1px solid rgb(22, 31, 112); */
             margin: 0;
             max-width: 100%;
-            border: 1px solid rgb(29, 7, 126);
+            /* border: 1px solid rgb(29, 7, 126); */
         }
 
         .form-body{
@@ -41,10 +43,24 @@
         }
 
         .canvas-container{
-            margin-bottom: 0;
+            margin-bottom: 5px auto;
         }
 
         .section{
             margin: 0;
+        }
+        .camera-title{
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
+        }
+    }
+
+    @media only screen and (max-width: 728px) {
+        
+        .camera-title{
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
         }
     }

@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
                 'city' => 'TANGUB CITY',
                 'barangay' => 'CANIANGAN',
                 'street' => 'P-6',
-                'email' => 'admin@dev.com',
+                //'email' => 'admin@dev.com',
                 'contact_no' => '099124646',
                 'role' => 'ADMINISTRATOR',
                 'password' => Hash::make('a')

@@ -2,7 +2,8 @@
 
     <div>
         <div class="section">
-           
+            <div class="box">
+
                 <b-tabs v-model="activeTab">
                     <b-tab-item label="Personal Inforamtion">
                         <div>
@@ -32,7 +33,9 @@
                             <b-field label="Contact No.">
                                 <b-input type="text" v-model="contact_no" placeholder="Contact No." required />
                             </b-field>
-    
+                            <div class="buttons">
+                                <b-button label="Clear" type="button" @click="clearForm"></b-button>
+                            </div>
                         </div>
                     </b-tab-item>
         
@@ -45,6 +48,7 @@
                                 <div class="webcam-container">
                                     <video class="webcam" id="video" width="320" height="240" autoplay></video>
                                 </div>
+                                <div class="camera-title">CAMERA</div>
                                 <div class="buttons is-centered mt-2">
                                     <b-button class="button is-primary" @click="snap">Snap</b-button>
                                     <b-button class="is-warning" @click="showSize">Show Size</b-button>
@@ -64,15 +68,17 @@
                                 </div>
                             </div>
                             <div class="footer">
-                                <div class="buttons">
+                                <div class="buttons is-centered">
                                     <button :class="btnClass" @click="submit">REGISTER FACE</button>
                                 </div>
                             </div>
                         </div>
                     </b-tab-item>
                 </b-tabs>
+                <!-- <div>{{ debug }}</div> -->
+            </div>
             
-                <div>{{ debug }}</div>
+            <b-loading :is-full-page="true" v-model="isLoading" :can-cancel="true"></b-loading>
 
         </div> <!--section-->
         <!-- Webcam.min.js -->
@@ -92,6 +98,7 @@ export default {
             shutterCount: 0,
 
             loading: true,
+            isLoading: false,
 
             //fields
             name: '',
@@ -106,6 +113,10 @@ export default {
             canvasWidth: 320,
             canvasHeight: 240,
 
+            detections1: null,
+            detections2: null,
+            detections2: null,
+            descriptions: [],
             // lname: '',
             // fname: '',
             // mname: '',
@@ -122,6 +133,8 @@ export default {
             }
         }
     },
+
+
     methods:{
 
         async startCamera(){
@@ -129,13 +142,7 @@ export default {
             let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
 	        video.srcObject = stream;
 
-            if(screen.width < 400){
-                this.canvasWidth = 240;
-                this.canvasHeight = 320;
-            }else{
-
-            }this.canvasWidth = 320;
-                this.canvasHeight = 240;
+           
         },
 
         snap(){
@@ -147,18 +154,25 @@ export default {
 
             let image_data_url;
 
+            // var scale = Math.min(this.canvasWidth / video.width, this.canvasHeight / video.height);
+            // var w = video.width * scale;
+            // var h = video.height * scale;
+
+            // var left = this.canvasWidth / 2 - w / 2;
+            // var top = this.canvasHeight / 2 - h / 2;
+
             switch(this.shutterCount){
                 case 0:
                     canvas1.getContext('2d').drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
-                    image_data_url = canvas1.toDataURL('image/jpeg');
+                    //image_data_url = canvas1.toDataURL('image/jpeg');
                     break;
                 case 1:
                     canvas2.getContext('2d').drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
-                    image_data_url = canvas2.toDataURL('image/jpeg');
+                    //image_data_url = canvas2.toDataURL('image/jpeg');
                     break;
                 case 2:
                     canvas3.getContext('2d').drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
-                    image_data_url = canvas3.toDataURL('image/jpeg');
+                    //image_data_url = canvas3.toDataURL('image/jpeg');
                     break;
             }
             
@@ -168,38 +182,46 @@ export default {
                 this.shutterCount = 0;
             }
             // data url of the image
-            console.log(image_data_url);
+
         },
 
 
         submit: function(){
             this.btnClass['is-loading'] = true;
-             
-            //this.store();
+            this.isLoading = true;
+            console.log('first')
+
+            this.store().then(()=>{
+                console.log('store completed')
+                this.btnClass['is-loading'] = false;
+                this.isLoading = false;
+            });
         },
 
         async store(){
+            console.log('second');
             
             let canvas1 = document.getElementById('canvas1');
             let canvas2 = document.getElementById('canvas2');
             let canvas3 = document.getElementById('canvas3');
+           
+    
+            this.detections1 = await faceapi.detectSingleFace(canvas1, new faceapi.TinyFaceDetectorOptions())
+                                    .withFaceLandmarks().withFaceDescriptor();
+            this.descriptions.push(this.detections1.descriptor)
 
-            const descriptions = [];
-            
-            const detections1 = await faceapi.detectSingleFace(canvas1, new faceapi.TinyFaceDetectorOptions())
+            this.detections2 = await faceapi.detectSingleFace(canvas2, new faceapi.TinyFaceDetectorOptions())
                                     .withFaceLandmarks().withFaceDescriptor();
-            descriptions.push(detections1.descriptor)
+            this.descriptions.push(this.detections2.descriptor)
             
-            //this.debug = descriptions;
-            const detections2 = await faceapi.detectSingleFace(canvas2, new faceapi.TinyFaceDetectorOptions())
+            this.detections3 = await faceapi.detectSingleFace(canvas3, new faceapi.TinyFaceDetectorOptions())
                                     .withFaceLandmarks().withFaceDescriptor();
-            descriptions.push(detections2.descriptor)
+            this.descriptions.push(this.detections3.descriptor)
             
-            const detections3 = await faceapi.detectSingleFace(canvas3, new faceapi.TinyFaceDetectorOptions())
-                                    .withFaceLandmarks().withFaceDescriptor();
-            descriptions.push(detections3.descriptor)
-            
-            
+            this.debug = this.descriptions;
+
+            this.btnClass['is-loading'] = false;
+
             axios.post('/store-descriptor', {
                 lname : this.lname,
                 fname : this.fname,
@@ -207,19 +229,48 @@ export default {
                 suffix : this.suffix,
                 sex : this.sex,
                 contact_no : this.contact_no,
-                descriptors : descriptions
+                descriptors : this.descriptions
             }).then(res=>{
-                this.btnClass['is-loading'] = false;
+               
                 this.debug = res.data;
                 this.$buefy.dialog.alert({
                     title: 'Saved!',
                     message: 'Image successfully saved.',
                     confirmText: 'OK',
-                    type: 'is-success'
+                    type: 'is-success',
+                    onConfirm: ()=>{
+                        
+                        this.clearForm();
+                    }
                 })
+            }).catch(err=>{
+                alert(err)
             })
         },
+        clearForm(){
+            this.shutterCount = 0;
+            this.lname = '';
+            this.fname = '';
+            this.mname = '';
+            this.suffix = '';
+            this.sex = '';
+            this.contact_no = '';
 
+            this.descriptions = [];
+
+            this.detections1 = null;
+            this.detections2 = null;
+            this.detections3 = null;
+
+            let context1 = canvas1.getContext('2d');
+            let context2 = canvas2.getContext('2d');
+            let context3 = canvas3.getContext('2d');
+
+            context1.clearRect(0, 0, canvas1.width, canvas1.height);
+            context2.clearRect(0, 0, canvas2.width, canvas2.height);
+            context3.clearRect(0, 0, canvas3.width, canvas3.height);
+
+        },
         initFaceDetectionControls(){
             faceapi.nets.faceRecognitionNet.loadFromUri('/js/face/weights');
             faceapi.nets.faceLandmark68Net.loadFromUri('/js/face/weights');
@@ -242,6 +293,14 @@ export default {
 
         myEventHandler(e) {
             // your code for handling resize...
+            //console.log(e)
+            if(screen.width < 400){
+                this.canvasWidth = 240;
+                this.canvasHeight = 320;
+            }else{
+                this.canvasWidth = 320;
+                this.canvasHeight = 240;
+            }
         }
     },
 
@@ -254,8 +313,7 @@ export default {
     mounted(){
         this.startCamera();
         this.initFaceDetectionControls();
-        this.run();
-        
+        this.run(); 
     }
 }        
 </script>

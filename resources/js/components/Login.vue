@@ -20,7 +20,7 @@
                             <b-input type="password" v-model="fields.password" password-reveal placeholder="Password" />
                         </b-field>
 
-                        <div class="buttons">
+                        <div class="buttons is-right">
                             <button class="button is-primary">LOGIN</button>
                         </div>
                     </div>
@@ -50,15 +50,11 @@ export default {
             axios.post('/login', this.fields).then(res=>{
                 console.log(res.data)
                 if(res.data.role === 'ADMINISTRATOR' || res.data.role === 'STAFF'){
-                    window.location = '/cpanel/home';
+                    window.location = '/home';
                 }
                 if(res.data.role === 'USER'){
                     window.location = '/';
                 }
-                if(res.data.role === 'DENTIST'){
-                    window.location = '/dentist/dashboard';
-                }
-               //window.location = '/dashboard';
             }).catch(err=>{
                 if(err.response.status === 422){
                     this.errors = err.response.data.errors;

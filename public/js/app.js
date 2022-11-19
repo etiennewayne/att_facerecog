@@ -2382,125 +2382,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       data: [],
       total: 0,
       loading: false,
-      sortField: 'user_id',
+      sortField: 'employee_id',
       sortOrder: 'desc',
       page: 1,
       perPage: 5,
@@ -2512,20 +2400,12 @@ __webpack_require__.r(__webpack_exports__);
       isModalCreate: false,
       modalResetPassword: false,
       fields: {
-        username: '',
         lname: '',
         fname: '',
         mname: '',
-        password: '',
-        password_confirmation: '',
+        suffix: '',
         sex: '',
-        role: '',
-        email: '',
-        contact_no: '',
-        province: '',
-        city: '',
-        barangay: '',
-        street: ''
+        contact_no: ''
       },
       errors: {},
       offices: [],
@@ -2548,7 +2428,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var params = ["sort_by=".concat(this.sortField, ".").concat(this.sortOrder), "lname=".concat(this.search.lname), "perpage=".concat(this.perPage), "page=".concat(this.page)].join('&');
       this.loading = true;
-      axios.get("/cpanel/get-employees?".concat(params)).then(function (_ref) {
+      axios.get("/get-employees?".concat(params)).then(function (_ref) {
         var data = _ref.data;
         _this.data = [];
         var currentTotal = data.total;
@@ -2617,7 +2497,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.global_id > 0) {
         //update
-        axios.put('/users/' + this.global_id, this.fields).then(function (res) {
+        axios.put('/employees/' + this.global_id, this.fields).then(function (res) {
           if (res.data.status === 'updated') {
             _this5.$buefy.dialog.alert({
               title: 'UPDATED!',
@@ -2640,7 +2520,7 @@ __webpack_require__.r(__webpack_exports__);
         });
       } else {
         //INSERT HERE
-        axios.post('/users', this.fields).then(function (res) {
+        axios.post('/employees', this.fields).then(function (res) {
           if (res.data.status === 'saved') {
             _this5.$buefy.dialog.alert({
               title: 'SAVED!',
@@ -2684,7 +2564,7 @@ __webpack_require__.r(__webpack_exports__);
     deleteSubmit: function deleteSubmit(delete_id) {
       var _this7 = this;
 
-      axios["delete"]('/users/' + delete_id).then(function (res) {
+      axios["delete"]('/employees/' + delete_id).then(function (res) {
         _this7.loadAsyncData();
       })["catch"](function (err) {
         if (err.response.status === 422) {
@@ -2694,20 +2574,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     clearFields: function clearFields() {
       this.fields = {
-        username: '',
         lname: '',
         fname: '',
         mname: '',
-        password: '',
-        password_confirmation: '',
+        suffix: '',
         sex: '',
-        role: '',
-        email: '',
-        contact_no: '',
-        province: '',
-        city: '',
-        barangay: '',
-        street: ''
+        contact_no: ''
       };
     },
     //update code here
@@ -2718,63 +2590,14 @@ __webpack_require__.r(__webpack_exports__);
       this.global_id = data_id;
       this.isModalCreate = true; //nested axios for getting the address 1 by 1 or request by request
 
-      axios.get('/users/' + data_id).then(function (res) {
+      axios.get('/employees/' + data_id).then(function (res) {
         _this8.fields = res.data;
-        _this8.fields.office = res.data.office_id;
-        var tempData = res.data; //load city first
-
-        axios.get('/load-cities?prov=' + _this8.fields.province).then(function (res) {
-          //load barangay
-          _this8.cities = res.data;
-          axios.get('/load-barangays?prov=' + _this8.fields.province + '&city_code=' + _this8.fields.city).then(function (res) {
-            _this8.barangays = res.data;
-            _this8.fields = tempData;
-          });
-        });
-      });
-    },
-    loadOffices: function loadOffices() {
-      var _this9 = this;
-
-      axios.get('/get-user-offices').then(function (res) {
-        _this9.offices = res.data;
-      });
-    },
-    //CHANGE PASSWORD
-    openModalResetPassword: function openModalResetPassword(dataId) {
-      this.modalResetPassword = true;
-      this.fields = {};
-      this.errors = {};
-      this.global_id = dataId;
-    },
-    resetPassword: function resetPassword() {
-      var _this10 = this;
-
-      axios.post('/user-reset-password/' + this.global_id, this.fields).then(function (res) {
-        if (res.data.status === 'changed') {
-          _this10.$buefy.dialog.alert({
-            title: 'PASSWORD CHANGED',
-            type: 'is-success',
-            message: 'Password changed successfully.',
-            confirmText: 'OK',
-            onConfirm: function onConfirm() {
-              _this10.modalResetPassword = false;
-              _this10.fields = {};
-              _this10.errors = {};
-
-              _this10.loadAsyncData();
-            }
-          });
-        }
-      })["catch"](function (err) {
-        _this10.errors = err.response.data.errors;
       });
     }
   },
   mounted: function mounted() {
     //this.loadOffices();
     this.loadAsyncData();
-    this.loadProvince();
   }
 });
 
@@ -2799,6 +2622,14 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2886,10 +2717,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
-    return {
+    var _ref;
+
+    return _ref = {
       activeTab: 0,
       shutterCount: 0,
       loading: true,
+      isLoading: false,
       //fields
       name: '',
       lname: 'Dela Curz',
@@ -2900,19 +2734,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       contact_no: '916465',
       canvasWidth: 320,
       canvasHeight: 240,
-      // lname: '',
-      // fname: '',
-      // mname: '',
-      // suffix: '',
-      // sex: '',
-      // contact_no: '',
-      debug: 'test',
-      btnClass: {
-        'button': true,
-        'is-primary': true,
-        'is-loading': true
-      }
-    };
+      detections1: null,
+      detections2: null
+    }, _defineProperty(_ref, "detections2", null), _defineProperty(_ref, "descriptions", []), _defineProperty(_ref, "debug", 'test'), _defineProperty(_ref, "btnClass", {
+      'button': true,
+      'is-primary': true,
+      'is-loading': true
+    }), _ref;
   },
   methods: {
     startCamera: function startCamera() {
@@ -2935,15 +2763,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 stream = _context.sent;
                 video.srcObject = stream;
 
-                if (screen.width < 400) {
-                  _this.canvasWidth = 240;
-                  _this.canvasHeight = 320;
-                } else {}
-
-                _this.canvasWidth = 320;
-                _this.canvasHeight = 240;
-
-              case 8:
+              case 5:
               case "end":
                 return _context.stop();
             }
@@ -2956,22 +2776,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var canvas2 = document.getElementById('canvas2');
       var canvas3 = document.getElementById('canvas3');
       var img = document.getElementById('img');
-      var image_data_url;
+      var image_data_url; // var scale = Math.min(this.canvasWidth / video.width, this.canvasHeight / video.height);
+      // var w = video.width * scale;
+      // var h = video.height * scale;
+      // var left = this.canvasWidth / 2 - w / 2;
+      // var top = this.canvasHeight / 2 - h / 2;
 
       switch (this.shutterCount) {
         case 0:
-          canvas1.getContext('2d').drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
-          image_data_url = canvas1.toDataURL('image/jpeg');
+          canvas1.getContext('2d').drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight); //image_data_url = canvas1.toDataURL('image/jpeg');
+
           break;
 
         case 1:
-          canvas2.getContext('2d').drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
-          image_data_url = canvas2.toDataURL('image/jpeg');
+          canvas2.getContext('2d').drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight); //image_data_url = canvas2.toDataURL('image/jpeg');
+
           break;
 
         case 2:
-          canvas3.getContext('2d').drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
-          image_data_url = canvas3.toDataURL('image/jpeg');
+          canvas3.getContext('2d').drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight); //image_data_url = canvas3.toDataURL('image/jpeg');
+
           break;
       }
 
@@ -2981,65 +2805,83 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         this.shutterCount = 0;
       } // data url of the image
 
-
-      console.log(image_data_url);
     },
     submit: function submit() {
-      this.btnClass['is-loading'] = true; //this.store();
-    },
-    store: function store() {
       var _this2 = this;
 
+      this.btnClass['is-loading'] = true;
+      this.isLoading = true;
+      console.log('first');
+      this.store().then(function () {
+        console.log('store completed');
+        _this2.btnClass['is-loading'] = false;
+        _this2.isLoading = false;
+      });
+    },
+    store: function store() {
+      var _this3 = this;
+
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var canvas1, canvas2, canvas3, descriptions, detections1, detections2, detections3;
+        var canvas1, canvas2, canvas3;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
+                console.log('second');
                 canvas1 = document.getElementById('canvas1');
                 canvas2 = document.getElementById('canvas2');
                 canvas3 = document.getElementById('canvas3');
-                descriptions = [];
                 _context2.next = 6;
                 return faceapi.detectSingleFace(canvas1, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
 
               case 6:
-                detections1 = _context2.sent;
-                descriptions.push(detections1.descriptor); //this.debug = descriptions;
+                _this3.detections1 = _context2.sent;
+
+                _this3.descriptions.push(_this3.detections1.descriptor);
 
                 _context2.next = 10;
                 return faceapi.detectSingleFace(canvas2, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
 
               case 10:
-                detections2 = _context2.sent;
-                descriptions.push(detections2.descriptor);
+                _this3.detections2 = _context2.sent;
+
+                _this3.descriptions.push(_this3.detections2.descriptor);
+
                 _context2.next = 14;
                 return faceapi.detectSingleFace(canvas3, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
 
               case 14:
-                detections3 = _context2.sent;
-                descriptions.push(detections3.descriptor);
-                axios.post('/store-descriptor', {
-                  lname: _this2.lname,
-                  fname: _this2.fname,
-                  mname: _this2.mname,
-                  suffix: _this2.suffix,
-                  sex: _this2.sex,
-                  contact_no: _this2.contact_no,
-                  descriptors: descriptions
-                }).then(function (res) {
-                  _this2.btnClass['is-loading'] = false;
-                  _this2.debug = res.data;
+                _this3.detections3 = _context2.sent;
 
-                  _this2.$buefy.dialog.alert({
+                _this3.descriptions.push(_this3.detections3.descriptor);
+
+                _this3.debug = _this3.descriptions;
+                _this3.btnClass['is-loading'] = false;
+                axios.post('/store-descriptor', {
+                  lname: _this3.lname,
+                  fname: _this3.fname,
+                  mname: _this3.mname,
+                  suffix: _this3.suffix,
+                  sex: _this3.sex,
+                  contact_no: _this3.contact_no,
+                  descriptors: _this3.descriptions
+                }).then(function (res) {
+                  _this3.debug = res.data;
+
+                  _this3.$buefy.dialog.alert({
                     title: 'Saved!',
                     message: 'Image successfully saved.',
                     confirmText: 'OK',
-                    type: 'is-success'
+                    type: 'is-success',
+                    onConfirm: function onConfirm() {
+                      _this3.clearForm();
+                    }
                   });
+                })["catch"](function (err) {
+                  alert(err);
                 });
 
-              case 17:
+              case 19:
               case "end":
                 return _context2.stop();
             }
@@ -3047,12 +2889,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
+    clearForm: function clearForm() {
+      this.shutterCount = 0;
+      this.lname = '';
+      this.fname = '';
+      this.mname = '';
+      this.suffix = '';
+      this.sex = '';
+      this.contact_no = '';
+      this.descriptions = [];
+      this.detections1 = null;
+      this.detections2 = null;
+      this.detections3 = null;
+      var context1 = canvas1.getContext('2d');
+      var context2 = canvas2.getContext('2d');
+      var context3 = canvas3.getContext('2d');
+      context1.clearRect(0, 0, canvas1.width, canvas1.height);
+      context2.clearRect(0, 0, canvas2.width, canvas2.height);
+      context3.clearRect(0, 0, canvas3.width, canvas3.height);
+    },
     initFaceDetectionControls: function initFaceDetectionControls() {
       faceapi.nets.faceRecognitionNet.loadFromUri('/js/face/weights');
       faceapi.nets.faceLandmark68Net.loadFromUri('/js/face/weights');
     },
     run: function run() {
-      var _this3 = this;
+      var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
@@ -3064,8 +2925,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 changeInputSize(128);
-                _this3.btnClass['is-loading'] = false;
-                console.log(_this3.btnClass);
+                _this4.btnClass['is-loading'] = false;
+                console.log(_this4.btnClass);
 
               case 5:
               case "end":
@@ -3081,7 +2942,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       alert('screen width: ' + screen.width);
     },
-    myEventHandler: function myEventHandler(e) {// your code for handling resize...
+    myEventHandler: function myEventHandler(e) {
+      // your code for handling resize...
+      //console.log(e)
+      if (screen.width < 400) {
+        this.canvasWidth = 240;
+        this.canvasHeight = 320;
+      } else {
+        this.canvasWidth = 320;
+        this.canvasHeight = 240;
+      }
     }
   },
   created: function created() {
@@ -3661,19 +3531,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -3728,7 +3585,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var params = ["sort_by=".concat(this.sortField, ".").concat(this.sortOrder), "lname=".concat(this.search.lname), "perpage=".concat(this.perPage), "page=".concat(this.page)].join('&');
       this.loading = true;
-      axios.get("/cpanel/get-users?".concat(params)).then(function (_ref) {
+      axios.get("/get-accounts?".concat(params)).then(function (_ref) {
         var data = _ref.data;
         _this.data = [];
         var currentTotal = data.total;
@@ -3797,7 +3654,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.global_id > 0) {
         //update
-        axios.put('/users/' + this.global_id, this.fields).then(function (res) {
+        axios.put('/accounts/' + this.global_id, this.fields).then(function (res) {
           if (res.data.status === 'updated') {
             _this5.$buefy.dialog.alert({
               title: 'UPDATED!',
@@ -3820,7 +3677,7 @@ __webpack_require__.r(__webpack_exports__);
         });
       } else {
         //INSERT HERE
-        axios.post('/users', this.fields).then(function (res) {
+        axios.post('/accounts', this.fields).then(function (res) {
           if (res.data.status === 'saved') {
             _this5.$buefy.dialog.alert({
               title: 'SAVED!',
@@ -3864,7 +3721,7 @@ __webpack_require__.r(__webpack_exports__);
     deleteSubmit: function deleteSubmit(delete_id) {
       var _this7 = this;
 
-      axios["delete"]('/users/' + delete_id).then(function (res) {
+      axios["delete"]('/accounts/' + delete_id).then(function (res) {
         _this7.loadAsyncData();
       })["catch"](function (err) {
         if (err.response.status === 422) {
@@ -3898,7 +3755,7 @@ __webpack_require__.r(__webpack_exports__);
       this.global_id = data_id;
       this.isModalCreate = true; //nested axios for getting the address 1 by 1 or request by request
 
-      axios.get('/users/' + data_id).then(function (res) {
+      axios.get('/accounts/' + data_id).then(function (res) {
         _this8.fields = res.data;
         _this8.fields.office = res.data.office_id;
         var tempData = res.data; //load city first
@@ -4376,17 +4233,12 @@ __webpack_require__.r(__webpack_exports__);
         console.log(res.data);
 
         if (res.data.role === 'ADMINISTRATOR' || res.data.role === 'STAFF') {
-          window.location = '/cpanel/home';
+          window.location = '/home';
         }
 
         if (res.data.role === 'USER') {
           window.location = '/';
         }
-
-        if (res.data.role === 'DENTIST') {
-          window.location = '/dentist/dashboard';
-        } //window.location = '/dashboard';
-
       })["catch"](function (err) {
         if (err.response.status === 422) {
           _this.errors = err.response.data.errors;
@@ -4818,6 +4670,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4858,19 +4732,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['propUser'],
   data: function data() {
     return {
       user: null
     };
   },
   methods: {
-    initData: function initData() {
-      var _this = this;
+    initData: function () {
+      var _initData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var _this = this;
 
-      axios.get('/load-user').then(function (res) {
-        _this.user = res.data;
-      });
-    },
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.get('/load-user').then(function (res) {
+                  _this.user = res.data;
+                  console.log(_this.user);
+                });
+
+              case 2:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      function initData() {
+        return _initData.apply(this, arguments);
+      }
+
+      return initData;
+    }(),
     logout: function logout() {
       axios.post('/logout').then(function () {
         window.location = '/';
@@ -4890,6 +4786,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     currentLogin: function currentLogin() {
       return !!this.user;
+    },
+    isAdmin: function isAdmin() {
+      if (this.user) return this.user.role == 'ADMINISTRATOR';
     }
   }
 });
@@ -23890,7 +23789,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.form-container[data-v-05a569ed]{\r\n        margin: 50px;\r\n        max-width: 720px;\r\n        border: 1px solid red;\n}\n.form-header[data-v-05a569ed]{\r\n        padding: 15px;\n}\n.form-title[data-v-05a569ed]{\r\n        font-weight: bold;\r\n        font-size: 1.4em;\r\n        text-align: center;\n}\n.webcam-container[data-v-05a569ed]{\r\n        display: block;\n}\n.webcam[data-v-05a569ed]{\r\n        margin: auto;\r\n        border: 1px solid blue;\r\n        display: block;\n}\n.canvas-container[data-v-05a569ed]{\r\n        border: 1px solid red;\r\n        overflow: hidden;\r\n        margin-bottom: 10px;\n}\n@media only screen and (max-width: 480px) {\n.form-container[data-v-05a569ed]{\r\n            /* border: 1px solid rgb(22, 31, 112); */\r\n            margin: 0;\r\n            max-width: 100%;\r\n            border: 1px solid rgb(29, 7, 126);\n}\n.form-body[data-v-05a569ed]{\r\n            padding: 5px;\n}\n.canvas-container[data-v-05a569ed]{\r\n            margin-bottom: 0;\n}\n.section[data-v-05a569ed]{\r\n            margin: 0;\n}\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.form-container[data-v-05a569ed]{\r\n        margin: 50px;\r\n        max-width: 720px;\r\n        /* border: 1px solid red; */\n}\n.form-header[data-v-05a569ed]{\r\n        padding: 15px;\n}\n.form-title[data-v-05a569ed]{\r\n        font-weight: bold;\r\n        font-size: 1.4em;\r\n        text-align: center;\n}\n.webcam-container[data-v-05a569ed]{\r\n        display: block;\n}\n.webcam[data-v-05a569ed]{\r\n        margin: auto;\r\n        border: 1px solid rgb(32, 32, 32);\r\n        display: block;\n}\n.canvas-container[data-v-05a569ed]{\r\n       \r\n        overflow: hidden;\r\n        margin-bottom: 5px auto;\n}\n@media only screen and (max-width: 480px) {\n.form-container[data-v-05a569ed]{\r\n            /* border: 1px solid rgb(22, 31, 112); */\r\n            margin: 0;\r\n            max-width: 100%;\r\n            /* border: 1px solid rgb(29, 7, 126); */\n}\n.form-body[data-v-05a569ed]{\r\n            padding: 5px;\n}\n.canvas-container[data-v-05a569ed]{\r\n            margin-bottom: 5px auto;\n}\n.section[data-v-05a569ed]{\r\n            margin: 0;\n}\n.camera-title[data-v-05a569ed]{\r\n            font-weight: bold;\r\n            font-size: 1.2em;\r\n            text-align: center;\n}\n}\n@media only screen and (max-width: 728px) {\n.camera-title[data-v-05a569ed]{\r\n            font-weight: bold;\r\n            font-size: 1.2em;\r\n            text-align: center;\n}\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -27012,7 +26911,7 @@ var render = function () {
                     staticClass: "is-flex mb-2",
                     staticStyle: { "font-size": "20px", "font-weight": "bold" },
                   },
-                  [_vm._v("LIST OF USER")]
+                  [_vm._v("LIST OF EMPLOYEE")]
                 ),
                 _vm._v(" "),
                 _c("div", { staticClass: "level" }, [
@@ -27178,27 +27077,9 @@ var render = function () {
                   },
                   [
                     _c("b-table-column", {
-                      attrs: { field: "user_id", label: "ID", sortable: "" },
-                      scopedSlots: _vm._u([
-                        {
-                          key: "default",
-                          fn: function (props) {
-                            return [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(props.row.user_id) +
-                                  "\n                        "
-                              ),
-                            ]
-                          },
-                        },
-                      ]),
-                    }),
-                    _vm._v(" "),
-                    _c("b-table-column", {
                       attrs: {
-                        field: "username",
-                        label: "Username",
+                        field: "employee_id",
+                        label: "ID",
                         sortable: "",
                       },
                       scopedSlots: _vm._u([
@@ -27208,7 +27089,7 @@ var render = function () {
                             return [
                               _vm._v(
                                 "\n                            " +
-                                  _vm._s(props.row.username) +
+                                  _vm._s(props.row.employee_id) +
                                   "\n                        "
                               ),
                             ]
@@ -27258,42 +27139,6 @@ var render = function () {
                     }),
                     _vm._v(" "),
                     _c("b-table-column", {
-                      attrs: { field: "email", label: "Email" },
-                      scopedSlots: _vm._u([
-                        {
-                          key: "default",
-                          fn: function (props) {
-                            return [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(props.row.email) +
-                                  "\n                        "
-                              ),
-                            ]
-                          },
-                        },
-                      ]),
-                    }),
-                    _vm._v(" "),
-                    _c("b-table-column", {
-                      attrs: { field: "role", label: "Role" },
-                      scopedSlots: _vm._u([
-                        {
-                          key: "default",
-                          fn: function (props) {
-                            return [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(props.row.role) +
-                                  "\n                        "
-                              ),
-                            ]
-                          },
-                        },
-                      ]),
-                    }),
-                    _vm._v(" "),
-                    _c("b-table-column", {
                       attrs: { label: "Action" },
                       scopedSlots: _vm._u([
                         {
@@ -27322,7 +27167,7 @@ var render = function () {
                                         on: {
                                           click: function ($event) {
                                             return _vm.getData(
-                                              props.row.user_id
+                                              props.row.employee_id
                                             )
                                           },
                                         },
@@ -27346,7 +27191,7 @@ var render = function () {
                                         on: {
                                           click: function ($event) {
                                             return _vm.confirmDelete(
-                                              props.row.user_id
+                                              props.row.employee_id
                                             )
                                           },
                                         },
@@ -27370,7 +27215,7 @@ var render = function () {
                                         on: {
                                           click: function ($event) {
                                             return _vm.openModalResetPassword(
-                                              props.row.user_id
+                                              props.row.employee_id
                                             )
                                           },
                                         },
@@ -27430,7 +27275,7 @@ var render = function () {
               _c("div", { staticClass: "modal-card" }, [
                 _c("header", { staticClass: "modal-card-head" }, [
                   _c("p", { staticClass: "modal-card-title" }, [
-                    _vm._v("User Information"),
+                    _vm._v("Employee Information"),
                   ]),
                   _vm._v(" "),
                   _c("button", {
@@ -27446,45 +27291,6 @@ var render = function () {
                 _vm._v(" "),
                 _c("section", { staticClass: "modal-card-body" }, [
                   _c("div", {}, [
-                    _c("div", { staticClass: "columns" }, [
-                      _c(
-                        "div",
-                        { staticClass: "column" },
-                        [
-                          _c(
-                            "b-field",
-                            {
-                              attrs: {
-                                label: "Username",
-                                "label-position": "on-border",
-                                type: this.errors.username ? "is-danger" : "",
-                                message: this.errors.username
-                                  ? this.errors.username[0]
-                                  : "",
-                              },
-                            },
-                            [
-                              _c("b-input", {
-                                attrs: {
-                                  placeholder: "Username",
-                                  required: "",
-                                },
-                                model: {
-                                  value: _vm.fields.username,
-                                  callback: function ($$v) {
-                                    _vm.$set(_vm.fields, "username", $$v)
-                                  },
-                                  expression: "fields.username",
-                                },
-                              }),
-                            ],
-                            1
-                          ),
-                        ],
-                        1
-                      ),
-                    ]),
-                    _vm._v(" "),
                     _c("div", { staticClass: "columns" }, [
                       _c(
                         "div",
@@ -27604,27 +27410,23 @@ var render = function () {
                             "b-field",
                             {
                               attrs: {
-                                label: "Email",
+                                label: "Suffix",
                                 "label-position": "on-border",
-                                type: this.errors.email ? "is-danger" : "",
-                                message: this.errors.email
-                                  ? this.errors.email[0]
+                                type: this.errors.suffix ? "is-danger" : "",
+                                message: this.errors.suffix
+                                  ? this.errors.suffix[0]
                                   : "",
                               },
                             },
                             [
                               _c("b-input", {
-                                attrs: {
-                                  type: "email",
-                                  placeholder: "Email",
-                                  required: "",
-                                },
+                                attrs: { placeholder: "Suffix" },
                                 model: {
-                                  value: _vm.fields.email,
+                                  value: _vm.fields.suffix,
                                   callback: function ($$v) {
-                                    _vm.$set(_vm.fields, "email", $$v)
+                                    _vm.$set(_vm.fields, "suffix", $$v)
                                   },
-                                  expression: "fields.email",
+                                  expression: "fields.suffix",
                                 },
                               }),
                             ],
@@ -27634,137 +27436,6 @@ var render = function () {
                         1
                       ),
                     ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "columns" }, [
-                      _c(
-                        "div",
-                        { staticClass: "column" },
-                        [
-                          _c(
-                            "b-field",
-                            {
-                              attrs: {
-                                label: "Contact No",
-                                "label-position": "on-border",
-                                type: this.errors.contact_no ? "is-danger" : "",
-                                message: this.errors.contact_no
-                                  ? this.errors.contact_no[0]
-                                  : "",
-                              },
-                            },
-                            [
-                              _c("b-input", {
-                                attrs: {
-                                  type: "number",
-                                  placeholder: "Contact No",
-                                  required: "",
-                                },
-                                model: {
-                                  value: _vm.fields.contact_no,
-                                  callback: function ($$v) {
-                                    _vm.$set(_vm.fields, "contact_no", $$v)
-                                  },
-                                  expression: "fields.contact_no",
-                                },
-                              }),
-                            ],
-                            1
-                          ),
-                        ],
-                        1
-                      ),
-                    ]),
-                    _vm._v(" "),
-                    _vm.global_id < 1
-                      ? _c("div", { staticClass: "columns" }, [
-                          _c(
-                            "div",
-                            { staticClass: "column" },
-                            [
-                              _c(
-                                "b-field",
-                                {
-                                  attrs: {
-                                    label: "Password",
-                                    "label-position": "on-border",
-                                    type: this.errors.password
-                                      ? "is-danger"
-                                      : "",
-                                    message: this.errors.password
-                                      ? this.errors.password[0]
-                                      : "",
-                                  },
-                                },
-                                [
-                                  _c("b-input", {
-                                    attrs: {
-                                      type: "password",
-                                      "password-reveal": "",
-                                      placeholder: "Password",
-                                      required: "",
-                                    },
-                                    model: {
-                                      value: _vm.fields.password,
-                                      callback: function ($$v) {
-                                        _vm.$set(_vm.fields, "password", $$v)
-                                      },
-                                      expression: "fields.password",
-                                    },
-                                  }),
-                                ],
-                                1
-                              ),
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            { staticClass: "column" },
-                            [
-                              _c(
-                                "b-field",
-                                {
-                                  attrs: {
-                                    label: "Confirm Password",
-                                    "label-position": "on-border",
-                                    type: this.errors.password_confirmation
-                                      ? "is-danger"
-                                      : "",
-                                    message: this.errors.password_confirmation
-                                      ? this.errors.password_confirmation[0]
-                                      : "",
-                                  },
-                                },
-                                [
-                                  _c("b-input", {
-                                    attrs: {
-                                      type: "password",
-                                      "password-reveal": "",
-                                      placeholder: "Confirm Password",
-                                      required: "",
-                                    },
-                                    model: {
-                                      value: _vm.fields.password_confirmation,
-                                      callback: function ($$v) {
-                                        _vm.$set(
-                                          _vm.fields,
-                                          "password_confirmation",
-                                          $$v
-                                        )
-                                      },
-                                      expression:
-                                        "fields.password_confirmation",
-                                    },
-                                  }),
-                                ],
-                                1
-                              ),
-                            ],
-                            1
-                          ),
-                        ])
-                      : _vm._e(),
                     _vm._v(" "),
                     _c("div", { staticClass: "columns" }, [
                       _c(
@@ -27813,116 +27484,6 @@ var render = function () {
                         ],
                         1
                       ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "column" },
-                        [
-                          _c(
-                            "b-field",
-                            {
-                              attrs: {
-                                label: "Role",
-                                "label-position": "on-border",
-                                expanded: "",
-                                type: this.errors.role ? "is-danger" : "",
-                                message: this.errors.role
-                                  ? this.errors.role[0]
-                                  : "",
-                              },
-                            },
-                            [
-                              _c(
-                                "b-select",
-                                {
-                                  attrs: { expanded: "" },
-                                  model: {
-                                    value: _vm.fields.role,
-                                    callback: function ($$v) {
-                                      _vm.$set(_vm.fields, "role", $$v)
-                                    },
-                                    expression: "fields.role",
-                                  },
-                                },
-                                [
-                                  _c("option", { attrs: { value: "ADMIN" } }, [
-                                    _vm._v("ADMINISTRATOR"),
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "option",
-                                    { attrs: { value: "DENTIST" } },
-                                    [_vm._v("DENTIST")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "STAFF" } }, [
-                                    _vm._v("STAFF"),
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "USER" } }, [
-                                    _vm._v("USER"),
-                                  ]),
-                                ]
-                              ),
-                            ],
-                            1
-                          ),
-                        ],
-                        1
-                      ),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "columns" }, [
-                      _vm.fields.role === "OFFICE"
-                        ? _c(
-                            "div",
-                            { staticClass: "column" },
-                            [
-                              _c(
-                                "b-field",
-                                {
-                                  attrs: {
-                                    label: "Office",
-                                    "label-position": "on-border",
-                                    expanded: "",
-                                    type: this.errors.office ? "is-danger" : "",
-                                    message: this.errors.office
-                                      ? this.errors.office[0]
-                                      : "",
-                                  },
-                                },
-                                [
-                                  _c(
-                                    "b-select",
-                                    {
-                                      attrs: { expanded: "" },
-                                      model: {
-                                        value: _vm.fields.office,
-                                        callback: function ($$v) {
-                                          _vm.$set(_vm.fields, "office", $$v)
-                                        },
-                                        expression: "fields.office",
-                                      },
-                                    },
-                                    _vm._l(_vm.offices, function (item, index) {
-                                      return _c(
-                                        "option",
-                                        {
-                                          key: index,
-                                          domProps: { value: item.office_id },
-                                        },
-                                        [_vm._v(_vm._s(item.office_name))]
-                                      )
-                                    }),
-                                    0
-                                  ),
-                                ],
-                                1
-                              ),
-                            ],
-                            1
-                          )
-                        : _vm._e(),
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "columns" }, [
@@ -27934,170 +27495,27 @@ var render = function () {
                             "b-field",
                             {
                               attrs: {
-                                label: "Province",
+                                label: "Contact No",
                                 "label-position": "on-border",
-                                expanded: "",
-                                type: this.errors.province ? "is-danger" : "",
-                                message: this.errors.province
-                                  ? this.errors.province[0]
+                                type: this.errors.contact_no ? "is-danger" : "",
+                                message: this.errors.contact_no
+                                  ? this.errors.contact_no[0]
                                   : "",
-                              },
-                            },
-                            [
-                              _c(
-                                "b-select",
-                                {
-                                  attrs: { expanded: "" },
-                                  on: { input: _vm.loadCity },
-                                  model: {
-                                    value: _vm.fields.province,
-                                    callback: function ($$v) {
-                                      _vm.$set(_vm.fields, "province", $$v)
-                                    },
-                                    expression: "fields.province",
-                                  },
-                                },
-                                _vm._l(_vm.provinces, function (item, index) {
-                                  return _c(
-                                    "option",
-                                    {
-                                      key: index,
-                                      domProps: { value: item.provCode },
-                                    },
-                                    [_vm._v(_vm._s(item.provDesc))]
-                                  )
-                                }),
-                                0
-                              ),
-                            ],
-                            1
-                          ),
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "column" },
-                        [
-                          _c(
-                            "b-field",
-                            {
-                              attrs: {
-                                label: "City",
-                                "label-position": "on-border",
-                                expanded: "",
-                                type: this.errors.city ? "is-danger" : "",
-                                message: this.errors.city
-                                  ? this.errors.city[0]
-                                  : "",
-                              },
-                            },
-                            [
-                              _c(
-                                "b-select",
-                                {
-                                  attrs: { expanded: "" },
-                                  on: { input: _vm.loadBarangay },
-                                  model: {
-                                    value: _vm.fields.city,
-                                    callback: function ($$v) {
-                                      _vm.$set(_vm.fields, "city", $$v)
-                                    },
-                                    expression: "fields.city",
-                                  },
-                                },
-                                _vm._l(_vm.cities, function (item, index) {
-                                  return _c(
-                                    "option",
-                                    {
-                                      key: index,
-                                      domProps: { value: item.citymunCode },
-                                    },
-                                    [_vm._v(_vm._s(item.citymunDesc))]
-                                  )
-                                }),
-                                0
-                              ),
-                            ],
-                            1
-                          ),
-                        ],
-                        1
-                      ),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "columns" }, [
-                      _c(
-                        "div",
-                        { staticClass: "column" },
-                        [
-                          _c(
-                            "b-field",
-                            {
-                              attrs: {
-                                label: "Barangay",
-                                "label-position": "on-border",
-                                expanded: "",
-                                type: this.errors.barangay ? "is-danger" : "",
-                                message: this.errors.barangay
-                                  ? this.errors.barangay[0]
-                                  : "",
-                              },
-                            },
-                            [
-                              _c(
-                                "b-select",
-                                {
-                                  attrs: { expanded: "" },
-                                  model: {
-                                    value: _vm.fields.barangay,
-                                    callback: function ($$v) {
-                                      _vm.$set(_vm.fields, "barangay", $$v)
-                                    },
-                                    expression: "fields.barangay",
-                                  },
-                                },
-                                _vm._l(_vm.barangays, function (item, index) {
-                                  return _c(
-                                    "option",
-                                    {
-                                      key: index,
-                                      domProps: { value: item.brgyCode },
-                                    },
-                                    [_vm._v(_vm._s(item.brgyDesc))]
-                                  )
-                                }),
-                                0
-                              ),
-                            ],
-                            1
-                          ),
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "column" },
-                        [
-                          _c(
-                            "b-field",
-                            {
-                              attrs: {
-                                label: "Street",
-                                "label-position": "on-border",
                               },
                             },
                             [
                               _c("b-input", {
-                                attrs: { placeholder: "Street" },
+                                attrs: {
+                                  type: "number",
+                                  placeholder: "Contact No",
+                                  required: "",
+                                },
                                 model: {
-                                  value: _vm.fields.street,
+                                  value: _vm.fields.contact_no,
                                   callback: function ($$v) {
-                                    _vm.$set(_vm.fields, "street", $$v)
+                                    _vm.$set(_vm.fields, "contact_no", $$v)
                                   },
-                                  expression: "fields.street",
+                                  expression: "fields.contact_no",
                                 },
                               }),
                             ],
@@ -28333,254 +27751,286 @@ var render = function () {
       { staticClass: "section" },
       [
         _c(
-          "b-tabs",
-          {
-            model: {
-              value: _vm.activeTab,
-              callback: function ($$v) {
-                _vm.activeTab = $$v
-              },
-              expression: "activeTab",
-            },
-          },
+          "div",
+          { staticClass: "box" },
           [
-            _c("b-tab-item", { attrs: { label: "Personal Inforamtion" } }, [
-              _c(
-                "div",
-                [
-                  _c(
-                    "b-field",
-                    { attrs: { label: "Last Name" } },
-                    [
-                      _c("b-input", {
-                        attrs: {
-                          type: "text",
-                          placeholder: "Last Name",
-                          required: "",
-                        },
-                        model: {
-                          value: _vm.lname,
-                          callback: function ($$v) {
-                            _vm.lname = $$v
-                          },
-                          expression: "lname",
-                        },
-                      }),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "b-field",
-                    { attrs: { label: "First Name" } },
-                    [
-                      _c("b-input", {
-                        attrs: {
-                          type: "text",
-                          placeholder: "First Name",
-                          required: "",
-                        },
-                        model: {
-                          value: _vm.fname,
-                          callback: function ($$v) {
-                            _vm.fname = $$v
-                          },
-                          expression: "fname",
-                        },
-                      }),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "b-field",
-                    { attrs: { label: "Middle Name" } },
-                    [
-                      _c("b-input", {
-                        attrs: { type: "text", placeholder: "Middle Name" },
-                        model: {
-                          value: _vm.mname,
-                          callback: function ($$v) {
-                            _vm.mname = $$v
-                          },
-                          expression: "mname",
-                        },
-                      }),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "b-field",
-                    { attrs: { label: "Suffix" } },
-                    [
-                      _c("b-input", {
-                        attrs: { type: "text", placeholder: "Suffix" },
-                        model: {
-                          value: _vm.suffix,
-                          callback: function ($$v) {
-                            _vm.suffix = $$v
-                          },
-                          expression: "suffix",
-                        },
-                      }),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "b-field",
-                    { attrs: { label: "Sex", expanded: "" } },
-                    [
-                      _c(
-                        "b-select",
-                        {
-                          attrs: { placeholder: "Sex", expanded: "" },
-                          model: {
-                            value: _vm.sex,
-                            callback: function ($$v) {
-                              _vm.sex = $$v
-                            },
-                            expression: "sex",
-                          },
-                        },
-                        [
-                          _c("option", { attrs: { value: "MALE" } }, [
-                            _vm._v("MALE"),
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "FEMALE" } }, [
-                            _vm._v("FEMALE"),
-                          ]),
-                        ]
-                      ),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "b-field",
-                    { attrs: { label: "Contact No." } },
-                    [
-                      _c("b-input", {
-                        attrs: {
-                          type: "text",
-                          placeholder: "Contact No.",
-                          required: "",
-                        },
-                        model: {
-                          value: _vm.contact_no,
-                          callback: function ($$v) {
-                            _vm.contact_no = $$v
-                          },
-                          expression: "contact_no",
-                        },
-                      }),
-                    ],
-                    1
-                  ),
-                ],
-                1
-              ),
-            ]),
-            _vm._v(" "),
-            _c("b-tab-item", { attrs: { label: "Image" } }, [
-              _c("div", { staticClass: "form-container" }, [
-                _c("div", { staticClass: "form-header" }, [
-                  _c("div", { staticClass: "form-title" }, [
-                    _vm._v("REGISTER FACE HERE"),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-body" }, [
-                  _c("div", { staticClass: "webcam-container" }, [
-                    _c("video", {
-                      staticClass: "webcam",
-                      attrs: {
-                        id: "video",
-                        width: "320",
-                        height: "240",
-                        autoplay: "",
-                      },
-                    }),
-                  ]),
-                  _vm._v(" "),
+            _c(
+              "b-tabs",
+              {
+                model: {
+                  value: _vm.activeTab,
+                  callback: function ($$v) {
+                    _vm.activeTab = $$v
+                  },
+                  expression: "activeTab",
+                },
+              },
+              [
+                _c("b-tab-item", { attrs: { label: "Personal Inforamtion" } }, [
                   _c(
                     "div",
-                    { staticClass: "buttons is-centered mt-2" },
                     [
                       _c(
-                        "b-button",
-                        {
-                          staticClass: "button is-primary",
-                          on: { click: _vm.snap },
-                        },
-                        [_vm._v("Snap")]
+                        "b-field",
+                        { attrs: { label: "Last Name" } },
+                        [
+                          _c("b-input", {
+                            attrs: {
+                              type: "text",
+                              placeholder: "Last Name",
+                              required: "",
+                            },
+                            model: {
+                              value: _vm.lname,
+                              callback: function ($$v) {
+                                _vm.lname = $$v
+                              },
+                              expression: "lname",
+                            },
+                          }),
+                        ],
+                        1
                       ),
                       _vm._v(" "),
                       _c(
-                        "b-button",
-                        {
-                          staticClass: "is-warning",
-                          on: { click: _vm.showSize },
-                        },
-                        [_vm._v("Show Size")]
+                        "b-field",
+                        { attrs: { label: "First Name" } },
+                        [
+                          _c("b-input", {
+                            attrs: {
+                              type: "text",
+                              placeholder: "First Name",
+                              required: "",
+                            },
+                            model: {
+                              value: _vm.fname,
+                              callback: function ($$v) {
+                                _vm.fname = $$v
+                              },
+                              expression: "fname",
+                            },
+                          }),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-field",
+                        { attrs: { label: "Middle Name" } },
+                        [
+                          _c("b-input", {
+                            attrs: { type: "text", placeholder: "Middle Name" },
+                            model: {
+                              value: _vm.mname,
+                              callback: function ($$v) {
+                                _vm.mname = $$v
+                              },
+                              expression: "mname",
+                            },
+                          }),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-field",
+                        { attrs: { label: "Suffix" } },
+                        [
+                          _c("b-input", {
+                            attrs: { type: "text", placeholder: "Suffix" },
+                            model: {
+                              value: _vm.suffix,
+                              callback: function ($$v) {
+                                _vm.suffix = $$v
+                              },
+                              expression: "suffix",
+                            },
+                          }),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-field",
+                        { attrs: { label: "Sex", expanded: "" } },
+                        [
+                          _c(
+                            "b-select",
+                            {
+                              attrs: { placeholder: "Sex", expanded: "" },
+                              model: {
+                                value: _vm.sex,
+                                callback: function ($$v) {
+                                  _vm.sex = $$v
+                                },
+                                expression: "sex",
+                              },
+                            },
+                            [
+                              _c("option", { attrs: { value: "MALE" } }, [
+                                _vm._v("MALE"),
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "FEMALE" } }, [
+                                _vm._v("FEMALE"),
+                              ]),
+                            ]
+                          ),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-field",
+                        { attrs: { label: "Contact No." } },
+                        [
+                          _c("b-input", {
+                            attrs: {
+                              type: "text",
+                              placeholder: "Contact No.",
+                              required: "",
+                            },
+                            model: {
+                              value: _vm.contact_no,
+                              callback: function ($$v) {
+                                _vm.contact_no = $$v
+                              },
+                              expression: "contact_no",
+                            },
+                          }),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "buttons" },
+                        [
+                          _c("b-button", {
+                            attrs: { label: "Clear", type: "button" },
+                            on: { click: _vm.clearForm },
+                          }),
+                        ],
+                        1
                       ),
                     ],
                     1
                   ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "capture-container" }, [
-                    _c("div", { staticClass: "canvas-container" }, [
-                      _c("canvas", {
-                        attrs: {
-                          id: "canvas1",
-                          width: _vm.canvasWidth,
-                          height: _vm.canvasHeight,
-                        },
-                      }),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "canvas-container" }, [
-                      _c("canvas", {
-                        attrs: {
-                          id: "canvas2",
-                          width: _vm.canvasWidth,
-                          height: _vm.canvasHeight,
-                        },
-                      }),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "canvas-container" }, [
-                      _c("canvas", {
-                        attrs: {
-                          id: "canvas3",
-                          width: _vm.canvasWidth,
-                          height: _vm.canvasHeight,
-                        },
-                      }),
-                    ]),
-                    _vm._v(" "),
-                    _c("img", { attrs: { id: "img" } }),
-                  ]),
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "footer" }, [
-                  _c("div", { staticClass: "buttons" }, [
-                    _c(
-                      "button",
-                      { class: _vm.btnClass, on: { click: _vm.submit } },
-                      [_vm._v("REGISTER FACE")]
-                    ),
+                _c("b-tab-item", { attrs: { label: "Image" } }, [
+                  _c("div", { staticClass: "form-container" }, [
+                    _c("div", { staticClass: "form-header" }, [
+                      _c("div", { staticClass: "form-title" }, [
+                        _vm._v("REGISTER FACE HERE"),
+                      ]),
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-body" }, [
+                      _c("div", { staticClass: "webcam-container" }, [
+                        _c("video", {
+                          staticClass: "webcam",
+                          attrs: {
+                            id: "video",
+                            width: "320",
+                            height: "240",
+                            autoplay: "",
+                          },
+                        }),
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "camera-title" }, [
+                        _vm._v("CAMERA"),
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "buttons is-centered mt-2" },
+                        [
+                          _c(
+                            "b-button",
+                            {
+                              staticClass: "button is-primary",
+                              on: { click: _vm.snap },
+                            },
+                            [_vm._v("Snap")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "b-button",
+                            {
+                              staticClass: "is-warning",
+                              on: { click: _vm.showSize },
+                            },
+                            [_vm._v("Show Size")]
+                          ),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "capture-container" }, [
+                        _c("div", { staticClass: "canvas-container" }, [
+                          _c("canvas", {
+                            attrs: {
+                              id: "canvas1",
+                              width: _vm.canvasWidth,
+                              height: _vm.canvasHeight,
+                            },
+                          }),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "canvas-container" }, [
+                          _c("canvas", {
+                            attrs: {
+                              id: "canvas2",
+                              width: _vm.canvasWidth,
+                              height: _vm.canvasHeight,
+                            },
+                          }),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "canvas-container" }, [
+                          _c("canvas", {
+                            attrs: {
+                              id: "canvas3",
+                              width: _vm.canvasWidth,
+                              height: _vm.canvasHeight,
+                            },
+                          }),
+                        ]),
+                        _vm._v(" "),
+                        _c("img", { attrs: { id: "img" } }),
+                      ]),
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "footer" }, [
+                      _c("div", { staticClass: "buttons is-centered" }, [
+                        _c(
+                          "button",
+                          { class: _vm.btnClass, on: { click: _vm.submit } },
+                          [_vm._v("REGISTER FACE")]
+                        ),
+                      ]),
+                    ]),
                   ]),
                 ]),
-              ]),
-            ]),
+              ],
+              1
+            ),
           ],
           1
         ),
         _vm._v(" "),
-        _c("div", [_vm._v(_vm._s(_vm.debug))]),
+        _c("b-loading", {
+          attrs: { "is-full-page": true, "can-cancel": true },
+          model: {
+            value: _vm.isLoading,
+            callback: function ($$v) {
+              _vm.isLoading = $$v
+            },
+            expression: "isLoading",
+          },
+        }),
       ],
       1
     ),
@@ -28884,7 +28334,7 @@ var render = function () {
                     staticClass: "is-flex mb-2",
                     staticStyle: { "font-size": "20px", "font-weight": "bold" },
                   },
-                  [_vm._v("LIST OF USER")]
+                  [_vm._v("LIST OF ACCOUNTS")]
                 ),
                 _vm._v(" "),
                 _c("div", { staticClass: "level" }, [
@@ -29467,44 +28917,6 @@ var render = function () {
                         ],
                         1
                       ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "column" },
-                        [
-                          _c(
-                            "b-field",
-                            {
-                              attrs: {
-                                label: "Email",
-                                "label-position": "on-border",
-                                type: this.errors.email ? "is-danger" : "",
-                                message: this.errors.email
-                                  ? this.errors.email[0]
-                                  : "",
-                              },
-                            },
-                            [
-                              _c("b-input", {
-                                attrs: {
-                                  type: "email",
-                                  placeholder: "Email",
-                                  required: "",
-                                },
-                                model: {
-                                  value: _vm.fields.email,
-                                  callback: function ($$v) {
-                                    _vm.$set(_vm.fields, "email", $$v)
-                                  },
-                                  expression: "fields.email",
-                                },
-                              }),
-                            ],
-                            1
-                          ),
-                        ],
-                        1
-                      ),
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "columns" }, [
@@ -29732,59 +29144,6 @@ var render = function () {
                         ],
                         1
                       ),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "columns" }, [
-                      _vm.fields.role === "OFFICE"
-                        ? _c(
-                            "div",
-                            { staticClass: "column" },
-                            [
-                              _c(
-                                "b-field",
-                                {
-                                  attrs: {
-                                    label: "Office",
-                                    "label-position": "on-border",
-                                    expanded: "",
-                                    type: this.errors.office ? "is-danger" : "",
-                                    message: this.errors.office
-                                      ? this.errors.office[0]
-                                      : "",
-                                  },
-                                },
-                                [
-                                  _c(
-                                    "b-select",
-                                    {
-                                      attrs: { expanded: "" },
-                                      model: {
-                                        value: _vm.fields.office,
-                                        callback: function ($$v) {
-                                          _vm.$set(_vm.fields, "office", $$v)
-                                        },
-                                        expression: "fields.office",
-                                      },
-                                    },
-                                    _vm._l(_vm.offices, function (item, index) {
-                                      return _c(
-                                        "option",
-                                        {
-                                          key: index,
-                                          domProps: { value: item.office_id },
-                                        },
-                                        [_vm._v(_vm._s(item.office_name))]
-                                      )
-                                    }),
-                                    0
-                                  ),
-                                ],
-                                1
-                              ),
-                            ],
-                            1
-                          )
-                        : _vm._e(),
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "columns" }, [
@@ -30387,7 +29746,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "buttons" }, [
+    return _c("div", { staticClass: "buttons is-right" }, [
       _c("button", { staticClass: "button is-primary" }, [_vm._v("LOGIN")]),
     ])
   },
@@ -31109,13 +30468,35 @@ var render = function () {
         key: "end",
         fn: function () {
           return [
-            _c("b-navbar-item", { attrs: { href: "/" } }, [
-              _vm._v("\n            HOME\n        "),
-            ]),
+            _vm.isAdmin
+              ? _c("b-navbar-item", { attrs: { href: "/home" } }, [
+                  _vm._v("\n            HOME\n        "),
+                ])
+              : _vm._e(),
             _vm._v(" "),
-            _c("b-navbar-item", { attrs: { href: "/face-register" } }, [
-              _vm._v("\n           Face Register\n        "),
-            ]),
+            !_vm.isAdmin
+              ? _c("b-navbar-item", { attrs: { href: "/" } }, [
+                  _vm._v("\n            HOME\n        "),
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.isAdmin
+              ? _c("b-navbar-item", { attrs: { href: "/face-register" } }, [
+                  _vm._v("\n            Face Register\n        "),
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.isAdmin
+              ? _c("b-navbar-item", { attrs: { href: "/employees" } }, [
+                  _vm._v("\n            Employee\n        "),
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.isAdmin
+              ? _c("b-navbar-item", { attrs: { href: "/accounts" } }, [
+                  _vm._v("\n            Accounts\n        "),
+                ])
+              : _vm._e(),
             _vm._v(" "),
             _c("b-navbar-item", { attrs: { tag: "div" } }, [
               !_vm.currentLogin

@@ -12,15 +12,29 @@
         </template>
 
         <template #end>
-            <b-navbar-item href="/">
+            <b-navbar-item v-if="isAdmin" href="/home">
+                HOME
+            </b-navbar-item>
+            <b-navbar-item v-if="!isAdmin" href="/">
                 HOME
             </b-navbar-item>
             <!-- <b-navbar-item href="/about">
                 ABOUT
             </b-navbar-item> -->
-            <b-navbar-item href="/face-register">
-               Face Register
+           
+            <b-navbar-item v-if="isAdmin" href="/face-register" >
+                Face Register
             </b-navbar-item>
+
+            <b-navbar-item v-if="isAdmin" href="/employees" >
+                Employee
+            </b-navbar-item>
+
+            <b-navbar-item v-if="isAdmin" href="/accounts" >
+                Accounts
+            </b-navbar-item>
+           
+           
             <b-navbar-item tag="div">
                 <div v-if="!currentLogin" class="buttons">
                     <a class="button is-light" href="/login">
@@ -39,7 +53,7 @@
 
 <script>
 export default {
-   
+   props: ['propUser'],
 
     data(){
         return{
@@ -48,9 +62,10 @@ export default {
     },
 
     methods:{
-        initData: function(){
-            axios.get('/load-user').then(res=>{
+        initData: async function(){
+            await axios.get('/load-user').then(res=>{
                 this.user = res.data;
+                console.log(this.user)
             })
         },
 
@@ -76,6 +91,10 @@ export default {
         },
         currentLogin(){
             return !!this.user;
+        },
+        isAdmin(){
+            if(this.user)
+                return this.user.role == 'ADMINISTRATOR';
         }
     }
 
