@@ -16,8 +16,8 @@ class CreateDescriptorsTable extends Migration
         Schema::create('descriptors', function (Blueprint $table) {
             $table->id('descriptor_id');
 
-            $table->unsignedBigInteger('employee_id');
-            $table->foreign('employee_id')->references('employee_id')->on('employees')
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('user_id')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');
             $table->json('descriptor');
             $table->timestamps();

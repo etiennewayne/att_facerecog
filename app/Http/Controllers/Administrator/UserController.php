@@ -40,7 +40,7 @@ class UserController extends Controller
 
     public function store(Request $req){
         //this will create random unique QR code
-        $qr_code = substr(md5(time() . $req->lname . $req->fname), -8);
+        //$qr_code = substr(md5(time() . $req->lname . $req->fname), -8);
 
         $validate = $req->validate([
             'username' => ['required', 'max:50', 'unique:users'],
@@ -55,22 +55,41 @@ class UserController extends Controller
             'barangay' => ['required', 'string'],
         ]);
 
-        User::create([
-            // 'qr_ref' => $qr_code,
-            'username' => $req->username,
-            'password' => Hash::make($req->password),
-            'lname' => strtoupper($req->lname),
-            'fname' => strtoupper($req->fname),
-            'mname' => strtoupper($req->mname),
-            'sex' => $req->sex,
-            // 'email' => $req->email,
-            'contact_no' => $req->contact_no,
-            'role' => $req->role,
-            'province' => $req->province,
-            'city' => $req->city,
-            'barangay' => $req->barangay,
-            'street' => strtoupper($req->street)
-        ]);
+        DB::transaction(function () use($req, &$dataArray)  {
+            //insert rating in ratings table
+            $data = User::create([
+                'username' => $req->username,
+                'password' => Hash::make($req->password),
+                'lname' => strtoupper($req->lname),
+                'fname' => strtoupper($req->fname),
+                'mname' => strtoupper($req->mname),
+                'sex' => $req->sex,
+                'contact_no' => $req->contact_no,
+                'role' => $req->role,
+                'province' => $req->province,
+                'city' => $req->city,
+                'barangay' => $req->barangay,
+                'street' => strtoupper($req->street)
+            ]);
+           //------------------------------
+
+           //create array for ratings
+           $dataArray = array();
+           foreach ($req->descriptors as $descriptor){
+                $temp = array([
+                    'user_id' => $data->user_id,
+                    'descriptor' => json_encode($descriptor),
+               ]);
+               $dataArray = array_merge($dataArray, $temp);
+           }
+           Descriptor::insert($dataArray);
+        }); //<--close DB Transaction
+
+        
+        return response()->json(['status' => 'saved'], 200);
+
+
+        
 
         return response()->json([
             'status' => 'saved'
