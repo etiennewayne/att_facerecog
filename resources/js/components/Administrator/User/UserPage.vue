@@ -23,11 +23,16 @@
                                 <div class="level-item">
                                     <b-field label="Search">
                                         <b-input type="text"
-                                                 v-model="search.lname" placeholder="Search Lastname"
+                                                 v-model="search.lname"
+                                                 placeholder="Search Lastname"
                                                  @keyup.native.enter="loadAsyncData"/>
                                         <p class="control">
-                                             <b-tooltip label="Search" type="is-success">
-                                            <b-button type="is-primary" icon-right="account-filter" @click="loadAsyncData"/>
+                                             <b-tooltip label="Search"
+                                                        type="is-success">
+                                            <b-button
+                                                type="is-primary"
+                                                icon-right="account-filter"
+                                                @click="loadAsyncData"/>
                                              </b-tooltip>
                                         </p>
                                     </b-field>
@@ -232,7 +237,7 @@
                                              :message="this.errors.role ? this.errors.role[0] : ''">
                                         <b-select v-model="fields.role" expanded>
                                             <option value="ADMIN">ADMINISTRATOR</option>
-                                            <option value="USER">USER</option>
+                                            <option value="EMPLOYEE">EMPLOYEE</option>
 
                                         </b-select>
                                     </b-field>

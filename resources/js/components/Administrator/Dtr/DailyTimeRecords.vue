@@ -58,7 +58,7 @@
                             @sort="onSort">
 
                             <b-table-column field="id" label="ID" sortable v-slot="props">
-                                {{ props.row.user_id }}
+                                {{ props.row.id }}
                             </b-table-column>
 
                             <b-table-column field="name" label="Name" sortable v-slot="props">
@@ -69,14 +69,28 @@
                                 {{ props.row.user.sex }}
                             </b-table-column>
 
+                            <b-table-column field="date_record" label="Record" v-slot="props">
+                                {{ props.row.date_record }} - {{ props.row.time_record | formatTime }}
+                            </b-table-column>
+
+                            <b-table-column field="time_status" label="Time Status" v-slot="props">
+                                <span v-if="props.row.time_status == 'in_am'">IN AM</span>
+                                <span v-if="props.row.time_status == 'out_am'">OUT AM</span>
+                                <span v-if="props.row.time_status == 'in_pm'">IN PM</span>
+                                <span v-if="props.row.time_status == 'out_pm'">OUT PM</span>
+
+                            </b-table-column>
 
                             <b-table-column label="Action" v-slot="props">
                                 <div class="is-flex">
                                     <b-tooltip label="Edit" type="is-warning">
-                                        <b-button class="button is-small mr-1" tag="a" icon-right="pencil" @click="getData(props.row.id)"></b-button>
+                                        <b-button class="button is-small mr-1" tag="a" icon-right="pencil" @click="openUpdate(props.row.id)"></b-button>
                                     </b-tooltip>
                                     <b-tooltip label="Delete" type="is-danger">
                                         <b-button class="button is-small mr-1" icon-right="delete" @click="confirmDelete(props.row.id)"></b-button>
+                                    </b-tooltip>
+                                    <b-tooltip label="DTR" type="is-warning">
+                                        <b-button class="button is-small mr-1" icon-right="note-multiple-outline" @click="displayDTR(props.row.user.user_id)"></b-button>
                                     </b-tooltip>
 
                                 </div>
@@ -270,65 +284,15 @@ export default{
 
 
         //update code here
-        getData: function(data_id){
-            this.clearFields();
-            this.global_id = data_id;
-            this.isModalCreate = true;
-
-
-            //nested axios for getting the address 1 by 1 or request by request
-            axios.get('/accounts/'+data_id).then(res=>{
-                this.fields = res.data;
-                this.fields.office = res.data.office_id;
-                let tempData = res.data;
-                //load city first
-                axios.get('/load-cities?prov=' + this.fields.province).then(res=>{
-                    //load barangay
-                    this.cities = res.data;
-                    axios.get('/load-barangays?prov=' + this.fields.province + '&city_code='+this.fields.city).then(res=>{
-                        this.barangays = res.data;
-                        this.fields = tempData;
-                    });
-                });
-            });
+        openUpdate: function(data_id){
+            window.location = '/daily-time-records/' + data_id + '/edit';
         },
 
-        loadOffices(){
-            axios.get('/get-user-offices').then(res=>{
-                this.offices = res.data
-            });
-        },
+        displayDTR(dataId){
+            window.location = '/display-dtr/' + dataId;
+        }
 
 
-        //CHANGE PASSWORD
-        openModalResetPassword(dataId){
-            this.modalResetPassword = true;
-            this.fields = {};
-            this.errors = {};
-            this.global_id = dataId;
-        },
-        resetPassword(){
-            axios.post('/user-reset-password/' + this.global_id, this.fields).then(res=>{
-
-                if(res.data.status === 'changed'){
-                    this.$buefy.dialog.alert({
-                        title: 'PASSWORD CHANGED',
-                        type: 'is-success',
-                        message: 'Password changed successfully.',
-                        confirmText: 'OK',
-                        onConfirm: () => {
-                            this.modalResetPassword = false;
-                            this.fields = {};
-                            this.errors = {};
-                            this.loadAsyncData()
-                        }
-                    });
-                }
-
-            }).catch(err=>{
-                this.errors = err.response.data.errors;
-            })
-        },
 
 
     },

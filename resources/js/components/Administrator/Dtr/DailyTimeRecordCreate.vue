@@ -49,7 +49,7 @@
 <script>
 
 export default {
-
+    props: ['propId', 'propData'],
     data(){
         return{
             fields:{
@@ -59,33 +59,65 @@ export default {
             },
             employee_fullname: '',
 
+            id: 0,
         }
     },
 
     methods: {
         submit: function(){
-            axios.post('/daily-time-records', this.fields).then(res=>{
-                if(res.data.status === 'saved'){
-                    this.$buefy.dialog.alert({
-                        title: 'SAVED!',
-                        message: 'Successfully saved.',
-                        type: 'is-success',
-                        onConfirm: () => {
-                            this.loadAsyncData();
-                            this.clearFields();
-                            this.global_id = 0;
-                            this.isModalCreate = false;
-                        }
-                    })
-                }
-            })
+            if(this.id > 0){
+                axios.put('/daily-time-records/' + this.id, this.fields).then(res=>{
+                    if(res.data.status === 'updated'){
+                        this.$buefy.dialog.alert({
+                            title: 'UPDATED!',
+                            message: 'Successfully updated.',
+                            type: 'is-success',
+                            onConfirm: () => {
+                                window.location = '/daily-time-records';
+                            }
+                        })
+                    }
+                })
+            }else{
+                axios.post('/daily-time-records', this.fields).then(res=>{
+                    if(res.data.status === 'saved'){
+                        this.$buefy.dialog.alert({
+                            title: 'SAVED!',
+                            message: 'Successfully saved.',
+                            type: 'is-success',
+                            onConfirm: () => {
+
+                                window.location = '/daily-time-records';
+                            }
+                        })
+                    }
+                })
+            }
+
         },
 
         emitBrowseEmployee: function(row){
             this.fields.user_id =  row.user_id;
             this.employee_fullname = row.lname + ', ' + row.fname + ' ' + row.mname;
             console.log(this.fields)
+        },
+        initData(){
+            this.id = parseInt(this.propId);
+
+            if(this.id > 0){
+                //update
+                const data = JSON.parse(this.propData);
+                this.employee_fullname = data.user.lname + ', ' + data.user.fname + " " + data.user.mname;
+                this.fields.nDateTime = new Date(data.date_record + ' ' + data.time_record);
+                this.fields.t_status = data.time_status;
+                this.fields.user_id = data.user_id;
+            }
         }
+
+    },
+
+    mounted(){
+        this.initData();
     }
 }
 </script>
