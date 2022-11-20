@@ -59,9 +59,7 @@ Route::get('/face-register', [App\Http\Controllers\Administrator\FaceRegisterCon
 Route::post('/store-descriptions', [App\Http\Controllers\Administrator\UserController::class, 'store']);
 Route::get('/load-descriptions', [App\Http\Controllers\EmployeeController::class, 'loadDescriptions']);
 
-
 Route::post('/store-dtr', [App\Http\Controllers\DailyTimeRecordController::class, 'storeDTR']);
-
 
 
 
@@ -106,7 +104,12 @@ Route::post('/account-reset-password/{id}', [App\Http\Controllers\Administrator\
 
 
 Route::resource('/employees', App\Http\Controllers\Administrator\AdminEmployeeController::class);
-Route::get('/get-employees', [App\Http\Controllers\Administrator\AdminEmployeeController::class, 'getEmployees']);
+Route::get('/get-browse-employees', [App\Http\Controllers\Administrator\AdminEmployeeController::class, 'getBrowseEmployees']); //use in the ModalBrowseEmployee
+
+
+
+Route::resource('/daily-time-records', App\Http\Controllers\Administrator\AdminDTRController::class);
+Route::get('/get-daily-time-records', [App\Http\Controllers\Administrator\AdminDTRController::class, 'getDTRs']);
 
 /*     ADMINSITRATOR          */
 

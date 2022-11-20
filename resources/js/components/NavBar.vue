@@ -26,6 +26,9 @@
                 Face Register
             </b-navbar-item>
 
+            <b-navbar-item v-if="isAdmin" href="/daily-time-records" >
+                DTR
+            </b-navbar-item>
 
             <b-navbar-item v-if="isAdmin" href="/accounts" >
                 Accounts
