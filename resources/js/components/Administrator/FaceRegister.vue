@@ -7,38 +7,141 @@
                 <b-tabs v-model="activeTab">
                     <b-tab-item label="Personal Inforamtion">
                         <div>
-                            <b-field label="Last Name">
-                                <b-input type="text" v-model="lname" placeholder="Last Name" required />
-                            </b-field>
-    
-                            <b-field label="First Name">
-                                <b-input type="text" v-model="fname" placeholder="First Name" required />
-                            </b-field>
-    
-                            <b-field label="Middle Name">
-                                <b-input type="text" v-model="mname" placeholder="Middle Name" />
-                            </b-field>
-    
-                            <b-field label="Suffix">
-                                <b-input type="text" v-model="suffix" placeholder="Suffix" />
-                            </b-field>
-    
-                            <b-field label="Sex" expanded>
-                                <b-select v-model="sex" placeholder="Sex" expanded>
-                                    <option value="MALE">MALE</option>
-                                    <option value="FEMALE">FEMALE</option>
-                                </b-select>
-                            </b-field>
-    
-                            <b-field label="Contact No.">
-                                <b-input type="text" v-model="contact_no" placeholder="Contact No." required />
-                            </b-field>
+                            <div class="columns">
+                                <div class="column">
+                                    <b-field label="Username" :type="this.errors.username ? 'is-danger':''"
+                                             :message="this.errors.username ? this.errors.username[0] : ''">
+                                        <b-input v-model="fields.username"
+                                                 placeholder="Username" required>
+                                        </b-input>
+                                    </b-field>
+                                </div>
+                            </div>
+
+                            <div class="columns" v-if="global_id < 1">
+                                <div class="column">
+                                    <b-field label="Password" :type="this.errors.password ? 'is-danger':''"
+                                             :message="this.errors.password ? this.errors.password[0] : ''">
+                                        <b-input type="password" password-reveal v-model="fields.password"
+                                                 placeholder="Password" required>
+                                        </b-input>
+                                    </b-field>
+                                </div>
+                                <div class="column">
+                                    <b-field label="Confirm Password" :type="this.errors.password_confirmation ? 'is-danger':''"
+                                             :message="this.errors.password_confirmation ? this.errors.password_confirmation[0] : ''">
+                                        <b-input type="password" password-reveal v-model="fields.password_confirmation"
+                                                 placeholder="Confirm Password" required>
+                                        </b-input>
+                                    </b-field>
+                                </div>
+                            </div>
+
+
+                            <div class="columns">
+                                <div class="column">
+                                    <b-field label="Last Name" :type="this.errors.lname ? 'is-danger':''"
+                                             :message="this.errors.lname ? this.errors.lname[0] : ''">
+                                        <b-input type="text" v-model="fields.lname" placeholder="Last Name" required />
+                                    </b-field>
+                                </div>
+                                <div class="column">
+                                    <b-field label="First Name" :type="this.errors.fname ? 'is-danger':''"
+                                             :message="this.errors.fname ? this.errors.fname[0] : ''">
+                                        <b-input type="text" v-model="fields.fname" placeholder="First Name" required />
+                                    </b-field>
+                                </div>
+                            </div>
+
+
+                            <div class="columns">
+                                <div class="column">
+                                    <b-field label="Middle Name">
+                                        <b-input type="text" v-model="fields.mname" placeholder="Middle Name" />
+                                    </b-field>
+                                </div>
+                                <div class="column">
+                                    <b-field label="Suffix">
+                                        <b-input type="text" v-model="fields.suffix" placeholder="Suffix" />
+                                    </b-field>
+                                </div>
+                            </div>
+
+
+                            <div class="columns">
+                                <div class="column">
+                                    <b-field label="Sex" expanded>
+                                        <b-select v-model="fields.sex" placeholder="Sex" expanded>
+                                            <option value="MALE">MALE</option>
+                                            <option value="FEMALE">FEMALE</option>
+                                        </b-select>
+                                    </b-field>
+                                </div>
+                                <div class="column">
+                                    <b-field label="Contact No.">
+                                        <b-input type="text" v-model="fields.contac_no" placeholder="Contact No." required />
+                                    </b-field>
+                                </div>
+                            </div>
+
+                            <div class="columns">
+                                <div class="column">
+                                    <b-field label="Sex" expanded>
+                                        <b-select v-model="fields.role" placeholder="Sex" expanded>
+                                            <option value="ADMINISTRATOR">ADMINISTRATOR</option>
+                                            <option value="EMPLOYEE">EMPLOYEE</option>
+                                        </b-select>
+                                    </b-field>
+                                </div>
+                            </div>
+
+                            <div class="columns">
+                                <div class="column">
+                                    <b-field label="Province" label-position="on-border" expanded
+                                             :type="this.errors.province ? 'is-danger':''"
+                                             :message="this.errors.province ? this.errors.province[0] : ''">
+                                        <b-select v-model="fields.province" @input="loadCity" expanded>
+                                            <option v-for="(item, index) in provinces" :key="index" :value="item.provCode">{{ item.provDesc }}</option>
+                                        </b-select>
+                                    </b-field>
+                                </div>
+
+                                <div class="column">
+                                    <b-field label="City" label-position="on-border" expanded
+                                             :type="this.errors.city ? 'is-danger':''"
+                                             :message="this.errors.city ? this.errors.city[0] : ''">
+                                        <b-select v-model="fields.city" @input="loadBarangay" expanded>
+                                            <option v-for="(item, index) in cities" :key="index" :value="item.citymunCode">{{ item.citymunDesc }}</option>
+                                        </b-select>
+                                    </b-field>
+                                </div>
+                            </div>
+
+                            <div class="columns">
+                                <div class="column">
+                                    <b-field label="Barangay" label-position="on-border" expanded
+                                             :type="this.errors.barangay ? 'is-danger':''"
+                                             :message="this.errors.barangay ? this.errors.barangay[0] : ''">
+                                        <b-select v-model="fields.barangay" expanded>
+                                            <option v-for="(item, index) in barangays" :key="index" :value="item.brgyCode">{{ item.brgyDesc }}</option>
+                                        </b-select>
+                                    </b-field>
+                                </div>
+                                <div class="column">
+                                    <b-field label="Street" label-position="on-border">
+                                        <b-input v-model="fields.street"
+                                                 placeholder="Street">
+                                        </b-input>
+                                    </b-field>
+                                </div>
+                            </div>
+
                             <div class="buttons">
                                 <b-button label="Clear" type="button" @click="clearForm"></b-button>
                             </div>
                         </div>
                     </b-tab-item>
-        
+
                     <b-tab-item label="Image">
                         <div class="form-container">
                             <div class="form-header">
@@ -53,7 +156,7 @@
                                     <b-button class="button is-primary" @click="snap">Snap</b-button>
                                     <b-button class="is-warning" @click="showSize">Show Size</b-button>
                                 </div>
-        
+
                                 <div class="capture-container">
                                     <div class="canvas-container">
                                         <canvas id="canvas1" :width="canvasWidth" :height="canvasHeight"></canvas>
@@ -77,7 +180,7 @@
                 </b-tabs>
                 <!-- <div>{{ debug }}</div> -->
             </div>
-            
+
             <b-loading :is-full-page="true" v-model="isLoading" :can-cancel="true"></b-loading>
 
         </div> <!--section-->
@@ -86,9 +189,8 @@
 
 
 
-</template>    
+</template>
 
-<!-- <script src='/js/webcam/webcam.js' defer></script> -->
 <script>
 
 export default {
@@ -96,33 +198,46 @@ export default {
         return{
             activeTab: 0,
             shutterCount: 0,
+            global_id: 0,
 
             loading: true,
             isLoading: false,
 
             //fields
             name: '',
-           
-            lname: 'Dela Curz',
-            fname: 'Juan',
-            mname: '',
-            suffix: '',
-            sex: 'MALE',
-            contact_no: '916465',
+
+            fields: {
+                username: 'a',
+                password: 'a',
+                password_confirmation: 'a',
+                lname: 'Dela Curz',
+                fname: 'Juan',
+                mname: '',
+                suffix: '',
+                sex: 'MALE',
+                role: 'EMPLOYEE',
+                contact_no: '916465',
+                province: '',
+                city: '',
+                brangay: '',
+                street: '',
+                descriptions: [],
+            },
+
+
+            errors: {},
+            provinces: [],
+            cities: [],
+            barangays: [],
 
             canvasWidth: 320,
             canvasHeight: 240,
 
             detections1: null,
             detections2: null,
-            detections2: null,
+            detections3: null,
             descriptions: [],
-            // lname: '',
-            // fname: '',
-            // mname: '',
-            // suffix: '',
-            // sex: '',
-            // contact_no: '',
+
 
             debug: 'test',
 
@@ -136,13 +251,34 @@ export default {
 
 
     methods:{
+        //address manangement
+        loadProvince: function(){
+            axios.get('/load-provinces').then(res=>{
+                this.provinces = res.data;
+            })
+        },
+
+        loadCity: function(){
+            axios.get('/load-cities?prov=' + this.fields.province).then(res=>{
+                this.cities = res.data;
+            })
+        },
+
+        loadBarangay: function(){
+            axios.get('/load-barangays?prov=' + this.fields.province + '&city_code='+this.fields.city).then(res=>{
+                this.barangays = res.data;
+            })
+        },
+        //address manangement
+
+
 
         async startCamera(){
             this.btnClass['is-loading'] = true;
             let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
 	        video.srcObject = stream;
 
-           
+
         },
 
         snap(){
@@ -150,8 +286,8 @@ export default {
             let canvas1 = document.getElementById('canvas1');
             let canvas2 = document.getElementById('canvas2');
             let canvas3 = document.getElementById('canvas3');
-            let img = document.getElementById('img');
 
+            let img = document.getElementById('img');
             let image_data_url;
 
             // var scale = Math.min(this.canvasWidth / video.width, this.canvasHeight / video.height);
@@ -175,7 +311,7 @@ export default {
                     //image_data_url = canvas3.toDataURL('image/jpeg');
                     break;
             }
-            
+
             if(this.shutterCount < 2){
                 this.shutterCount++;
             }else{
@@ -192,46 +328,38 @@ export default {
             console.log('first')
 
             this.store().then(()=>{
-                console.log('store completed')
+                //console.log('store completed')
                 this.btnClass['is-loading'] = false;
                 this.isLoading = false;
             });
         },
 
         async store(){
-            console.log('second');
-            
+           // console.log('second');
+
             let canvas1 = document.getElementById('canvas1');
             let canvas2 = document.getElementById('canvas2');
             let canvas3 = document.getElementById('canvas3');
-           
-    
+
+
             this.detections1 = await faceapi.detectSingleFace(canvas1, new faceapi.TinyFaceDetectorOptions())
                                     .withFaceLandmarks().withFaceDescriptor();
-            this.descriptions.push(this.detections1.descriptor)
+            this.fields.descriptions.push(this.detections1.descriptor)
 
             this.detections2 = await faceapi.detectSingleFace(canvas2, new faceapi.TinyFaceDetectorOptions())
                                     .withFaceLandmarks().withFaceDescriptor();
-            this.descriptions.push(this.detections2.descriptor)
-            
+            this.fields.descriptions.push(this.detections2.descriptor)
+
             this.detections3 = await faceapi.detectSingleFace(canvas3, new faceapi.TinyFaceDetectorOptions())
                                     .withFaceLandmarks().withFaceDescriptor();
-            this.descriptions.push(this.detections3.descriptor)
-            
+            this.fields.descriptions.push(this.detections3.descriptor)
+
             this.debug = this.descriptions;
 
             this.btnClass['is-loading'] = false;
 
-            axios.post('/store-descriptor', {
-                lname : this.lname,
-                fname : this.fname,
-                mname : this.mname,
-                suffix : this.suffix,
-                sex : this.sex,
-                contact_no : this.contact_no,
-                descriptors : this.descriptions
-            }).then(res=>{
-               
+            axios.post('/store-descriptions', this.fields).then(res=>{
+
                 this.debug = res.data;
                 this.$buefy.dialog.alert({
                     title: 'Saved!',
@@ -239,7 +367,6 @@ export default {
                     confirmText: 'OK',
                     type: 'is-success',
                     onConfirm: ()=>{
-                        
                         this.clearForm();
                     }
                 })
@@ -311,11 +438,12 @@ export default {
         window.removeEventListener("resize", this.myEventHandler);
     },
     mounted(){
+        this.loadProvince();
         this.startCamera();
         this.initFaceDetectionControls();
-        this.run(); 
+        this.run();
     }
-}        
+}
 </script>
 
 <style scoped src="../../../css/face-register.css"></style>

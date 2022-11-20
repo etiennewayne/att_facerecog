@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Administrator;
 
-use App\Models\Office;
+
+use App\Models\Descriptor;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -41,6 +43,7 @@ class UserController extends Controller
     public function store(Request $req){
         //this will create random unique QR code
         //$qr_code = substr(md5(time() . $req->lname . $req->fname), -8);
+        //return $req;
 
         $validate = $req->validate([
             'username' => ['required', 'max:50', 'unique:users'],
@@ -50,9 +53,6 @@ class UserController extends Controller
             // 'email' => ['required', 'unique:users'],
             'password' => ['required', 'string', 'confirmed'],
             'role' => ['required', 'string'],
-            'province' => ['required', 'string'],
-            'city' => ['required', 'string'],
-            'barangay' => ['required', 'string'],
         ]);
 
         DB::transaction(function () use($req, &$dataArray)  {
@@ -75,25 +75,19 @@ class UserController extends Controller
 
            //create array for ratings
            $dataArray = array();
-           foreach ($req->descriptors as $descriptor){
+           foreach ($req->descriptions as $description){
                 $temp = array([
                     'user_id' => $data->user_id,
-                    'descriptor' => json_encode($descriptor),
+                    'descriptions' => json_encode($description),
                ]);
                $dataArray = array_merge($dataArray, $temp);
            }
            Descriptor::insert($dataArray);
         }); //<--close DB Transaction
 
-        
+
         return response()->json(['status' => 'saved'], 200);
 
-
-        
-
-        return response()->json([
-            'status' => 'saved'
-        ]);
     }
 
     public function update(Request $req, $id){
@@ -128,15 +122,6 @@ class UserController extends Controller
         ]);
     }
 
-
-    public function getBrowseDentist(Request $req){
-
-        $data = User::where('lname', 'like', $req->lname . '%')
-            ->where('fname', 'like', $req->fname . '%')
-            ->where('role', 'DENTIST')
-            ->paginate($req->perpage);
-        return $data;
-    }
 
     public function resetPassword(Request $req, $id){
 

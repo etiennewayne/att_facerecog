@@ -53,12 +53,14 @@ Route::get('/face-recog-dashboard', [App\Http\Controllers\FaceRecogDashboardCont
 
 
 Route::get('/face-register', [App\Http\Controllers\Administrator\FaceRegisterController::class, 'index']);
-Route::post('/face-register', [App\Http\Controllers\Administrator\FaceRegisterController::class, 'store']);
+//Route::post('/face-register', [App\Http\Controllers\Administrator\FaceRegisterController::class, 'store']);
 
 
-Route::post('/store-descriptor', [App\Http\Controllers\EmployeeController::class, 'store']);
-Route::get('/load-descriptors', [App\Http\Controllers\EmployeeController::class, 'loadDescriptors']);
+Route::post('/store-descriptions', [App\Http\Controllers\Administrator\UserController::class, 'store']);
+Route::get('/load-descriptions', [App\Http\Controllers\EmployeeController::class, 'loadDescriptions']);
 
+
+Route::post('/store-dtr', [App\Http\Controllers\DailyTimeRecordController::class, 'storeDTR']);
 
 
 

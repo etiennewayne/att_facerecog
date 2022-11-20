@@ -19,7 +19,7 @@ class CreateDescriptorsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('user_id')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');
-            $table->json('descriptor');
+            $table->json('descriptions');
             $table->timestamps();
         });
     }

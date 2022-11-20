@@ -21,8 +21,8 @@ class User extends Authenticatable
     protected $primaryKey = 'user_id';
     protected $fillable = [
         'username', 'lname', 'fname', 'mname', 'suffix', 'sex',
-        'province', 'city', 'barangay', 'street', 
-        'contact_no', 
+        'province', 'city', 'barangay', 'street',
+        'contact_no',
         'role',
         'password',
     ];
@@ -45,4 +45,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function descriptions(){
+        return $this->hasMany(Descriptor::class, 'user_id', 'user_id');
+    }
+
 }

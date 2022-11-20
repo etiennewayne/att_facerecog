@@ -21,20 +21,17 @@
             <!-- <b-navbar-item href="/about">
                 ABOUT
             </b-navbar-item> -->
-           
+
             <b-navbar-item v-if="isAdmin" href="/face-register" >
                 Face Register
             </b-navbar-item>
 
-            <b-navbar-item v-if="isAdmin" href="/employees" >
-                Employee
-            </b-navbar-item>
 
             <b-navbar-item v-if="isAdmin" href="/accounts" >
                 Accounts
             </b-navbar-item>
-           
-           
+
+
             <b-navbar-item tag="div">
                 <div v-if="!currentLogin" class="buttons">
                     <a class="button is-light" href="/login">
@@ -69,7 +66,7 @@ export default {
             })
         },
 
-     
+
 
         logout(){
             axios.post('/logout').then(()=>{

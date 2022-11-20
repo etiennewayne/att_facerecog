@@ -13,11 +13,11 @@ class Descriptor extends Model
     protected $table = 'descriptors';
     protected $primaryKey = 'descriptor_id';
 
-    protected $fillable = ['employee_id', 'descriptor'];
+    protected $fillable = ['employee_id', 'descriptions'];
 
 
     protected $casts = [
-        'descriptor' => 'json',
+        'descriptions' => 'json',
     ];
 
 
