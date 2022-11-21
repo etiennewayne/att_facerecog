@@ -24,6 +24,8 @@ class CreateDailyTimeRecordsTable extends Migration
             $table->time('time_record');
             $table->date('date_record');
 
+            $table->dateTime('dt_record');
+
             $table->timestamps();
         });
     }

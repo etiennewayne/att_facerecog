@@ -2,17 +2,16 @@
 
     <div>
         <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-            <b-select v-model="selectedMonth">
-                <option v-for="(index, item) in months" :key="index"
-                    :value="item.index">{{ item.monthName }}</option>
-
+            <b-select v-model="selectedMonth" @input="loadDtr">
+                <option v-for="(item, index) in months" :key="index"
+                    :value="{ id: item.monthKey, monthName: item.monthName }">{{ item.monthName }}</option>
             </b-select>
         </div>
 
         <div class="print-form">
             <div class="print-title">Daily Time Record</div>
             <div class="dtr-name">{{ fullName }}</div>
-            <div class="dtr-month">Month of: <span style="font-weight: bold;">{{ November }}</span></div>
+            <div class="dtr-month">Month of: <span style="font-weight: bold;">{{ selectedMonth.monthName }}</span></div>
 
             <div>
                 <table class="dtr-table">
@@ -28,60 +27,64 @@
 </template>
 
 <script>
+import { assertExpressionStatement } from '@babel/types';
+
 export default {
     props: ['propId', 'propData'],
     data(){
         return{
             data: null,
             selectedMonth: 1,
+            
+            dtrs: [],
 
             months: [
                 {
-                    index: 1,
-                    monthName: 'JANUARY'
+                    'monthKey': 1,
+                    'monthName': 'JANUARY'
                 },
                 {
-                    index: 2,
-                    monthName: 'FEBRUARY'
+                    'monthKey': 2,
+                    'monthName': 'FEBRUARY'
                 },
                 {
-                    index: 1,
-                    monthName: 'MARCH'
+                    'monthKey': 1,
+                    'monthName': 'MARCH'
                 },
                 {
-                    index: 4,
-                    monthName: 'APRIL'
+                    'monthKey': 4,
+                    'monthName': 'APRIL'
                 },
                 {
-                    index: 5,
-                    monthName: 'MAY'
+                    'monthKey': 5,
+                    'monthName': 'MAY'
                 },
                 {
-                    index: 6,
-                    monthName: 'JUNE'
+                    'monthKey': 6,
+                    'monthName': 'JUNE'
                 },
                 {
-                    index: 7,
-                    monthName: 'JULY'
+                    'monthKey': 7,
+                    'monthName': 'JULY'
                 },
                 {
-                    index: 8,
-                    monthName: 'AUGUST'
+                    'monthKey': 8,
+                    'monthName': 'AUGUST'
                 },
                 {
-                    index: 9,
-                    monthName: 'SEPTEMBER'
+                    'monthKey': 9,
+                    'monthName': 'SEPTEMBER'
                 },
                 {
-                    index: 10,
+                    'monthKey': 10,
                     monthName: 'OCTOBER'
                 },
                 {
-                    index: 11,
+                    'monthKey': 11,
                     monthName: 'NOVEMBER'
                 },
                 {
-                    index: 12,
+                    'monthKey': 12,
                     monthName: 'DECEMBER'
                 },
             ],
@@ -91,6 +94,12 @@ export default {
         initData: function(){
             this.data = JSON.parse(this.propData);
             console.log(this.data)
+        },
+
+        loadDtr(){
+            axios.get('/get-user-dtr/' + this.data[0].user.user_id).then(res=>{
+                this.dtrs = res.data;
+            })
         }
     },
     mounted() {

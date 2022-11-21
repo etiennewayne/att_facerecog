@@ -29,6 +29,14 @@ class AdminDTRController extends Controller
             ->paginate($req->perpage);
         return $data;
     }
+    public function getUserDTR($id){
+        $userid = $id;
+
+        return DailyTimeRecord::whereMonth('2')
+        ->orderBy('date_record')
+        ->get();
+
+    }
 
     public function create(){
         return view('administrator.daily-time-record-create')
@@ -38,14 +46,18 @@ class AdminDTRController extends Controller
     public function store(Request $req){
         //return $req;
 
+
         $nTime = date("H:i", strtotime($req->nDateTime)); //convert to date format UNIX
         $ndate = date("Y-m-d", strtotime($req->nDateTime)); //convert to date format UNIX
+        $nDateTime = date("Y-m-d H:i", strtotime($req->nDateTime)); //convert to date format UNIX
+
 
         DailyTimeRecord::create([
             'time_status' => $req->t_status,
             'user_id' => $req->user_id,
             'time_record' => $nTime,
-            'date_record' => $ndate
+            'date_record' => $ndate,
+            'dt_record' => $nDateTime
         ]);
 
         return response()->json([
@@ -65,11 +77,14 @@ class AdminDTRController extends Controller
 
         $nTime = date("H:i", strtotime($req->nDateTime)); //convert to date format UNIX
         $ndate = date("Y-m-d", strtotime($req->nDateTime)); //convert to date format UNIX
+        $nDateTime = date("Y-m-d H:i", strtotime($req->nDateTime)); //convert to date format UNIX
 
         $data = DailyTimeRecord::find($id);
         $data->time_status = $req->t_status;
         $data->time_record = $nTime;
         $data->date_record = $ndate;
+        $data->dt_record = $nDateTime;
+
         $data->save();
 
         return response()->json([
