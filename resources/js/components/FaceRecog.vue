@@ -183,7 +183,7 @@ export default {
             let session = "AM";
 
             //set combo box for time in , time out auto
-            if(hh >= 7 && hh < 12){
+            if(hh >= 0 && hh < 12){
                 this.timeStatus = 'in_am';
             }
 
@@ -200,7 +200,7 @@ export default {
                 this.timeStatus = 'in_pm';
             }
 
-            if(hh > 15 && hh < 19){
+            if(hh > 15 && hh < 23){
                 this.timeStatus = 'out_pm';
             }
 

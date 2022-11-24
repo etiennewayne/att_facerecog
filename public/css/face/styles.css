@@ -30,7 +30,7 @@
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    height: 100vh;
+
 }
 
 #clock{
@@ -46,6 +46,7 @@
 .w-title{
   font-weight: bold;
   font-size: 1.4em;
+    margin-top: 80px;
 }
 
 #github-link {
