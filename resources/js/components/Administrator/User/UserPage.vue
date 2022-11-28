@@ -247,6 +247,21 @@
 
                             <div class="columns">
                                 <div class="column">
+                                    <b-field label="Salary Level" label-position="on-border" expanded
+                                             :type="this.errors.salary_level_id ? 'is-danger':''"
+                                             :message="this.errors.salary_level_id ? this.errors.salary_level_id[0] : ''">
+                                        <b-select v-model="fields.salary_level_id" expanded>
+                                            <option v-for="(item, index) in salary_levels" :key="index" 
+                                                :value="item.salary_level_id">
+                                                {{ item.salary_level }}
+                                            </option>
+                                        </b-select>
+                                    </b-field>
+                                </div>
+                            </div>
+
+                            <div class="columns">
+                                <div class="column">
                                     <b-field label="Province" label-position="on-border" expanded
                                              :type="this.errors.province ? 'is-danger':''"
                                              :message="this.errors.province ? this.errors.province[0] : ''">
@@ -366,6 +381,7 @@
 <script>
 
 export default{
+    props: ['propSalaryLevels'],
     data() {
         return{
             data: [],
@@ -406,6 +422,7 @@ export default{
             provinces: [],
             cities: [],
             barangays: [],
+            salary_levels: [],
 
 
         }
@@ -634,11 +651,16 @@ export default{
             })
         },
 
+        initData(){
+            this.salary_levels = JSON.parse(this.propSalaryLevels);
+        }
+
 
     },
 
     mounted() {
         //this.loadOffices();
+        this.initData();
         this.loadAsyncData();
         this.loadProvince();
     }

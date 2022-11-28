@@ -4,11 +4,10 @@
     <style>
 
         @media print {
-
             .print-form{
-                width: 816px;
-                margin: 30px auto 0;
-                border: 1px solid red;
+                
+                margin: 10px auto 0;
+                /* border: 1px solid red; */
             }
             .print-title{
                 margin: auto;
@@ -17,12 +16,26 @@
             .navbar{
                 display: none;
             }
+
+            .filter-print{
+                display: none;
+            }
+
+            .payslip{
+                margin: 10px auto 0;
+            }
         }
 
         /*outisde during not print pge*/
         .print-title{
             margin: auto;
             text-align: center;
+        }
+
+        .filter-print{
+            display: flex;
+            margin: 10px auto;
+            justify-content: center;
         }
 
         .dtr-month{
@@ -36,15 +49,41 @@
         }
 
         .dtr-table{
+            /*border: 1px solid black;*/
+            margin: auto;
+            font-size: 11px;
+        }
+        .dtr-table tr td{
             border: 1px solid black;
+            padding: 5px;
+        }
+
+        .dtr-table tr .time-header{
+            text-align: center;
+            font-weight: bold;
+            width: 80px;
+        }
+
+        .dtr-table tr .time{
+            text-align: center;
+
+        }
+
+
+        .payslip-header-text{
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .table-payslip tr .align-right{
+            text-align: right;
         }
 
     </style>
 @endsection
 
 @section('content')
-
-    <display-dtr prop-id="{{ $id }}" prop-data='@json($data)'></display-dtr>
+    <display-dtr prop-id="{{ $id }}" prop-user='@json($user)'></display-dtr>
 @endsection
 
 

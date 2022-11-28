@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\DailyTimeRecord;
 use Illuminate\Http\Request;
 
+
+use App\Models\User;
+
 class AdminDTRController extends Controller
 {
     //
@@ -29,12 +32,30 @@ class AdminDTRController extends Controller
             ->paginate($req->perpage);
         return $data;
     }
-    public function getUserDTR($id){
-        $userid = $id;
+    public function getUserDTR(Request $req){
+        //return $req;
+        $half = $req->half;
+        $user = $req->user;
+        $month = $req->month;
+        $year = $req->year;
 
-        return DailyTimeRecord::whereMonth('2')
-        ->orderBy('date_record')
-        ->get();
+        if($half == 'first'){
+            return DailyTimeRecord::whereMonth('dt_record', $month)
+                ->whereYear('dt_record', $year)
+                ->whereDay('dt_record', '>=', 1)
+                ->whereDay('dt_record', '<=', 15)
+                ->where('user_id', $user)
+                ->orderBy('dt_record', 'desc')
+                ->get();
+        }else{
+            return DailyTimeRecord::whereMonth('dt_record', $month)
+                ->whereYear('dt_record', $year)
+                ->whereDay('dt_record', '>=', 16)
+                ->whereDay('dt_record', '<=', 31)
+                ->where('user_id', $user)
+                ->orderBy('dt_record', 'desc')
+                ->get();
+        }
 
     }
 
@@ -94,15 +115,27 @@ class AdminDTRController extends Controller
 
 
     public function displayDTR($id){
-        $data = DailyTimeRecord::with(['user'])
-            ->whereHas('user', function($q) use ($id){
-                $q->where('user_id', $id);
-            })
-        ->get();
+
+        // $data = DailyTimeRecord::with(['user'])
+        //     ->whereHas('user', function($q) use ($id){
+        //         $q->where('user_id', $id);
+        //     })
+        // ->get();
+        $user = User::where('user_id', $id)
+            ->with(['salary_level'])
+            ->first();
 
         return view('administrator.display-dtr')
             ->with('id', $id)
-            ->with('data', $data);
+            ->with('user', $user);
+    }
+
+    public function destroy($id){
+        DailyTimeRecord::destroy($id);
+
+        return response()->json([
+            'status' => 'deleted'
+        ],200);
     }
 
 }

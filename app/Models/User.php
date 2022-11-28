@@ -23,7 +23,7 @@ class User extends Authenticatable
         'username', 'lname', 'fname', 'mname', 'suffix', 'sex',
         'province', 'city', 'barangay', 'street',
         'contact_no',
-        'role',
+        'role','salary_level_id',
         'password',
     ];
 
@@ -48,6 +48,10 @@ class User extends Authenticatable
 
     public function descriptions(){
         return $this->hasMany(Descriptor::class, 'user_id', 'user_id');
+    }
+
+    public function salary_level(){
+        return $this->hasOne(SalaryLevel::class, 'salary_level_id', 'salary_level_id');
     }
 
 }

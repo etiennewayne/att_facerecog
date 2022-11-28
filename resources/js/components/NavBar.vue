@@ -30,6 +30,10 @@
                 DTR
             </b-navbar-item>
 
+            <b-navbar-item v-if="isAdmin" href="/salary-level" >
+                Salary Level
+            </b-navbar-item>
+
             <b-navbar-item v-if="isAdmin" href="/accounts" >
                 Accounts
             </b-navbar-item>
@@ -65,7 +69,6 @@ export default {
         initData: async function(){
             await axios.get('/load-user').then(res=>{
                 this.user = res.data;
-                console.log(this.user)
             })
         },
 

@@ -86,10 +86,17 @@
 
                             <div class="columns">
                                 <div class="column">
-                                    <b-field label="Sex" expanded>
+                                    <b-field label="Role" expanded>
                                         <b-select v-model="fields.role" placeholder="Sex" expanded>
                                             <option value="ADMINISTRATOR">ADMINISTRATOR</option>
                                             <option value="EMPLOYEE">EMPLOYEE</option>
+                                        </b-select>
+                                    </b-field>
+                                </div>
+                                <div class="column">
+                                    <b-field label="Salary Level" expanded>
+                                        <b-select v-model="fields.salary_level" placeholder="Salary Level" expanded>
+                                            <option v-for="(item, index) in salary_levels" :key="index" :value="item.salary_level_id">{{ item.salary_level }}</option>
                                         </b-select>
                                     </b-field>
                                 </div>
@@ -194,6 +201,9 @@
 <script>
 
 export default {
+    props: ['propSalaryLevels'],
+
+
     data(){
         return{
             activeTab: 0,
@@ -204,7 +214,6 @@ export default {
             isLoading: false,
 
             //fields
-            name: '',
 
             fields: {
                 username: 'a',
@@ -216,6 +225,7 @@ export default {
                 suffix: '',
                 sex: 'MALE',
                 role: 'EMPLOYEE',
+                salary_level_id: 1,
                 contact_no: '916465',
                 province: '',
                 city: '',
@@ -229,6 +239,7 @@ export default {
             provinces: [],
             cities: [],
             barangays: [],
+            salary_levels: [],
 
             canvasWidth: 320,
             canvasHeight: 240,
@@ -318,14 +329,13 @@ export default {
                 this.shutterCount = 0;
             }
             // data url of the image
-
         },
 
 
         submit: function(){
             this.btnClass['is-loading'] = true;
             this.isLoading = true;
-            console.log('first')
+          
 
             this.store().then(()=>{
                 //console.log('store completed')
@@ -354,7 +364,7 @@ export default {
                                     .withFaceLandmarks().withFaceDescriptor();
             this.fields.descriptions.push(this.detections3.descriptor)
 
-            this.debug = this.descriptions;
+            //this.debug = this.descriptions;
 
             this.btnClass['is-loading'] = false;
 
@@ -428,6 +438,9 @@ export default {
                 this.canvasWidth = 320;
                 this.canvasHeight = 240;
             }
+        },
+        initSalaryLevels(){
+            this.salary_levels = JSON.parse(this.propSalaryLevels)
         }
     },
 
@@ -442,6 +455,7 @@ export default {
         this.startCamera();
         this.initFaceDetectionControls();
         this.run();
+        this.initSalaryLevels();
     }
 }
 </script>

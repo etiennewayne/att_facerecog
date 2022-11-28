@@ -2,7 +2,7 @@
     <div>
         <div class="section">
             <div class="columns is-centered">
-                <div class="column is-10">
+                <div class="column is-8-desktop is-10-tablet">
                     <div class="box">
 
                         <div class="is-flex mb-2" style="font-size: 20px; font-weight: bold;">DAILY TIME RECORDS</div>
@@ -32,6 +32,13 @@
                                         </p>
                                     </b-field>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="level">
+                            <div class="level-left">
+                                <b-field label="Select Date" label-position="on-border">
+                                    <b-datepicker v-model="search.searchdate"></b-datepicker>
+                                </b-field>
                             </div>
                         </div>
 
@@ -210,55 +217,6 @@ export default{
         },
 
 
-        submit: function(){
-            if(this.global_id > 0){
-                //update
-                axios.put('/accounts/'+this.global_id, this.fields).then(res=>{
-                    if(res.data.status === 'updated'){
-                        this.$buefy.dialog.alert({
-                            title: 'UPDATED!',
-                            message: 'Successfully updated.',
-                            type: 'is-success',
-                            onConfirm: () => {
-                                this.loadAsyncData();
-                                this.clearFields();
-                                this.global_id = 0;
-                                this.isModalCreate = false;
-                            }
-                        })
-                    }
-                }).catch(err=>{
-                    if(err.response.status === 422){
-                        this.errors = err.response.data.errors;
-                    }
-                })
-            }else{
-                //INSERT HERE
-                axios.post('/accounts', this.fields).then(res=>{
-                    if(res.data.status === 'saved'){
-                        this.$buefy.dialog.alert({
-                            title: 'SAVED!',
-                            message: 'Successfully saved.',
-                            type: 'is-success',
-                            confirmText: 'OK',
-                            onConfirm: () => {
-                                this.isModalCreate = false;
-                                this.loadAsyncData();
-                                this.clearFields();
-                                this.global_id = 0;
-                            }
-                        })
-                    }
-                }).catch(err=>{
-                    if(err.response.status === 422){
-                        this.errors = err.response.data.errors;
-                    }
-                });
-
-
-            }
-        },
-
 
         //alert box ask for deletion
         confirmDelete(delete_id) {
@@ -267,13 +225,13 @@ export default{
                 type: 'is-danger',
                 message: 'Are you sure you want to delete this data?',
                 cancelText: 'Cancel',
-                confirmText: 'Delete user account?',
+                confirmText: 'Delete?',
                 onConfirm: () => this.deleteSubmit(delete_id)
             });
         },
         //execute delete after confirming
         deleteSubmit(delete_id) {
-            axios.delete('/accounts/' + delete_id).then(res => {
+            axios.delete('/daily-time-records/' + delete_id).then(res => {
                 this.loadAsyncData();
             }).catch(err => {
                 if (err.response.status === 422) {

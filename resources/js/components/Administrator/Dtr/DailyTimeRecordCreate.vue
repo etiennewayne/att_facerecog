@@ -1,47 +1,51 @@
 <template>
     <div>
         <div class="section">
-            <div class="box">
-                <div class="has-text-weight-bold mb-2" style="font-size: 1.3em;">
-                    ADD RECORD
-                </div>
-
-                <div>
-                    <form @submit.prevent="submit">
-                        <div class="columns">
-                            <div class="column">
-                                <b-field label="Select Date & Time">
-                                    <b-datetimepicker v-model="fields.nDateTime" placeholder="Select Date & Time"></b-datetimepicker>
-                                </b-field>
-                            </div>
+            <div class="columns is-centered">
+                <div class="column is-6-desktop is-8-tablet">
+                    <div class="box">
+                        <div class="has-text-weight-bold mb-2" style="font-size: 1.3em;">
+                            ADD RECORD
                         </div>
-                        <div class="columns">
-                            <div class="column">
-                                <b-field label="Time Status" expanded>
-                                    <b-select v-model="fields.t_status" expanded>
-                                        <option value="in_am">IN AM</option>
-                                        <option value="out_am">OUT AM</option>
-
-                                        <option value="in_pm">IN PM</option>
-                                        <option value="out_pm">OUT PM</option>
-
-                                    </b-select>
-                                </b-field>
-                            </div>
+        
+                        <div>
+                            <form @submit.prevent="submit">
+                                <div class="columns">
+                                    <div class="column">
+                                        <b-field label="Select Date & Time">
+                                            <b-datetimepicker v-model="fields.nDateTime" placeholder="Select Date & Time"></b-datetimepicker>
+                                        </b-field>
+                                    </div>
+                                </div>
+                                <div class="columns">
+                                    <div class="column">
+                                        <b-field label="Time Status" expanded>
+                                            <b-select v-model="fields.t_status" expanded>
+                                                <option value="in_am">IN AM</option>
+                                                <option value="out_am">OUT AM</option>
+        
+                                                <option value="in_pm">IN PM</option>
+                                                <option value="out_pm">OUT PM</option>
+        
+                                            </b-select>
+                                        </b-field>
+                                    </div>
+                                </div>
+                                <div class="columns">
+                                    <div class="column">
+                                        <modal-browse-employees :prop-employee="employee_fullname"
+                                                                @browseEmployees="emitBrowseEmployee($event)"></modal-browse-employees>
+                                    </div>
+                                </div>
+                                <div class="buttons">
+                                    <button class="button is-primary">SAVE</button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="columns">
-                            <div class="column">
-                                <modal-browse-employees :prop-employee="employee_fullname"
-                                                        @browseEmployees="emitBrowseEmployee($event)"></modal-browse-employees>
-                            </div>
-                        </div>
-                        <div class="buttons">
-                            <button class="button is-primary">SAVE</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+                    </div>
+                </div><!-- column -->
+            </div><!-- cols -->
+        </div><!-- section s-->
     </div>
 
 </template>

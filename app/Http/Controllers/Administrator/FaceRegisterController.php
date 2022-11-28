@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Administrator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\SalaryLevel;
 class FaceRegisterController extends Controller
 {
     //
@@ -13,6 +14,9 @@ class FaceRegisterController extends Controller
     }
 
     public function index(){
-        return view('administrator.face-register');
+        $salaryLevels = SalaryLevel::orderBy('salary_level', 'asc')->get();
+
+        return view('administrator.face-register')
+            ->with('salaryLevels', $salaryLevels);
     }
 }

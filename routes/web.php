@@ -111,7 +111,13 @@ Route::get('/get-browse-employees', [App\Http\Controllers\Administrator\AdminEmp
 Route::resource('/daily-time-records', App\Http\Controllers\Administrator\AdminDTRController::class);
 Route::get('/get-daily-time-records', [App\Http\Controllers\Administrator\AdminDTRController::class, 'getDTRs']);
 Route::get('/display-dtr/{id}', [App\Http\Controllers\Administrator\AdminDTRController::class, 'displayDTR']);
-Route::get('/get-user-dtr/{id}', [App\Http\Controllers\Administrator\AdminDTRController::class, 'getUserDTR']);
+Route::get('/get-user-dtr', [App\Http\Controllers\Administrator\AdminDTRController::class, 'getUserDTR']);
+
+
+Route::resource('/salary-level', App\Http\Controllers\Administrator\SalaryLevelController::class);
+Route::get('/get-salary-levels', [App\Http\Controllers\Administrator\SalaryLevelController::class, 'getSalaryLevel']);
+
+
 
 /*     ADMINSITRATOR          */
 

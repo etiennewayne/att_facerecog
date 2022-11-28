@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\User;
+use App\Models\SalaryLevel;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -19,11 +21,13 @@ class UserController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('admin');
-
     }
 
     public function index(){
-        return view('administrator.user'); //blade.php
+        $salaryLevels = SalaryLevel::orderBy('salary_level', 'asc')->get();
+
+        return view('administrator.user')
+            ->with('salaryLevels', $salaryLevels); //blade.php
     }
 
     public function getUsers(Request $req){
@@ -43,7 +47,6 @@ class UserController extends Controller
     public function store(Request $req){
         //this will create random unique QR code
         //$qr_code = substr(md5(time() . $req->lname . $req->fname), -8);
-        //return $req;
 
         $validate = $req->validate([
             'username' => ['required', 'max:50', 'unique:users'],
@@ -66,6 +69,7 @@ class UserController extends Controller
                 'sex' => $req->sex,
                 'contact_no' => $req->contact_no,
                 'role' => $req->role,
+                'salary_level_id' => $req->salary_level_id,
                 'province' => $req->province,
                 'city' => $req->city,
                 'barangay' => $req->barangay,
@@ -73,16 +77,19 @@ class UserController extends Controller
             ]);
            //------------------------------
 
-           //create array for ratings
-           $dataArray = array();
-           foreach ($req->descriptions as $description){
-                $temp = array([
-                    'user_id' => $data->user_id,
-                    'descriptions' => json_encode($description),
-               ]);
-               $dataArray = array_merge($dataArray, $temp);
-           }
-           Descriptor::insert($dataArray);
+            if($req->role != 'ADMINISTRATOR'){
+                //create array for ratings
+                $dataArray = array();
+                foreach ($req->descriptions as $description){
+                    $temp = array([
+                        'user_id' => $data->user_id,
+                        'descriptions' => json_encode($description),
+                    ]);
+                    $dataArray = array_merge($dataArray, $temp);
+                }
+                Descriptor::insert($dataArray);
+            }
+
         }); //<--close DB Transaction
 
 
@@ -111,6 +118,7 @@ class UserController extends Controller
         $data->sex = $req->sex;
        // $data->email = $req->email;
         $data->role = $req->role;
+        $data->salary_level_id = $req->salary_level_id;
         $data->province = $req->province;
         $data->city = $req->city;
         $data->barangay = $req->barangay;

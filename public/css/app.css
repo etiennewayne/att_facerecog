@@ -26636,6 +26636,15 @@ html body {
   font-family: "Roboto", sans-serif;
 }
 
+@media print {
+  .filter-print {
+    display: none;
+  }
+
+  input {
+    display: none;
+  }
+}
 @media screen and (max-width: 1023px) {
   .b-sidebar .sidebar-content.is-mini-mobile:not(.is-mini-expand) .menu-list li a span:nth-child(2), .b-sidebar .sidebar-content.is-mini-mobile.is-mini-expand:not(:hover):not(.is-mini-delayed) .menu-list li a span:nth-child(2) {
     display: none;
