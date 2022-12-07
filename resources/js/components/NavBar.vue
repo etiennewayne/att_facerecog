@@ -1,5 +1,5 @@
 <template>
-    <b-navbar>
+    <b-navbar shadow>
         <template #brand>
             <b-navbar-item>
                 <h1 class="title is-4">ATTENDANCE SYSTEM</h1>
@@ -13,10 +13,10 @@
 
         <template #end>
             <b-navbar-item v-if="isAdmin" href="/home">
-                HOME
+                Home
             </b-navbar-item>
             <b-navbar-item v-if="!isAdmin" href="/">
-                HOME
+                Home
             </b-navbar-item>
             <!-- <b-navbar-item href="/about">
                 ABOUT
@@ -107,5 +107,9 @@ export default {
 <style>
     .navbar-item{
         font-weight: bold;
+    }
+
+    .navbar{
+        border-bottom: 1px solid blue;
     }
 </style>

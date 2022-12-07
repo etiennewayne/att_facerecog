@@ -24,12 +24,28 @@ class AdminDTRController extends Controller
     public function getDTRs(Request $req){
         $sort = explode('.', $req->sort_by);
 
-        $data = DailyTimeRecord::with(['user'])
-            ->whereHas('user', function($q) use($req){
-                $q->where('lname', 'like',  $req->lname . '%');
-            })
-            ->orderBy($sort[0], $sort[1])
-            ->paginate($req->perpage);
+        //return $req;
+        if($req->searchdate == 'null'){
+            $data = DailyTimeRecord::with(['user'])
+                ->whereHas('user', function($q) use($req){
+                    $q->where('lname', 'like',  $req->lname . '%');
+                })
+                ->orderBy($sort[0], $sort[1])
+                ->paginate($req->perpage);
+        }else{
+            $ndate = date("Y-m-d", strtotime($req->searchdate)); //convert to date format UNIX
+            //return $ndate;
+
+            $data = DailyTimeRecord::with(['user'])
+                ->whereHas('user', function($q) use($req){
+                    $q->where('lname', 'like',  $req->lname . '%');
+                })
+                ->whereDate('dt_record', $ndate)
+                ->orderBy($sort[0], $sort[1])
+                ->paginate($req->perpage);
+        }
+
+        
         return $data;
     }
     public function getUserDTR(Request $req){

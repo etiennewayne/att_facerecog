@@ -12,7 +12,9 @@
     /*    line-height: 18px;*/
     /*}*/
 
-
+    .print-title{
+        font-weight: bold;
+    }
 
     .myDivToPrint{
         margin: 0;

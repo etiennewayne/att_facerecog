@@ -14,3 +14,7 @@ git
 - centralize monitoring of attendance per branch
 - synchronize the registered face and other data auto (done)
 - allow admin bypass undetected face (done)
+
+
+
+

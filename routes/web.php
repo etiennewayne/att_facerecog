@@ -5,9 +5,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
-use App\Models\Appointment;
-use App\Models\User;
-use App\Models\DentistSchedule;
 
 
 
@@ -101,12 +98,8 @@ Route::get('/get-accounts', [App\Http\Controllers\Administrator\UserController::
 
 Route::post('/account-reset-password/{id}', [App\Http\Controllers\Administrator\UserController::class, 'resetPassword']);
 
-
-
 Route::resource('/employees', App\Http\Controllers\Administrator\AdminEmployeeController::class);
-Route::get('/get-browse-employees', [App\Http\Controllers\Administrator\AdminEmployeeController::class, 'getBrowseEmployees']); //use in the ModalBrowseEmployee
-
-
+Route::get('/get-browse-employees', [App\Http\Controllers\Administrator\AdminEmployeeController::class, 'getBrowseEmployees']); //use in the ModalBrowseEmployees
 
 Route::resource('/daily-time-records', App\Http\Controllers\Administrator\AdminDTRController::class);
 Route::get('/get-daily-time-records', [App\Http\Controllers\Administrator\AdminDTRController::class, 'getDTRs']);
@@ -126,6 +119,12 @@ Route::get('/get-salary-levels', [App\Http\Controllers\Administrator\SalaryLevel
 Route::get('/', [App\Http\Controllers\MainPageController::class, 'index']);
 
 
+
+// EMPLOYEE
+Route::get('/employee', [App\Http\Controllers\Employee\EmployeeDashboardController::class, 'index']);
+
+
+Route::get('/employee/dtr', [App\Http\Controllers\Employee\EmployeeDTRConttroller::class, 'index']);
 
 Route::get('/session', function(){
     return Session::all();

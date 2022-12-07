@@ -37,7 +37,18 @@
                         <div class="level">
                             <div class="level-left">
                                 <b-field label="Select Date" label-position="on-border">
-                                    <b-datepicker v-model="search.searchdate"></b-datepicker>
+                                    <b-datepicker v-model="search.searchdate">
+                                        <b-button label="Clear"
+                                            type="is-danger"
+                                            icon-left="close"
+                                            outlined
+                                            @click="search.searchdate = null"></b-button>
+                                    </b-datepicker>
+                                    <p class="control">
+                                        <b-tooltip label="Search" type="is-success">
+                                            <b-button type="is-primary" icon-right="account-filter" @click="loadAsyncData"/>
+                                        </b-tooltip>
+                                    </p>
                                 </b-field>
                             </div>
                         </div>
@@ -77,7 +88,7 @@
                             </b-table-column>
 
                             <b-table-column field="date_record" label="Record" v-slot="props">
-                                {{ props.row.date_record }} - {{ props.row.time_record | formatTime }}
+                                {{ new Date(props.row.dt_record).toLocaleDateString() }} - {{ new Date(props.row.dt_record).toTimeString() | formatTime }}
                             </b-table-column>
 
                             <b-table-column field="time_status" label="Time Status" v-slot="props">
@@ -133,6 +144,7 @@ export default{
 
             search: {
                 lname: '',
+                searchdate: null,
             },
 
             isModalCreate: false,
@@ -157,13 +169,23 @@ export default{
         /*
         * Load async data
         */
+    
         loadAsyncData() {
+            let sdate = null;
+            if(this.search.searchdate){
+               sdate = new Date(this.search.searchdate);
+               sdate = sdate.getFullYear() + '-' + (sdate.getMonth() + 1)  + '-' + sdate.getDate();
+            }
+            
+
             const params = [
                 `sort_by=${this.sortField}.${this.sortOrder}`,
                 `lname=${this.search.lname}`,
+                `searchdate=${sdate}`,
                 `perpage=${this.perPage}`,
                 `page=${this.page}`
             ].join('&')
+
 
             this.loading = true
             axios.get(`/get-daily-time-records?${params}`)

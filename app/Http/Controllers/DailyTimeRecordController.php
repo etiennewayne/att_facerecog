@@ -18,13 +18,26 @@ class DailyTimeRecordController extends Controller
         //return $nTime;
         $nDateTime = date("Y-m-d H:i", strtotime($req->t_time)); //convert to date format UNIX
 
-        DailyTimeRecord::create([
-            'time_status' => $req->t_status,
-            'user_id' => $req->t_user,
-            'time_record' => $nTime,
-            'date_record' => $ndate,
-            'dt_record' => $nDateTime
-        ]);
+        $exist = DailyTimeRecord::whereDate('dt_record', $ndate)
+            ->where('time_status', $req->t_status)
+            ->where('user_id',  $req->t_user)
+            ->exists();
+
+        if($exist){
+            return response()->json([
+                'status' => 'exist'
+            ], 422);
+        }else{
+            DailyTimeRecord::create([
+                'time_status' => $req->t_status,
+                'user_id' => $req->t_user,
+                'dt_record' => $nDateTime
+            ]);
+
+            return response()->json([
+                'status' => 'saved'
+            ], 200);
+        }
 
     }
 }

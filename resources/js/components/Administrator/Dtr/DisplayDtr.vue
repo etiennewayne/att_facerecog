@@ -1,7 +1,7 @@
 <template>
 
-    <div>
-        <div class="columns is-centered">
+    <div class="section">
+        <div class="columns">
             <div class="column">
                 <div class="filter-print">
                     <b-field label="Filter" label-position="on-border">
@@ -77,7 +77,7 @@
                 <div class="payslip">
                     <div class="payslip-header">
                         <div class="payslip-header-text">PAYSLIP</div>
-                        <table style="margin-top: 10px;" class="table-payslip">
+                        <table style="margin: 10px auto" class="table-payslip">
                             <tr>
                                 <td>Name: </td>
                                 <td>{{ fullName }}</td>
@@ -118,7 +118,6 @@
 </template>
 
 <script>
-import { assertExpressionStatement } from '@babel/types';
 
 export default {
     props: ['propId', 'propUser'],
@@ -233,12 +232,11 @@ export default {
         },
 
         createDTR(){
-
-            let timeWorkAM = null;
-            let timeWorkPM = null;
+            
             let salary = 0;
             this.totalDays = 0;
             let day = 1;
+            this.totalOvertime = 0;
 
             if(this.dtrs.length > 0){
                 this.totalDeduction = 0;
@@ -260,17 +258,17 @@ export default {
                         if(nday === day){
                             //AM
                             if(el.time_status === 'in_am'){
-                                in_am = el.time_record
+                                in_am = new Date(el.dt_record).toTimeString();
                             }
                             if(el.time_status === 'out_am'){
-                                out_am = el.time_record
+                                out_am = new Date(el.dt_record).toTimeString();
                             }
                             //PM
                             if(el.time_status === 'in_pm'){
-                                in_pm = el.time_record
+                                in_pm = new Date(el.dt_record).toTimeString();
                             }
                             if(el.time_status === 'out_pm'){
-                                out_pm = el.time_record
+                                out_pm = new Date(el.dt_record).toTimeString();
                             }
 
                             //in AM computation

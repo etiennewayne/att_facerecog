@@ -1,11 +1,12 @@
 <template>
     <div>
-        <div class="section">
-            <div class="columns is-centered">
-                
+        <div class="admin-container">
+            <div class="welcome-text">
                 ADMIN PANEL
             </div>
 
+
+      
         </div>
 
         <!-- <div class="section">
@@ -46,5 +47,18 @@ export default {
         text-align: center;
         font-weight: bold;
         font-size: 2em;
+    }
+
+    .admin-container{
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: -25px;
+        /* border: 1px solid red; */
+    }
+    .welcome-text{
+        font-weight: bold;
+        font-size: 1.8em;
     }
 </style>

@@ -21,8 +21,8 @@ class CreateDailyTimeRecordsTable extends Migration
             $table->foreign('user_id')->references('user_id')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->time('time_record');
-            $table->date('date_record');
+            // $table->time('time_record');
+            // $table->date('date_record');
 
             $table->dateTime('dt_record');
 

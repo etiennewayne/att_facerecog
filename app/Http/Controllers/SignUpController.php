@@ -18,6 +18,7 @@ class SignUpController extends Controller
 
     public function store(Request $req){
 
+
         $validate = $req->validate([
             'username' => ['required', 'string', 'unique:users'],
             'lname' => ['required', 'string', 'max:100'],
@@ -30,9 +31,7 @@ class SignUpController extends Controller
             'barangay' => ['required', 'string'],
         ]);
 
-        $msg = 'Hi '.$req->lname . ', ' . $req->fname . '. Welcome to Dental Clinic Services. You have successfully created an account.';
-
-        
+        //$msg = 'Hi '.$req->lname . ', ' . $req->fname . '. Welcome to Dental Clinic Services. You have successfully created an account.';
 
         $qr_code = substr(md5(time() . $req->lname . $req->fname), -8);
 

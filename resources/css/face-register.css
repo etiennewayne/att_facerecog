@@ -23,7 +23,6 @@
     }
    
     .canvas-container{
-       
         overflow: hidden;
         margin-bottom: 5px auto;
     }
@@ -62,5 +61,15 @@
             font-weight: bold;
             font-size: 1.2em;
             text-align: center;
+        }
+    }
+
+    @media only screen and (max-width: 1024px) {
+        
+        .camera-title{
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
+            margin: 20px;
         }
     }

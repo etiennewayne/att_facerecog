@@ -13,7 +13,12 @@ class DailyTimeRecord extends Model
     protected $table = 'daily_time_records';
     protected $primaryKey = 'id';
 
-    protected $fillable = ['time_status', 'user_id', 'time_record', 'date_record', 'dt_record'];
+    protected $fillable = ['time_status',
+        'user_id', 
+        // 'time_record', 
+        // 'date_record', 
+        'dt_record'
+    ];
 
 
  public function user(){

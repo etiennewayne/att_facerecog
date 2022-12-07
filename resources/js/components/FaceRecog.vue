@@ -5,7 +5,7 @@
             <div class="video-container">
                 <video @loadedmetadata="onPlay(this)"
                     id="inputVideo" autoplay muted playsinline
-                    width="320" height="240">
+                    :width="canvasWidth" :height="canvasHeight">
                 </video>
                 <canvas id="overlay" />
             </div>
@@ -29,16 +29,18 @@
         </div>
 
 
-        <div class="section">
+        <!-- <div class="section">
             <div class="buttons">
                 <b-button @click="loadLabeledImages">Load Label (debug only)</b-button>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
 
 <script>
+import { tSExpressionWithTypeArguments } from '@babel/types';
+
 
     let forwardTimes = []
     let faceMatcher;
@@ -52,6 +54,9 @@ export default {
             labeledFaceDescriptors: null,
 
             timeStatus: '',
+
+            canvasWidth: 240,
+            canvasHeight: 320,
         }
     },
 
@@ -59,6 +64,7 @@ export default {
 
         async onPlay() {
             //loop
+            
             const videoEl = $('#inputVideo').get(0)
             let canvas = $('#overlay').get(0);
 
@@ -71,12 +77,15 @@ export default {
             const result = await faceapi.detectSingleFace(videoEl, options)
                 .withFaceLandmarks()
                 .withFaceDescriptor();
+
             const displaySize = { width: videoEl.width, height: videoEl.height };
+            
+            //const displaySize = { width: this.canvasWidth, height: this.canvasHeight }; //try
 
-            console.log('faceMatcher', faceMatcher);
+            //console.log('faceMatcher', faceMatcher);
 
-            if (result && faceMatcher) {
-
+            if (result &&  faceMatcher) {
+                
                 faceapi.matchDimensions(canvas, displaySize, true);
                 const resizeDetection = faceapi.resizeResults(result, displaySize);
 
@@ -86,40 +95,57 @@ export default {
 
                 const faceResult = faceMatcher.findBestMatch(result.descriptor);
 
-                console.log('faceResult => ', faceResult);
+                //console.log('faceResult => ', faceResult);
 
                 const faceDraw = new faceapi.draw.DrawBox(resizeDetection.detection.box, { label: faceResult.toString() });
                 faceDraw.draw(canvas);
 
                 labelResult = faceResult.toString().split(/[ ,]+/)[0];
-                //either number or u will return
+                if(labelResult === 'unknown'){
+                    console.log('Refresh Data');
+                    this.loadFaces(); 
+                }
 
-                console.log('result =>' + labelResult + ' vs TempId => ' + tempId);
-
-                if(labelResult[0] != 'u'){
-                    if(labelResult[0] != tempId){
+                if(faceResult.distance <= 0.4){
+                    console.log('Im sure for the recognition');
+                    if(labelResult != 'unknown'){
                         axios.post('/store-dtr',{
                             t_time: new Date(),
-                            t_user: labelResult[0],
+                            t_user: labelResult,
                             t_status: this.timeStatus
                         }).then(res=>{
-                            this.$buefy.toast.open({
-                                duration: 4000,
-                                message: 'Time recorded successfully.',
-                                position: 'is-bottom',
-                                type: 'is-success'
-                            })
+                            if(res.data.status === 'saved'){
+                                this.$buefy.toast.open({
+                                    duration: 4000,
+                                    message: 'Time recorded successfully.',
+                                    position: 'is-top',
+                                    type: 'is-success'
+                                })
+                            }
+                            
+                        }).catch(err=>{
+                            this.loadFaces();
                         })
-                    }
-                    tempId = parseInt(labelResult[0]);
+                    }   
                 }
+                //either number or u will return
+
+                //console.log('result =>' + labelResult + ' vs TempId => ' + tempId);
+
+                // if(labelResult[0] != 'u'){
+                //     if(labelResult[0] != tempId){
+                        
+                //     }
+                //     tempId = parseInt(labelResult[0]);
+                // }
+
+                
 
             }else{
                 canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
             }
 
-
-            setTimeout(() => this.onPlay(), 5000)
+            setTimeout(() => this.onPlay(), 4000)
         },
 
         async run() {
@@ -139,15 +165,27 @@ export default {
             const videoEl = $('#inputVideo').get(0)
             videoEl.srcObject = stream
 
+            await this.loadFaces();
+        },
+
+        async loadFaces(){
             this.labeledFaceDescriptors = await this.loadLabeledImages();
-            console.log('label descriptors: ', this.labeledFaceDescriptors);
+            //console.log('label descriptors: ', this.labeledFaceDescriptors);
             //start faceMatching, threshold 0.6
             faceMatcher = new faceapi.FaceMatcher(this.labeledFaceDescriptors, 0.6);
-            console.log('faceMatcher descriptors: ', faceMatcher);
+            //console.log('faceMatcher descriptors: ', faceMatcher);
+            
+            // if(faceMatcher){
+            //     this.$buefy.toast.open({
+            //         duration: 4000,
+            //         message: 'Face data successfully loaded.',
+            //         position: 'is-bottom',
+            //         type: 'is-info'
+            //     });
+            // }
         },
 
         async loadLabeledImages() {
-
             await axios.get('/load-descriptions').then(res=>{
                 //console.log('load images from db: ', res.data);
                 this.labels = res.data;
@@ -157,14 +195,11 @@ export default {
                 this.labels.map(async label => {
                     const descriptions = [];
                     const name = `${label.user_id} ${label.fname}`;
-
                     //console.log(label.descriptors[0].descriptor);
-
                     for(let i = 0; i < 3; i++) {
-
                         descriptions.push(new Float32Array(label.descriptions[i].descriptions))
                     }
-                    console.log('descriptions: ', descriptions);
+                    //console.log('descriptions: ', descriptions);
                     return new faceapi.LabeledFaceDescriptors(name, descriptions)
                 })
             );
@@ -200,7 +235,7 @@ export default {
                 this.timeStatus = 'in_pm';
             }
 
-            if(hh > 15 && hh < 23){
+            if(hh > 15 && hh <= 23){
                 this.timeStatus = 'out_pm';
             }
 
@@ -229,9 +264,27 @@ export default {
         initFaceDetectionControls(){
             faceapi.nets.faceRecognitionNet.loadFromUri('/js/face/weights');
             faceapi.nets.faceLandmark68Net.loadFromUri('/js/face/weights');
-        }
+        },
+
+        myEventHandler(e) {
+            // your code for handling resize...
+            console.log('canvasheight: ' +this.canvasHeight + '\n canvas widht: ' + this.canvasWidth)
+            if(screen.width < 450){
+                this.canvasWidth = 240;
+                this.canvasHeight = 320;
+            }else{
+                this.canvasWidth = 320;
+                this.canvasHeight = 240;
+            }
+        },
     },
 
+    created() {
+        window.addEventListener("resize", this.myEventHandler);
+    },
+    destroyed() {
+        window.removeEventListener("resize", this.myEventHandler);
+    },
 
     mounted(){
 
@@ -244,9 +297,6 @@ export default {
             this.run();
             this.currentTime();
         })
-
-
-
     }
 }
 </script>

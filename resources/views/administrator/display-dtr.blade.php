@@ -12,6 +12,7 @@
             .print-title{
                 margin: auto;
                 text-align: center;
+                font-weight: bold;
             }
             .navbar{
                 display: none;
@@ -30,6 +31,7 @@
         .print-title{
             margin: auto;
             text-align: center;
+            font-weight: bold;
         }
 
         .filter-print{

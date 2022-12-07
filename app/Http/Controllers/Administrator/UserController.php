@@ -45,6 +45,8 @@ class UserController extends Controller
     }
 
     public function store(Request $req){
+        //return $req;
+
         //this will create random unique QR code
         //$qr_code = substr(md5(time() . $req->lname . $req->fname), -8);
 
@@ -56,6 +58,10 @@ class UserController extends Controller
             // 'email' => ['required', 'unique:users'],
             'password' => ['required', 'string', 'confirmed'],
             'role' => ['required', 'string'],
+            'salary_level' => ['required'],
+        ], $message = [
+            'role.required' => 'Please select role.',
+            'salary_level.required' => 'Please select salary level.',
         ]);
 
         DB::transaction(function () use($req, &$dataArray)  {
@@ -69,7 +75,7 @@ class UserController extends Controller
                 'sex' => $req->sex,
                 'contact_no' => $req->contact_no,
                 'role' => $req->role,
-                'salary_level_id' => $req->salary_level_id,
+                'salary_level_id' => $req->salary_level,
                 'province' => $req->province,
                 'city' => $req->city,
                 'barangay' => $req->barangay,
