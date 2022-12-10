@@ -95,6 +95,8 @@ Route::resource('/home', App\Http\Controllers\Administrator\AdminHomeController:
 //user === account
 Route::resource('/accounts', App\Http\Controllers\Administrator\UserController::class);
 Route::get('/get-accounts', [App\Http\Controllers\Administrator\UserController::class, 'getUsers']);
+Route::post('/user-reset-password/{id}', [App\Http\Controllers\Administrator\UserController::class, 'resetPassword']);
+
 
 Route::post('/account-reset-password/{id}', [App\Http\Controllers\Administrator\UserController::class, 'resetPassword']);
 

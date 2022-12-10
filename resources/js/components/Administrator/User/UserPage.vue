@@ -628,6 +628,7 @@ export default{
             this.errors = {};
             this.global_id = dataId;
         },
+        
         resetPassword(){
             axios.post('/user-reset-password/' + this.global_id, this.fields).then(res=>{
 
