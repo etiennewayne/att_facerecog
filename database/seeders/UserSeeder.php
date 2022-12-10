@@ -31,9 +31,6 @@ class UserSeeder extends Seeder
                 'role' => 'ADMINISTRATOR',
                 'password' => Hash::make('a')
             ],
-
-           
-
         ];
 
         \App\Models\User::insertOrIgnore($data);

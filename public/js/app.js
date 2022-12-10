@@ -21065,8 +21065,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['propSalaryLevels'],
   data: function data() {
@@ -21165,6 +21163,7 @@ __webpack_require__.r(__webpack_exports__);
       this.isModalCreate = true;
       this.fields = {};
       this.errors = {};
+      this.fields.role = 'ADMINISTRATOR';
     },
     loadProvince: function loadProvince() {
       var _this2 = this;
@@ -49275,7 +49274,7 @@ var render = function () {
                               _c(
                                 "b-select",
                                 {
-                                  attrs: { expanded: "" },
+                                  attrs: { disabled: "", expanded: "" },
                                   model: {
                                     value: _vm.fields.role,
                                     callback: function ($$v) {
@@ -49285,9 +49284,11 @@ var render = function () {
                                   },
                                 },
                                 [
-                                  _c("option", { attrs: { value: "ADMIN" } }, [
-                                    _vm._v("ADMINISTRATOR"),
-                                  ]),
+                                  _c(
+                                    "option",
+                                    { attrs: { value: "ADMINISTRATOR" } },
+                                    [_vm._v("ADMINISTRATOR")]
+                                  ),
                                   _vm._v(" "),
                                   _c(
                                     "option",

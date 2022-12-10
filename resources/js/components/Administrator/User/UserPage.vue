@@ -235,14 +235,12 @@
                                     <b-field label="Role" label-position="on-border" expanded
                                              :type="this.errors.role ? 'is-danger':''"
                                              :message="this.errors.role ? this.errors.role[0] : ''">
-                                        <b-select v-model="fields.role" expanded>
-                                            <option value="ADMIN">ADMINISTRATOR</option>
+                                        <b-select v-model="fields.role" disabled expanded>
+                                            <option value="ADMINISTRATOR">ADMINISTRATOR</option>
                                             <option value="EMPLOYEE">EMPLOYEE</option>
-
                                         </b-select>
                                     </b-field>
                                 </div>
-
                             </div>
 
                             <div class="columns">
@@ -486,6 +484,8 @@ export default{
             this.isModalCreate=true;
             this.fields = {};
             this.errors = {};
+
+            this.fields.role = 'ADMINISTRATOR';
         },
 
         loadProvince: function(){
