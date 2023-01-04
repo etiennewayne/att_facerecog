@@ -2,6 +2,8 @@
     <div>
         <div class="w-center-content">
             <div class="w-title">Face Recognition Attendance System</div>
+            <div class="w-title-branch" v-if="user.branch">{{ user.branch.branch_name }}</div>
+
             <div class="video-container">
                 <video @loadedmetadata="onPlay(this)"
                     id="inputVideo" autoplay muted playsinline
@@ -39,8 +41,6 @@
 
 
 <script>
-import { tSExpressionWithTypeArguments } from '@babel/types';
-
 
     let forwardTimes = []
     let faceMatcher;
@@ -48,6 +48,8 @@ import { tSExpressionWithTypeArguments } from '@babel/types';
     var labelResult = '';
 
 export default {
+    props: ['propUser'],
+
     data() {
         return{
             labels: [],
@@ -57,6 +59,8 @@ export default {
 
             canvasWidth: 240,
             canvasHeight: 320,
+
+            user: {},
         }
     },
 
@@ -292,11 +296,24 @@ export default {
             // Code that will run only after the
             // entire view has been rendered
 
+            this.user = JSON.parse(this.propUser);
+
             this.loadLabeledImages();
             this.initFaceDetectionControls();
             this.run();
             this.currentTime();
         })
+    },
+    computed: {
+
+        
     }
 }
 </script>
+
+<style scoped>
+    .w-title-branch{
+        font-weight: bold;
+    }
+
+</style>

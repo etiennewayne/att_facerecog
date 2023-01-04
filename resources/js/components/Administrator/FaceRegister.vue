@@ -83,6 +83,13 @@
                                                 <b-input type="text" v-model="fields.contac_no" placeholder="Contact No." />
                                             </b-field>
                                         </div>
+                                        <div class="column">
+                                            <b-field label="Branches" expanded>
+                                                <b-select v-model="fields.branch_id" placeholder="Branch" expanded>
+                                                    <option v-for="(item, index) in branches" :key="index" :value="item.branch_id">{{ item.branch_name }}</option>
+                                                </b-select>
+                                            </b-field>
+                                        </div>
                                     </div>
         
                                     <div class="columns">
@@ -208,7 +215,7 @@
 <script>
 
 export default {
-    props: ['propSalaryLevels'],
+    props: ['propSalaryLevels', 'propBranches'],
 
 
     data(){
@@ -247,6 +254,7 @@ export default {
             cities: [],
             barangays: [],
             salary_levels: [],
+            branches: [],
 
             canvasWidth: 320,
             canvasHeight: 240,
@@ -427,6 +435,7 @@ export default {
                 suffix: '',
                 sex: '',
                 role: '',
+                branch_id: 0,
                 salary_level: '',
                 contact_no: '',
                 province: '',
@@ -485,6 +494,10 @@ export default {
             this.salary_levels = JSON.parse(this.propSalaryLevels)
         },
 
+        initBranches(){
+            this.branches = JSON.parse(this.propBranches)
+        },
+
         debugMe: function(){
 
             this.fields = {
@@ -521,6 +534,7 @@ export default {
         this.initFaceDetectionControls();
         this.run();
         this.initSalaryLevels();
+        this.initBranches()
     }
 }
 </script>

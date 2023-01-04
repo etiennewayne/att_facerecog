@@ -9,7 +9,7 @@
 
 
 @section('content')
-    <face-recog></face-recog>
+    <face-recog prop-user='@json($user)'></face-recog>
 @endsection
     
 

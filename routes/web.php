@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Session;
 
 
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,9 +27,6 @@ Route::get('/cpanel', function () {
     // }
     return view('cpanel-login');
 });
-
-
-
 
 
 Auth::routes([
@@ -57,7 +53,6 @@ Route::post('/store-descriptions', [App\Http\Controllers\Administrator\UserContr
 Route::get('/load-descriptions', [App\Http\Controllers\EmployeeController::class, 'loadDescriptions']);
 
 Route::post('/store-dtr', [App\Http\Controllers\DailyTimeRecordController::class, 'storeDTR']);
-
 
 
 
@@ -112,6 +107,8 @@ Route::get('/get-user-dtr', [App\Http\Controllers\Administrator\AdminDTRControll
 Route::resource('/salary-level', App\Http\Controllers\Administrator\SalaryLevelController::class);
 Route::get('/get-salary-levels', [App\Http\Controllers\Administrator\SalaryLevelController::class, 'getSalaryLevel']);
 
+Route::resource('/branches', App\Http\Controllers\Administrator\BranchController::class);
+Route::get('/get-branches', [App\Http\Controllers\Administrator\BranchController::class, 'getBranches']);
 
 
 /*     ADMINSITRATOR          */

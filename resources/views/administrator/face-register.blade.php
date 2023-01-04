@@ -9,7 +9,8 @@
 
 
 @section('content')
-    <face-register prop-salary-levels='@json($salaryLevels)'></face-register>
+    <face-register prop-salary-levels='@json($salaryLevels)'
+        prop-branches='@json($branches)'></face-register>
 @endsection
     
 

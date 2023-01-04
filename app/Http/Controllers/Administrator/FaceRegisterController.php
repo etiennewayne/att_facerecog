@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\SalaryLevel;
+use App\Models\Branch;
+
 class FaceRegisterController extends Controller
 {
     //
@@ -15,8 +17,13 @@ class FaceRegisterController extends Controller
 
     public function index(){
         $salaryLevels = SalaryLevel::orderBy('salary_level', 'asc')->get();
+        $branches = Branch::all();
 
         return view('administrator.face-register')
-            ->with('salaryLevels', $salaryLevels);
+            ->with('salaryLevels', $salaryLevels)
+            ->with('branches', $branches);
     }
+
+
+
 }

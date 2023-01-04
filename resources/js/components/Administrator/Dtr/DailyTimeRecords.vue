@@ -51,6 +51,19 @@
                                     </p>
                                 </b-field>
                             </div>
+
+                            <div class="level-right">
+                                <b-field label="Select Branch" label-position="on-border">
+                                    <b-select v-model="search.branch">
+                                        <option v-for="(item,index) in branches" :value="item.branch_id" :key="index">{{ item.branch_name }}</option>
+                                    </b-select>
+                                    <p class="control">
+                                        <b-tooltip label="Search" type="is-success">
+                                            <b-button type="is-primary" icon-right="account-filter" @click="loadAsyncData"/>
+                                        </b-tooltip>
+                                    </p>
+                                </b-field>
+                            </div>
                         </div>
 
                         <div class="buttons mt-3">
@@ -128,6 +141,8 @@
 <script>
 
 export default{
+    props: ['propBranches'],
+
     data() {
         return{
             data: [],
@@ -145,6 +160,7 @@ export default{
             search: {
                 lname: '',
                 searchdate: null,
+                branch: '',
             },
 
             isModalCreate: false,
@@ -159,6 +175,8 @@ export default{
                 'button': true,
                 'is-loading':false,
             },
+
+            branches: [],
 
 
         }
@@ -182,6 +200,7 @@ export default{
                 `sort_by=${this.sortField}.${this.sortOrder}`,
                 `lname=${this.search.lname}`,
                 `searchdate=${sdate}`,
+                `branch=${this.search.branch}`,
                 `perpage=${this.perPage}`,
                 `page=${this.page}`
             ].join('&')
@@ -270,6 +289,10 @@ export default{
 
         displayDTR(dataId){
             window.location = '/display-dtr/' + dataId;
+        },
+
+        initData(){
+            this.branches = JSON.parse(this.propBranches)
         }
 
 
@@ -280,6 +303,7 @@ export default{
     mounted() {
         //this.loadOffices();
         this.loadAsyncData();
+        this.initData();
 
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\User;
 use App\Models\SalaryLevel;
+use App\Models\Branch;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -25,9 +26,11 @@ class UserController extends Controller
 
     public function index(){
         $salaryLevels = SalaryLevel::orderBy('salary_level', 'asc')->get();
+        $branches = Branch::all();
 
         return view('administrator.user')
-            ->with('salaryLevels', $salaryLevels); //blade.php
+            ->with('salaryLevels', $salaryLevels)
+            ->with('branches', $branches); //blade.php
     }
 
     public function getUsers(Request $req){
@@ -45,7 +48,6 @@ class UserController extends Controller
     }
 
     public function store(Request $req){
-        //return $req;
 
         //this will create random unique QR code
         //$qr_code = substr(md5(time() . $req->lname . $req->fname), -8);
@@ -58,11 +60,14 @@ class UserController extends Controller
             // 'email' => ['required', 'unique:users'],
             'password' => ['required', 'string', 'confirmed'],
             'role' => ['required', 'string'],
-            'salary_level' => ['required'],
+            'branch_id' => ['required'],
+            'salary_level_id' => ['required'],
         ], $message = [
             'role.required' => 'Please select role.',
-            'salary_level.required' => 'Please select salary level.',
+            'branch_id.required' => 'Please select branch.',
+            'salary_level_id.required' => 'Please select category.',
         ]);
+
 
         DB::transaction(function () use($req, &$dataArray)  {
             //insert rating in ratings table
@@ -75,15 +80,17 @@ class UserController extends Controller
                 'sex' => $req->sex,
                 'contact_no' => $req->contact_no,
                 'role' => $req->role,
-                'salary_level_id' => $req->salary_level,
+                'branch_id' => $req->branch_id,
+                'salary_level_id' => $req->salary_level_id,
                 'province' => $req->province,
                 'city' => $req->city,
                 'barangay' => $req->barangay,
                 'street' => strtoupper($req->street)
             ]);
+
            //------------------------------
 
-            if($req->role != 'ADMINISTRATOR'){
+            if($req->role == 'EMPLOYEE'){
                 //create array for ratings
                 $dataArray = array();
                 foreach ($req->descriptions as $description){
@@ -112,6 +119,7 @@ class UserController extends Controller
             // 'email' => ['required', 'unique:users,email,'.$id.',user_id'],
             'role' => ['required', 'string'],
             'province' => ['required', 'string'],
+            'branch_id' => ['required'],
             'city' => ['required', 'string'],
             'barangay' => ['required', 'string'],
         ]);
@@ -124,6 +132,8 @@ class UserController extends Controller
         $data->sex = $req->sex;
        // $data->email = $req->email;
         $data->role = $req->role;
+        $data->contact_no = $req->contact_no;
+        $data->branch_id = $req->branch_id;
         $data->salary_level_id = $req->salary_level_id;
         $data->province = $req->province;
         $data->city = $req->city;

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 
 use App\Models\User;
+use App\Models\Branch;
 
 class AdminDTRController extends Controller
 {
@@ -18,7 +19,10 @@ class AdminDTRController extends Controller
     }
 
     public function index(){
-        return view('administrator.daily-time-records');
+        $branches = Branch::all();
+
+        return view('administrator.daily-time-records')
+            ->with('branches', $branches);
     }
 
     public function getDTRs(Request $req){
@@ -28,7 +32,8 @@ class AdminDTRController extends Controller
         if($req->searchdate == 'null'){
             $data = DailyTimeRecord::with(['user'])
                 ->whereHas('user', function($q) use($req){
-                    $q->where('lname', 'like',  $req->lname . '%');
+                    $q->where('lname', 'like',  $req->lname . '%')
+                        ->where('branch_id', $req->branch);
                 })
                 ->orderBy($sort[0], $sort[1])
                 ->paginate($req->perpage);
@@ -38,16 +43,19 @@ class AdminDTRController extends Controller
 
             $data = DailyTimeRecord::with(['user'])
                 ->whereHas('user', function($q) use($req){
-                    $q->where('lname', 'like',  $req->lname . '%');
+                    $q->where('lname', 'like',  $req->lname . '%')
+                        ->where('branch_id', $req->branch);
                 })
+                
                 ->whereDate('dt_record', $ndate)
                 ->orderBy($sort[0], $sort[1])
                 ->paginate($req->perpage);
         }
 
-        
         return $data;
     }
+
+
     public function getUserDTR(Request $req){
         //return $req;
         $half = $req->half;
@@ -82,7 +90,6 @@ class AdminDTRController extends Controller
 
     public function store(Request $req){
         //return $req;
-
 
         $nTime = date("H:i", strtotime($req->nDateTime)); //convert to date format UNIX
         $ndate = date("Y-m-d", strtotime($req->nDateTime)); //convert to date format UNIX

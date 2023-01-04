@@ -235,9 +235,9 @@
                                     <b-field label="Role" label-position="on-border" expanded
                                              :type="this.errors.role ? 'is-danger':''"
                                              :message="this.errors.role ? this.errors.role[0] : ''">
-                                        <b-select v-model="fields.role" disabled expanded>
+                                        <b-select v-model="fields.role" expanded>
                                             <option value="ADMINISTRATOR">ADMINISTRATOR</option>
-                                            <option value="EMPLOYEE">EMPLOYEE</option>
+                                            <option value="STAFF">STAFF</option>
                                         </b-select>
                                     </b-field>
                                 </div>
@@ -245,14 +245,22 @@
 
                             <div class="columns">
                                 <div class="column">
-                                    <b-field label="Salary Level" label-position="on-border" expanded
-                                             :type="this.errors.salary_level_id ? 'is-danger':''"
-                                             :message="this.errors.salary_level_id ? this.errors.salary_level_id[0] : ''">
+                                    <b-field label="Category" label-position="on-border" expanded
+                                             :type="this.errors.salary_level ? 'is-danger':''"
+                                             :message="this.errors.salary_level ? this.errors.salary_level[0] : ''">
                                         <b-select v-model="fields.salary_level_id" expanded>
+                                            
                                             <option v-for="(item, index) in salary_levels" :key="index" 
                                                 :value="item.salary_level_id">
                                                 {{ item.salary_level }}
                                             </option>
+                                        </b-select>
+                                    </b-field>
+                                </div>
+                                <div class="column">
+                                    <b-field label="Branches" label-position="on-border" expanded>
+                                        <b-select v-model="fields.branch_id" placeholder="Branch" expanded>
+                                            <option v-for="(item, index) in branches" :key="index" :value="item.branch_id">{{ item.branch_name }}</option>
                                         </b-select>
                                     </b-field>
                                 </div>
@@ -379,7 +387,7 @@
 <script>
 
 export default{
-    props: ['propSalaryLevels'],
+    props: ['propSalaryLevels', 'propBranches'],
     data() {
         return{
             data: [],
@@ -421,6 +429,7 @@ export default{
             cities: [],
             barangays: [],
             salary_levels: [],
+            branches: [],
 
 
         }
@@ -481,8 +490,9 @@ export default{
         },
 
         openModal(){
+
             this.isModalCreate=true;
-            this.fields = {};
+            this.clearFields()
             this.errors = {};
 
             this.fields.role = 'ADMINISTRATOR';
@@ -585,6 +595,8 @@ export default{
                     lname: '', fname: '', mname: '',
                     password: '', password_confirmation : '',
                     sex : '', role: '',  email : '', contact_no : '',
+                    salary_level_id: 0,
+                    branch_id: 0,
                     province: '', city: '', barangay: '', street: ''
             };
         },
@@ -654,6 +666,7 @@ export default{
 
         initData(){
             this.salary_levels = JSON.parse(this.propSalaryLevels);
+            this.branches = JSON.parse(this.propBranches);
         }
 
 

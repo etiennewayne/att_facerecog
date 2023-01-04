@@ -52,6 +52,9 @@ export default {
                 if(res.data.role === 'ADMINISTRATOR'){
                     window.location = '/home';
                 }
+                if(res.data.role === 'STAFF'){
+                    window.location = '/face-recog';
+                }
                 if(res.data.role === 'EMPLOYEE'){
                     window.location = '/employee/dtr';
                 }

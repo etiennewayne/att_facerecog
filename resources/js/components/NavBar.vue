@@ -22,6 +22,10 @@
                 ABOUT
             </b-navbar-item> -->
 
+            <b-navbar-item v-if="isAdmin" href="/branches" >
+                Branches
+            </b-navbar-item>
+
             <b-navbar-item v-if="isAdmin" href="/face-register" >
                 Face Register
             </b-navbar-item>
