@@ -1,42 +1,47 @@
 <template>
     <div>
-        <div class="w-center-content">
-            <div class="w-title">Face Recognition Attendance System</div>
-            <div class="w-title-branch" v-if="user.branch">{{ user.branch.branch_name }}</div>
+        <div class="columns is-centered">
+            <div class="column is-6-desktop is-10-tablet">
+                <div class="section">
 
-            <div class="video-container">
-                <video @loadedmetadata="onPlay(this)"
-                    id="inputVideo" autoplay muted playsinline
-                    :width="canvasWidth" :height="canvasHeight">
-                </video>
-                <canvas id="overlay" />
-            </div>
-
-            <div class="time-container">
-                <div id="clock"></div>
-            </div>
-
-           <div>
-               <b-field>
-                   <b-select v-model="timeStatus" disabled>
-                       <option value="in_am">IN AM</option>
-                       <option value="out_am">OUT AM</option>
-
-                       <option value="in_pm">IN PM</option>
-                       <option value="out_pm">OUT PM</option>
-
-                   </b-select>
-               </b-field>
-           </div>
-        </div>
-
-
-        <!-- <div class="section">
-            <div class="buttons">
-                <b-button @click="loadLabeledImages">Load Label (debug only)</b-button>
-            </div>
-        </div> -->
-    </div>
+                    <div class="box">
+                        <div class="box-header">
+                            <div class="w-title">Face Recognition Attendance System</div>
+                            <div class="w-title-branch" v-if="user.branch"><strong>Branch: </strong>{{ user.branch.branch_name }}</div>
+                        </div>
+    
+                        <div class="box-body">
+                            <div class="video-container">
+                                <video @loadedmetadata="onPlay(this)"
+                                    id="inputVideo" autoplay muted playsinline
+                                    :width="canvasWidth" :height="canvasHeight">
+                                </video>
+                                <canvas id="overlay" />
+                            </div>
+    
+                            <div class="time-category">
+                                <div class="time-container">
+                                    <div id="clock"></div>
+                                </div>
+                                <b-field>
+                                    <b-select v-model="timeStatus">
+                                        <option value="in_am">IN AM</option>
+                                        <option value="out_am">OUT AM</option>
+    
+                                        <option value="in_pm">IN PM</option>
+                                        <option value="out_pm">OUT PM</option>
+    
+                                    </b-select>
+                                </b-field>
+                            </div>
+                        </div>
+                    </div> <!--box-->
+                </div><!--section-->
+                
+            </div> <!--col-->
+        </div><!--cols-->
+            
+    </div><!--root div-->
 </template>
 
 
@@ -99,18 +104,18 @@ export default {
 
                 const faceResult = faceMatcher.findBestMatch(result.descriptor);
 
-                //console.log('faceResult => ', faceResult);
-
-                const faceDraw = new faceapi.draw.DrawBox(resizeDetection.detection.box, { label: faceResult.toString() });
-                faceDraw.draw(canvas);
+                console.log('faceResult => ', faceResult);
 
                 labelResult = faceResult.toString().split(/[ ,]+/)[0];
                 if(labelResult === 'unknown'){
                     console.log('Refresh Data');
                     this.loadFaces(); 
                 }
-
+                
                 if(faceResult.distance <= 0.4){
+                    const faceDraw = new faceapi.draw.DrawBox(resizeDetection.detection.box, { label: faceResult.toString() });
+                    faceDraw.draw(canvas);
+
                     console.log('Im sure for the recognition');
                     if(labelResult != 'unknown'){
                         axios.post('/store-dtr',{
@@ -129,6 +134,7 @@ export default {
                             
                         }).catch(err=>{
                             this.loadFaces();
+                            //alert(err);
                         })
                     }   
                 }
@@ -169,7 +175,7 @@ export default {
             const videoEl = $('#inputVideo').get(0)
             videoEl.srcObject = stream
 
-            await this.loadFaces();
+            await this.loadFaces()
         },
 
         async loadFaces(){
@@ -214,32 +220,50 @@ export default {
 
         updateResults(){},
 
+        initiateTime(){
+            let date = new Date();
+            let hh = date.getHours();
+            let mm = date.getMinutes();
+
+            if(hh >= 7 && hh < 12){
+                this.timeStatus = 'in_am';
+            }
+
+            if(hh >= 12 && mm >= 0 && mm <= 30){
+                this.timeStatus = 'out_am';
+            }
+
+            if(hh >= 12 && hh <= 13 && mm >= 31 && mm <= 59){
+                this.timeStatus = 'in_pm';
+            }
+
+            if(hh >= 15 && hh <= 23){
+                this.timeStatus = 'out_pm';
+            }
+        },
+
         currentTime: function() {
             let date = new Date();
             let hh = date.getHours();
             let mm = date.getMinutes();
             let ss = date.getSeconds();
             let session = "AM";
+            
 
             //set combo box for time in , time out auto
-            if(hh >= 0 && hh < 12){
+            if(hh == 7 && mm == 30){
                 this.timeStatus = 'in_am';
             }
 
-            if(hh >= 12 && hh < 13 ){
-                if( mm > 0 && mm <= 30){
-                    this.timeStatus = 'out_am';
-                }
-                if(mm > 30 && mm <= 59){
-                    this.timeStatus = 'in_pm';
-                }
+            if(hh == 12 && mm == 0 ){
+                this.timeStatus = 'out_am';
             }
 
-            if(hh > 13 && hh <= 15){
+            if(hh == 12 && mm == 30 ){
                 this.timeStatus = 'in_pm';
             }
 
-            if(hh > 15 && hh <= 23){
+            if(hh == 17 && mm == 0 ){
                 this.timeStatus = 'out_pm';
             }
 
@@ -266,8 +290,8 @@ export default {
         },
 
         initFaceDetectionControls(){
-            faceapi.nets.faceRecognitionNet.loadFromUri('/js/face/weights');
             faceapi.nets.faceLandmark68Net.loadFromUri('/js/face/weights');
+            faceapi.nets.faceRecognitionNet.loadFromUri('/js/face/weights');
         },
 
         myEventHandler(e) {
@@ -290,7 +314,19 @@ export default {
         window.removeEventListener("resize", this.myEventHandler);
     },
 
+
     mounted(){
+        try {
+            this.initFaceDetectionControls();
+            this.loadLabeledImages();
+            this.run()
+        }
+        catch(err) {
+            alert(err)
+        }
+
+       
+        
 
         this.$nextTick(function () {
             // Code that will run only after the
@@ -298,10 +334,9 @@ export default {
 
             this.user = JSON.parse(this.propUser);
 
-            this.loadLabeledImages();
-            this.initFaceDetectionControls();
-            this.run();
             this.currentTime();
+
+            this.initiateTime()
         })
     },
     computed: {
@@ -314,6 +349,7 @@ export default {
 <style scoped>
     .w-title-branch{
         font-weight: bold;
+        text-align: center;
     }
 
 </style>

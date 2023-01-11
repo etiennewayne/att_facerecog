@@ -5,7 +5,7 @@
                 <div class="column is-10">
                     <div class="box">
 
-                        <div class="is-flex mb-2" style="font-size: 20px; font-weight: bold;">LIST OF SALARY LEVEL</div>
+                        <div class="is-flex mb-2" style="font-size: 20px; font-weight: bold;">LIST OF CATEGORY</div>
 
                         <div class="level">
                             <div class="level-left">
@@ -61,7 +61,7 @@
                                 {{ props.row.salary_level_id }}
                             </b-table-column>
 
-                            <b-table-column field="salary_level" label="Salary Level" sortable v-slot="props">
+                            <b-table-column field="salary_level" label="Category" sortable v-slot="props">
                                 {{ props.row.salary_level }}
                             </b-table-column>
                             <b-table-column field="salary" label="Salary" sortable v-slot="props">
@@ -100,7 +100,7 @@
             <form @submit.prevent="submit">
                 <div class="modal-card">
                     <header class="modal-card-head">
-                        <p class="modal-card-title">Salary Level Information</p>
+                        <p class="modal-card-title">Category Information</p>
                         <button
                             type="button"
                             class="delete"
@@ -112,11 +112,11 @@
                     
                             <div class="columns">
                                 <div class="column">
-                                    <b-field label="Salary Level" label-position="on-border"
+                                    <b-field label="Category" label-position="on-border"
                                              :type="this.errors.salary_level ? 'is-danger':''"
                                              :message="this.errors.salary_level ? this.errors.salary_level[0] : ''">
                                         <b-input v-model="fields.salary_level"
-                                                 placeholder="Salary Level" required>
+                                                 placeholder="Category" required>
                                         </b-input>
                                     </b-field>
                                 </div>

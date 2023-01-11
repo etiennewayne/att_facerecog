@@ -15,7 +15,6 @@
     }
 
     .w-title{
-        margin: 30px;
         text-align: center;
     }
 
@@ -30,7 +29,11 @@
   left: 20px;
 } */
 .video-container{
-  position: relative;
+    position: relative;
+    /* border: 1px solid red; */
+    display: block;
+    max-width: 240px;
+    margin: auto;
 }
 
 .w-center-content {
@@ -52,10 +55,17 @@
     border: 1px solid red;
 }
 
+
+.time-category{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .w-title{
     font-weight: bold;
-    font-size: 1.4em;
-    margin-top: 80px;
+    font-size: 1.4em; 
+    text-align: center;
 }
 
 #github-link {

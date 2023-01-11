@@ -144,7 +144,7 @@ class AdminDTRController extends Controller
         //         $q->where('user_id', $id);
         //     })
         // ->get();
-        $user = User::where('user_id', $id)
+        $user = User::with(['branch'])->where('user_id', $id)
             ->with(['salary_level'])
             ->first();
 

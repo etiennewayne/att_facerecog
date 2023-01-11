@@ -1,33 +1,49 @@
 <template>
     <div class="login-wrapper">
-        <div class="login">
+        <div class="columns is-centered m-2">
+            <div class="column is-8-desktop is-10-tablet">
 
-            <form @submit.prevent="submit">
-                <div class="box">
-                    <div class="title is-4">
-                        SECURITY CHECK
-                    </div>
-                    <hr>
-
-                    <div class="panel-body">
-                        <b-field label="Username" label-position="on-border"
-                            :type="this.errors.username ? 'is-danger':''"
-                            :message="this.errors.username ? this.errors.username[0] : ''">
-                            <b-input type="text" v-model="fields.username" placeholder="Username" />
-                        </b-field>
-
-                        <b-field label="Password" label-position="on-border">
-                            <b-input type="password" v-model="fields.password" password-reveal placeholder="Password" />
-                        </b-field>
-
-                        <div class="buttons is-right">
-                            <button class="button is-primary">LOGIN</button>
+                <form @submit.prevent="submit">
+                    <div class="box box-up-line">
+                        <div class="title is-4">
+                            SECURITY CHECK
+                        </div>
+                        <hr>
+    
+                        <div class="panel-body">
+    
+                            <div class="columns is-centered">
+                                <div class="column">
+                                    <img src="/img/login-img.png" />
+                                </div>
+    
+                                <div class="column">
+                                    <b-field label="Username" label-position="on-border"
+                                        :type="this.errors.username ? 'is-danger':''"
+                                        :message="this.errors.username ? this.errors.username[0] : ''">
+                                        <b-input type="text" v-model="fields.username" placeholder="Username" />
+                                    </b-field>
+    
+                                    <b-field label="Password" label-position="on-border">
+                                        <b-input type="password" v-model="fields.password" password-reveal placeholder="Password" />
+                                    </b-field>
+                                    <div class="buttons is-right">
+                                        <button class="button is-primary is-fullwidth">
+                                            <b-icon icon="login-variant" class="mr-3"></b-icon>
+                                            LOGIN
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+    
+                            
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div> <!--col-->
 
-        </div>
+        </div><!--cols-->
     </div>
 </template>
 
@@ -77,12 +93,14 @@ export default {
         align-items: center;
     }
 
-    .login{
-        width: 500px;
-    }
+ 
 
     .box{
         border: 1px solid rgb(223, 223, 223);
+    }
+
+    .box-up-line{
+        border-top: 2px solid blue;
     }
 
 

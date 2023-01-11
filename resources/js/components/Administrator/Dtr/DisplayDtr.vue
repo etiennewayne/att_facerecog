@@ -26,6 +26,7 @@
                 <div class="print-form">
                     <div class="print-title">Daily Time Record</div>
                     <div class="dtr-name">{{ fullName }}</div>
+                    <div class="branch"><strong>Branch: </strong>{{ user.branch.branch_name }}</div>
                     <div class="dtr-month">Month of: 
                         <span style="font-weight: bold;">{{ selectedMonth.monthName }}, 
                             <span v-if="half==='first'">1 - 15</span>
@@ -397,3 +398,7 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+   
+</style>

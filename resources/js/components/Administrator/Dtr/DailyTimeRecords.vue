@@ -177,10 +177,7 @@ export default{
             },
 
             branches: [],
-
-
         }
-
     },
 
     methods: {

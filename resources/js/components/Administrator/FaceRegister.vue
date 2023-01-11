@@ -103,10 +103,10 @@
                                             </b-field>
                                         </div>
                                         <div class="column">
-                                            <b-field label="Salary Level" expanded
-                                                :type="this.errors.salary_level ? 'is-danger':''"
-                                                :message="this.errors.salary_level ? this.errors.salary_level[0] : ''">
-                                                <b-select v-model="fields.salary_level" placeholder="Salary Level" expanded>
+                                            <b-field label="Category" expanded
+                                                :type="this.errors.salary_level_id ? 'is-danger':''"
+                                                :message="this.errors.salary_level_id ? this.errors.salary_level_id[0] : ''">
+                                                <b-select v-model="fields.salary_level_id" placeholder="Category" expanded>
                                                     <option v-for="(item, index) in salary_levels" :key="index" :value="item.salary_level_id">{{ item.salary_level }}</option>
                                                 </b-select>
                                             </b-field>

@@ -1,8 +1,9 @@
 <template>
     <b-navbar shadow>
         <template #brand>
+           
             <b-navbar-item>
-                <h1 class="title is-4">ATTENDANCE SYSTEM</h1>
+                <img src="/img/brand-logo.png" />
             </b-navbar-item>
         </template>
 
@@ -35,7 +36,7 @@
             </b-navbar-item>
 
             <b-navbar-item v-if="isAdmin" href="/salary-level" >
-                Salary Level
+                Category
             </b-navbar-item>
 
             <b-navbar-item v-if="isAdmin" href="/accounts" >

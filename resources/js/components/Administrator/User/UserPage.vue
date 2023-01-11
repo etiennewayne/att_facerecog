@@ -244,7 +244,7 @@
                             </div>
 
                             <div class="columns">
-                                <div class="column">
+                                <!-- <div class="column" v-if="fields.role !=== ''">
                                     <b-field label="Category" label-position="on-border" expanded
                                              :type="this.errors.salary_level ? 'is-danger':''"
                                              :message="this.errors.salary_level ? this.errors.salary_level[0] : ''">
@@ -256,7 +256,7 @@
                                             </option>
                                         </b-select>
                                     </b-field>
-                                </div>
+                                </div> -->
                                 <div class="column">
                                     <b-field label="Branches" label-position="on-border" expanded>
                                         <b-select v-model="fields.branch_id" placeholder="Branch" expanded>

@@ -50,6 +50,10 @@
             text-align: center;
         }
 
+        .branch{
+            text-align: center;
+        }
+
         .dtr-table{
             /*border: 1px solid black;*/
             margin: auto;
